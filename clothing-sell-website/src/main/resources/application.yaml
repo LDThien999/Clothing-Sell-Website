@@ -2,7 +2,7 @@ spring:
   application:
     name: clothing-sell-website
   datasource:
-    url: "jdbc:sqlserver://;serverName=localhost;databaseName=FLIGHTBOOKING;encrypt=true;trustServerCertificate=true"
+    url: "jdbc:sqlserver://;serverName=localhost;databaseName=FASHIONSHOP;encrypt=true;trustServerCertificate=true"
     driver-class-name: "com.microsoft.sqlserver.jdbc.SQLServerDriver"
     username: sa
     password: 123456
