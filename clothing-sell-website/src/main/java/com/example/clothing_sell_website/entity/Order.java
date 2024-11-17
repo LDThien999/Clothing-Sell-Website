@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Table(name = "Order")
+@Table(name = "[Order]")
 public class Order {
     @Id
     @Column(name = "OrderId")

@@ -1,0 +1,91 @@
+<!doctype html>
+<!--[if lt IE 7]>
+<html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js lt-ie9" lang=""> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html xmlns:th="http://www.thymeleaf.org" class="no-js" lang="en">
+<!--<![endif]-->
+
+<head th:replace="admin/fragments :: meta_css"></head>
+
+<body>
+
+<!-- Left Panel -->
+<aside th:replace="admin/fragments :: left-panel"></aside>
+
+<!-- Left Panel -->
+
+<!-- Right Panel -->
+
+<div id="right-panel" class="right-panel">
+
+    <!-- Header-->
+    <header th:replace="admin/fragments :: header"></header>
+    <!-- /header -->
+    <!-- Header-->
+
+    <div class="breadcrumbs">
+        <div class="col-sm-4">
+            <div class="page-header float-left">
+                <div class="page-title">
+                    <h1>Loại</h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-8">
+            <div class="page-header float-right">
+                <div class="page-title">
+                    <ol class="breadcrumb text-right">
+                        <li><a href="#">Loại</a></li>
+                        <li class="active">Cập nhật loại</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="content mt-3">
+
+        <div class="card">
+            <div class="card-header"><strong>Cập nhật loại</strong><small> Form</small></div>
+            <div class="card-body card-block">
+                <form action="#" th:action="@{/admin/type/save-type}" th:object="${type}" method="post">
+                    <div class="form-group"><label for="typeId" class=" form-control-label">Mã loại</label>
+                        <input type="text" th:field="*{typeId}" id="typeId" placeholder="Nhập mã loại"
+                               class="form-control">
+                    </div>
+
+                    <div class="form-group"><label for="typeName" class=" form-control-label">Tên loại</label>
+                        <input th:field="*{typeName}" type="text" id="typeName" placeholder="Nhập tên loại"
+                               class="form-control">
+                    </div>
+
+
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-primary btn-sm">
+                            <i class="fa fa-dot-circle-o"></i> Gửi
+                        </button>
+                        <button type="reset" class="btn btn-danger btn-sm">
+                            <i class="fa fa-ban"></i> Hủy
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+
+    </div> <!-- .content -->
+</div><!-- /#right-panel -->
+
+<!-- Right Panel -->
+
+<div th:replace="~{admin/fragments :: scripts}"></div>
+
+
+</body>
+
+</html>
