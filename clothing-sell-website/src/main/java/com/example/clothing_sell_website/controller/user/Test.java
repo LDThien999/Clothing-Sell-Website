@@ -30,10 +30,6 @@ public class Test {
     public String contact() {
         return "user/contact";
     }
-    @GetMapping("/shop.html")
-    public String shop() {
-        return "user/shop";
-    }
     @GetMapping("/shop-details.html")
     public String shopDetails() {
         return "user/shop-details";
