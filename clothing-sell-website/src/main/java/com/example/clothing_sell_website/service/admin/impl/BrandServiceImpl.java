@@ -1,17 +1,16 @@
 package com.example.clothing_sell_website.service.admin.impl;
 
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import com.example.clothing_sell_website.entity.Brand;
-import com.example.clothing_sell_website.entity.Product;
 import com.example.clothing_sell_website.repository.BrandRepository;
-import com.example.clothing_sell_website.repository.ProductRepository;
 import com.example.clothing_sell_website.service.admin.BrandService;
-import com.example.clothing_sell_website.service.admin.ProductService;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +25,9 @@ public class BrandServiceImpl implements BrandService {
 
     @Override
     public Brand findBrandById(String id) {
-        return brandRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy thương hiệu với id là " + id));
+        return brandRepository
+                .findById(id)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy thương hiệu với id là " + id));
     }
 
     @Override

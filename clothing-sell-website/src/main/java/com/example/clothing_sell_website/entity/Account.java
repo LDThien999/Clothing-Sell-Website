@@ -1,6 +1,7 @@
 package com.example.clothing_sell_website.entity;
 
 import jakarta.persistence.*;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -26,5 +27,4 @@ public class Account {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "RoleId")
     Role role;
-
 }

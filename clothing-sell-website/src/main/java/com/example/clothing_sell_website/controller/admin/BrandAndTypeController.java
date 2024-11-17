@@ -1,22 +1,21 @@
 package com.example.clothing_sell_website.controller.admin;
 
-import com.example.clothing_sell_website.entity.Brand;
-import com.example.clothing_sell_website.entity.Product;
-import com.example.clothing_sell_website.entity.Type;
-import com.example.clothing_sell_website.enums.NotificationType;
-import com.example.clothing_sell_website.repository.ProductRepository;
-import com.example.clothing_sell_website.service.admin.BrandService;
-import com.example.clothing_sell_website.service.admin.TypeService;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.stream.Collectors;
+import com.example.clothing_sell_website.entity.Brand;
+import com.example.clothing_sell_website.entity.Type;
+import com.example.clothing_sell_website.enums.NotificationType;
+import com.example.clothing_sell_website.service.admin.BrandService;
+import com.example.clothing_sell_website.service.admin.TypeService;
+
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 
 @Controller
 @RequestMapping("/admin/brand-type")
@@ -32,12 +31,16 @@ public class BrandAndTypeController {
     @GetMapping
     public String getBrandsAndTypes(HttpServletRequest request, Model model) {
         model.addAttribute("currentUri", request.getRequestURI());
-        model.addAttribute("brandList", brandService.getBrands().stream().peek(brand ->
-                        brand.setBrandId(brand.getBrandId().trim()))
-                .toList());
-        model.addAttribute("typeList", typeService.getTypes().stream().peek(type ->
-                        type.setTypeId(type.getTypeId().trim()))
-                .toList());
+        model.addAttribute(
+                "brandList",
+                brandService.getBrands().stream()
+                        .peek(brand -> brand.setBrandId(brand.getBrandId().trim()))
+                        .toList());
+        model.addAttribute(
+                "typeList",
+                typeService.getTypes().stream()
+                        .peek(type -> type.setTypeId(type.getTypeId().trim()))
+                        .toList());
         return "admin/brand-type";
     }
 
@@ -70,7 +73,11 @@ public class BrandAndTypeController {
     }
 
     @PostMapping("/save-brand")
-    public String saveBrand(@ModelAttribute("brand") Brand brand, HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
+    public String saveBrand(
+            @ModelAttribute("brand") Brand brand,
+            HttpServletRequest request,
+            Model model,
+            RedirectAttributes redirectAttributes) {
         model.addAttribute("currentUri", request.getRequestURI());
         try {
             brandService.save(brand);
@@ -85,7 +92,11 @@ public class BrandAndTypeController {
     }
 
     @PostMapping("/save-type")
-    public String saveType(@ModelAttribute("type") Type type, HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
+    public String saveType(
+            @ModelAttribute("type") Type type,
+            HttpServletRequest request,
+            Model model,
+            RedirectAttributes redirectAttributes) {
         model.addAttribute("currentUri", request.getRequestURI());
         try {
             typeService.save(type);
@@ -100,7 +111,8 @@ public class BrandAndTypeController {
     }
 
     @GetMapping("/delete-brand/{id}")
-    public String deleteBrand(@PathVariable String id, HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
+    public String deleteBrand(
+            @PathVariable String id, HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
         model.addAttribute("currentUri", request.getRequestURI());
         try {
             brandService.delete(id);
@@ -109,13 +121,15 @@ public class BrandAndTypeController {
 
         } catch (RuntimeException e) {
             redirectAttributes.addFlashAttribute(NOTIFICATION_TYPE, NotificationType.ERROR.getMessage());
-            redirectAttributes.addFlashAttribute(NOTIFICATION_MESSAGE, "Thương hiệu này không thể xóa vì đã được sử dụng.");
+            redirectAttributes.addFlashAttribute(
+                    NOTIFICATION_MESSAGE, "Thương hiệu này không thể xóa vì đã được sử dụng.");
         }
         return "redirect:/admin/brand-type";
     }
 
     @GetMapping("/delete-type/{id}")
-    public String deleteType(@PathVariable String id, HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
+    public String deleteType(
+            @PathVariable String id, HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
         model.addAttribute("currentUri", request.getRequestURI());
         try {
             typeService.delete(id);
@@ -128,5 +142,4 @@ public class BrandAndTypeController {
         }
         return "redirect:/admin/brand-type";
     }
-
 }
