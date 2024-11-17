@@ -1,10 +1,11 @@
 package com.example.clothing_sell_website.entity;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.*;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -12,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Table(name = "Order")
+@Table(name = "[Order]")
 public class Order {
     @Id
     @Column(name = "OrderId")

@@ -14,33 +14,38 @@ public class Test {
     public String about() {
         return "user/about";
     }
+
     @GetMapping("/blog.html")
     public String blog() {
         return "user/blog";
     }
+
     @GetMapping("/blog-details.html")
     public String blogDetails() {
         return "user/blog-details";
     }
+
     @GetMapping("/checkout.html")
     public String checkout() {
         return "user/checkout";
     }
+
     @GetMapping("/contact.html")
     public String contact() {
         return "user/contact";
     }
+
     @GetMapping("/shop.html")
     public String shop() {
         return "user/shop";
     }
+
     @GetMapping("/shop-details.html")
     public String shopDetails() {
         return "user/shop-details";
     }
+
     public String shoppingCart() {
         return "user/shopping-cart";
     }
-
-
 }
