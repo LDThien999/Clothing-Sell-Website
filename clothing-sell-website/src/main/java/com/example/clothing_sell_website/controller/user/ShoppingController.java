@@ -1,15 +1,20 @@
 package com.example.clothing_sell_website.controller.user;
 
 import com.example.clothing_sell_website.entity.Brand;
+import com.example.clothing_sell_website.entity.Customer;
 import com.example.clothing_sell_website.entity.Product;
 import com.example.clothing_sell_website.entity.Type;
 import com.example.clothing_sell_website.service.customer.BrandService;
+import com.example.clothing_sell_website.service.customer.CustomerService;
 import com.example.clothing_sell_website.service.customer.ShopService;
 import com.example.clothing_sell_website.service.customer.TypeService;
+
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import  org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -21,14 +26,53 @@ public class ShoppingController {
     private TypeService typeService;
     @Autowired
     private BrandService brandService;
+    @Autowired
+    private CustomerService customerService;
     @GetMapping("/shop.html")
-    public String shop(Model model) {
+    public String shop(Model model, HttpSession session) {
         List<Product> products = shopService.getAllProduct();
         List<Type> types = typeService.getAllType();
         List<Brand> brands = brandService.getAllBrand();
+        Customer cus = customerService.getCustomerById("KH001");
+        model.addAttribute("customer",cus);
+        session.setAttribute("customerss", cus);
         model.addAttribute("products", products);
         model.addAttribute("types", types);
         model.addAttribute("brands", brands);
         return "user/shopping/shop";
+    }
+
+    @GetMapping("/shop/brand/{brandId}")
+    public String shopBrand(@PathVariable String brandId, Model model) {
+        List<Product> products = shopService.getProductByBrand(brandId);
+        model.addAttribute("products", products);
+        List<Type> types = typeService.getAllType();
+        List<Brand> brands = brandService.getAllBrand();
+        model.addAttribute("types", types);
+        model.addAttribute("brands", brands);
+        return "user/shopping/shop";
+
+    }
+
+    @GetMapping("/shop/type/{typeId}")
+    public String shopType(@PathVariable String typeId, Model model) {
+        List<Product> products = shopService.getProductByType(typeId);
+        model.addAttribute("products", products);
+        List<Type> types = typeService.getAllType();
+        List<Brand> brands = brandService.getAllBrand();
+        model.addAttribute("types", types);
+        model.addAttribute("brands", brands);
+        return "user/shopping/shop";
+
+    }
+
+    @GetMapping("/shop/detail/{productId}")
+    public String shopDetail(@PathVariable String productId, Model model,HttpSession session) {
+        Product product = shopService.getProductById(productId);
+        Customer cus = customerService.getCustomerById("KH001");
+        model.addAttribute("customer",cus);
+        model.addAttribute("product", product);
+        return "user/shopping/shop-details";
+
     }
 }

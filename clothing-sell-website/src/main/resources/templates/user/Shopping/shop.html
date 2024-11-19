@@ -58,7 +58,7 @@
                                         <div class="card-body">
                                             <div class="shop__sidebar__categories">
                                                 <ul class="nice-scroll">
-                                                    <li th:each=" type: ${types}" ><a href="#" th:text ="${type.typeName}"></a></li>
+                                                    <li th:each=" type: ${types}" ><a th:href="@{'/shop/type/' + ${type.typeId}}" th:text ="${type.typeName}"></a></li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -72,7 +72,7 @@
                                         <div class="card-body">
                                             <div class="shop__sidebar__brand">
                                                 <ul>
-                                                    <li th:each=" brand: ${brands}" ><a href="#" th:text ="${brand.brandName}" ></a></li>
+                                                    <li th:each=" brand: ${brands}" ><a th:href="@{'/shop/brand/' + ${brand.brandId}}" th:text ="${brand.brandName}" ></a></li>
 
                                                 </ul>
                                             </div>
@@ -92,7 +92,7 @@
                                                     <li><a href="#">$100.00 - $150.00</a></li>
                                                     <li><a href="#">$150.00 - $200.00</a></li>
                                                     <li><a href="#">$200.00 - $250.00</a></li>
-                                                    <li><a href="#">250.00+</a></li>
+                                                    <li><a href="#" >250.00+</a></li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -221,12 +221,12 @@
                                         <li><a href="#"><img th:src="@{/user/img/icon/heart.png}" alt=""></a></li>
                                         <li><a href="#"><img th:src="@{/user/img/icon/compare.png}" alt=""> <span>Compare</span></a>
                                         </li>
-                                        <li><a href="#"><img th:src="@{/user/img/icon/search.png}" alt=""></a></li>
+                                        <li><a th:href="@{'/shop/detail/' + ${product.productId}}"><img th:src="@{/user/img/icon/search.png}" alt=""></a></li>
                                     </ul>
                                 </div>
                                 <div class="product__item__text">
                                     <h6 th:text="${product.productName}"></h6>
-                                    <a href="#" class="add-cart">+ Thêm vào giỏ hàng</a>
+                                    <a th:href="@{'/shop/addCart/' + ${product.productId.replace(' ','')} +'/1/' + ${customer.customerId.replace(' ','')}}" class="add-cart">+ Thêm vào giỏ hàng</a>
                                     <div class="rating">
                                         <i class="fa fa-star-o"></i>
                                         <i class="fa fa-star-o"></i>

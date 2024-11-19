@@ -6,4 +6,7 @@ import java.util.List;
 
 public interface ShopService {
     List<Product> getAllProduct();
+    List<Product> getProductByBrand(String brandId);
+    List<Product> getProductByType(String typeId);
+    Product getProductById(String productId);
 }

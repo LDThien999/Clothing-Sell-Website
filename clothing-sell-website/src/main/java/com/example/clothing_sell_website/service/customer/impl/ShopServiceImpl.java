@@ -11,8 +11,26 @@ import java.util.List;
 public class ShopServiceImpl implements ShopService {
     @Autowired
     private ShopRepository shopRepo;
+
     @Override
     public List<Product> getAllProduct(){
         return shopRepo.findAll();
     }
+
+    @Override
+    public List<Product> getProductByBrand(String brandId){
+        return shopRepo.getProductByBrand(brandId);
+    }
+    @Override
+    public List<Product> getProductByType(String typeId){
+        return shopRepo.getProductByType(typeId);
+    }
+
+    @Override
+    public Product getProductById(String productId){
+        return shopRepo.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Không tồn tại sản phẩm với id là " + productId));
+    }
+
+
 }

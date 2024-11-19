@@ -1,7 +1,6 @@
 package com.example.clothing_sell_website.entity;
 
 import jakarta.persistence.*;
-
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -12,7 +11,8 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Table(name = "Customer")
-public class Customer {
+public class Customer{
+
     @Id
     @Column(name = "CustomerId")
     String customerId;

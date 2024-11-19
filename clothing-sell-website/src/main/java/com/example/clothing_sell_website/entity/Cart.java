@@ -15,7 +15,8 @@ import lombok.experimental.FieldDefaults;
 public class Cart {
     @Id
     @Column(name = "CartId")
-    String cartId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    long cartId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ProductId")
