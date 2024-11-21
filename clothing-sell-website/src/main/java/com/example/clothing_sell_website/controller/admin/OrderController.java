@@ -1,5 +1,7 @@
 package com.example.clothing_sell_website.controller.admin;
 
+import com.example.clothing_sell_website.entity.Order;
+import com.example.clothing_sell_website.entity.Product;
 import com.example.clothing_sell_website.service.admin.StaffService;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -12,6 +14,7 @@ import com.example.clothing_sell_website.service.admin.OrderService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/admin/order")
@@ -37,5 +40,23 @@ public class OrderController {
         model.addAttribute("order", orderService.findOrderById(id));
         model.addAttribute("staffList", staffService.getStaffs());
         return "admin/update-order";
+    }
+
+    @PostMapping("/save")
+    public String save(
+            @ModelAttribute("order") Order order,
+            HttpServletRequest request,
+            Model model,
+            RedirectAttributes redirectAttributes) {
+        model.addAttribute("currentUri", request.getRequestURI());
+        try {
+            orderService.save(order);
+            redirectAttributes.addFlashAttribute(NOTIFICATION_TYPE, "success");
+            redirectAttributes.addFlashAttribute(NOTIFICATION_MESSAGE, "Đơn hàng đã được cập nhật thành công.");
+        } catch (RuntimeException e) {
+            redirectAttributes.addFlashAttribute(NOTIFICATION_TYPE, "error");
+            redirectAttributes.addFlashAttribute(NOTIFICATION_MESSAGE, "Đơn hàng này không thể cập nhật.");
+        }
+        return "redirect:/admin/order";
     }
 }

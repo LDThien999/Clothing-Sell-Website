@@ -40,7 +40,7 @@
                 <div class="page-title">
                     <ol class="breadcrumb text-right">
                         <li><a href="#">Đơn hàng</a></li>
-                        <li class="active">Cập nhật đơn hàng</li>
+                        <li class="active">Cập nhật hóa đơn</li>
                     </ol>
                 </div>
             </div>
@@ -50,12 +50,17 @@
     <div class="content mt-3">
 
         <div class="card">
-            <div class="card-header"><strong>Cập nhật đơn hàng</strong><small> Form</small></div>
+            <div class="card-header"><strong>Cập nhật hóa đơn</strong><small> Form</small></div>
             <div class="card-body card-block">
                 <form action="#" th:action="@{/admin/order/save}" th:object="${order}" method="post">
-                    <div class="form-group"><label for="orderId" class=" form-control-label">Mã Đơn hàng</label>
-                        <input type="text" th:field="*{orderId}" id="orderId" placeholder="Nhập mã đơn hàng"
+                    <div class="form-group"><label for="orderId" class=" form-control-label">Mã Hóa đơn</label>
+                        <input type="text" th:field="*{orderId}" id="orderId" placeholder="Nhập mã hóa đơn"
                                class="form-control" readonly>
+                    </div>
+
+                    <div class="form-group"><label for="totalAmount" class=" form-control-label">Tổng tiền</label>
+                        <input th:field="*{totalAmount}" type="text" id="totalAmount" placeholder="Nhập tổng tiền"
+                               class="form-control">
                     </div>
 
                     <div class="form-group"><label for="date" class=" form-control-label">Thời gian</label>
@@ -63,23 +68,7 @@
                                class="form-control">
                     </div>
 
-                    <div class="form-group"><label for="paymentMethod" class=" form-control-label">Phương thức thanh
-                        toán</label>
-                        <input th:field="*{paymentMethod}" type="text" id="paymentMethod"
-                               placeholder="Nhập phương thức thanh toán" class="form-control">
-                    </div>
 
-                    <div class="row form-group">
-                        <div class="col col-md-3"><label for="selectStatus" class=" form-control-label">Trạng
-                            thái</label>
-                        </div>
-                        <div class="col-12">
-                            <select th:field="*{status}" name="selectStatus" id="selectStatus" class="form-control">
-                                <option value="true">true</option>
-                                <option value="false">false</option>
-                            </select>
-                        </div>
-                    </div>
 
                     <div class="row form-group">
                         <div class="col col-md-3"><label for="selectStaff" class=" form-control-label">Nhân viên</label>
@@ -94,11 +83,6 @@
 
                             </select>
                         </div>
-                    </div>
-
-                    <div class="form-group"><label for="bill" class=" form-control-label">Hóa đơn</label>
-                        <input th:field="*{bill}" type="text" id="bill" placeholder="Nhập hóa đơn"
-                               class="form-control">
                     </div>
 
                     <div class="card-footer">

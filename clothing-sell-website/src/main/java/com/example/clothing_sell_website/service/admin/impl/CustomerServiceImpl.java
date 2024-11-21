@@ -23,4 +23,15 @@ public class CustomerServiceImpl implements CustomerService {
     public List<Customer> getCustomers() {
         return customerRepository.findAll();
     }
+
+    @Override
+    public Customer getCustomerById(String id) {
+        return customerRepository.findById(id).orElseThrow(()
+                -> new RuntimeException("Không tìm thấy khách hàng với id là " + id));
+    }
+
+    @Override
+    public Customer save(Customer customer) {
+        return customerRepository.save(customer);
+    }
 }

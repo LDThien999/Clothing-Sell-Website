@@ -6,7 +6,7 @@ import com.example.clothing_sell_website.entity.Bill;
 
 public interface BillService {
     public List<Bill> getBills();
-    //    public Type findTypeById(String id);
-    //    public Type save(Type type);
+        public Bill getBillById(Integer id);
+        public Bill save(Bill bill);
     //    public void delete(String id);
 }
