@@ -28,8 +28,4 @@ public class OrderList {
 
     @Column(name = "Quantity")
     Integer quantity;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "BillCode")
-    Bill bill;
 }

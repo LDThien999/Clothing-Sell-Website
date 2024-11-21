@@ -23,7 +23,7 @@ public class Product {
     @Column(name = "Price")
     Float price;
 
-    @Column(name = "Size", length = 1)
+    @Column(name = "Size", length = 5)
     String size;
 
     @Column(name = "Origin")
@@ -39,4 +39,7 @@ public class Product {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TypeId")
     Type type;
+
+    @Column(name = "Image")
+    String image;
 }

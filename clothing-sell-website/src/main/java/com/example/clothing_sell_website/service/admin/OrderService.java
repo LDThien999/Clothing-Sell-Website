@@ -6,7 +6,7 @@ import com.example.clothing_sell_website.entity.Order;
 
 public interface OrderService {
     public List<Order> getOrders();
-    //    public Type findTypeById(String id);
-    //    public Type save(Type type);
+        public Order findOrderById(Integer id);
+        public Order save(Order order);
     //    public void delete(String id);
 }
