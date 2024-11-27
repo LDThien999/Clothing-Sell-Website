@@ -48,4 +48,10 @@ public class Test {
     public String shoppingCart() {
         return "user/shopping-cart";
     }
+
+    @GetMapping("/login.html")
+    public String loginPage() {return "user/login";}
+
+    @GetMapping("/register.html")
+    public String registerPage() {return "user/register";}
 }
