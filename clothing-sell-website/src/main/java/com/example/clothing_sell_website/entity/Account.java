@@ -15,7 +15,7 @@ import lombok.experimental.FieldDefaults;
 public class Account {
     @Id
     @Column(name = "UserName")
-    String userName;
+    String username;
 
     @Column(name = "Password")
     String password;
@@ -27,4 +27,8 @@ public class Account {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "RoleId")
     Role role;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "StaffId")
+    Staff staff;
 }
