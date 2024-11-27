@@ -6,6 +6,21 @@ spring:
     driver-class-name: "com.microsoft.sqlserver.jdbc.SQLServerDriver"
     username: sa
     password: 123456
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: automailsender111@gmail.com
+    password: cchp fuat gdtn ayhv
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+    default-encoding: UTF-8
+
 server:
   port: 8080
   servlet:
