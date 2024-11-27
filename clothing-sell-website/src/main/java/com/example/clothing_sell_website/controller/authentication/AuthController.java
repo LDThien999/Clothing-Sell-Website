@@ -43,6 +43,32 @@ public class AuthController {
     public ResponseEntity<String> getUserInfo(
             @RequestHeader("Authorization") String authorizationHeader
     ){
+        ResponseEntity<String> response= getStringResponseEntity(authorizationHeader);
+        if (response.getStatusCode()==HttpStatus.OK){
+            String username = response.getBody();
+
+            //Xu ly backend
+            return response;
+        }
+        return response;
+    }
+
+
+    @GetMapping("/admin/info")
+    public ResponseEntity<String> getAdminInfo(
+            @RequestHeader("Authorization") String authorizationHeader
+    ){
+        ResponseEntity<String> response= getStringResponseEntity(authorizationHeader);
+        if (response.getStatusCode()==HttpStatus.OK){
+            String username = response.getBody();
+
+            //Xu ly backend
+            return response;
+        }
+        return response;
+    }
+
+    private ResponseEntity<String> getStringResponseEntity(@RequestHeader("Authorization") String authorizationHeader) {
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             String token = authorizationHeader.substring(7);
 

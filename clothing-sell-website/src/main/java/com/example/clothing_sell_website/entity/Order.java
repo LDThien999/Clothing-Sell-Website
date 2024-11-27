@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Data
@@ -21,6 +22,7 @@ public class Order {
     Integer orderId;
 
     @Column(name = "Date")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     LocalDateTime date;
 
     @Column(name = "PaymentMethod")
@@ -32,4 +34,8 @@ public class Order {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "StaffId")
     Staff staff;
+
+    @OneToOne
+    @JoinColumn(name = "BillCode", referencedColumnName = "BillCode")
+    Bill bill;
 }

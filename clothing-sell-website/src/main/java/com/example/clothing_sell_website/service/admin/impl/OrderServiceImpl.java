@@ -22,4 +22,15 @@ public class OrderServiceImpl implements OrderService {
     public List<Order> getOrders() {
         return orderRepository.findAll();
     }
+
+    @Override
+    public Order findOrderById(Integer id) {
+        return orderRepository.findById(id).orElseThrow(()
+                -> new RuntimeException("Không tìm thấy đơn hàng với id là " + id));
+    }
+
+    @Override
+    public Order save(Order order) {
+        return orderRepository.save(order);
+    }
 }
