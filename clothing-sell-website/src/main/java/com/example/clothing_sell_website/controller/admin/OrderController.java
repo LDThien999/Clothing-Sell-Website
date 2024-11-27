@@ -37,9 +37,12 @@ public class OrderController {
     @GetMapping("/update-order/{id}")
     public String updateProduct(@PathVariable Integer id, HttpServletRequest request, Model model) {
         model.addAttribute("currentUri", request.getRequestURI());
-        model.addAttribute("order", orderService.findOrderById(id));
-        model.addAttribute("staffList", staffService.getStaffs());
-        return "admin/update-order";
+//        model.addAttribute("order", orderService.findOrderById(id));
+//        model.addAttribute("staffList", staffService.getStaffs());
+        Order order = orderService.findOrderById(id);
+        order.setStatus(true);
+        orderService.save(order);
+        return "redirect:/admin/order";
     }
 
     @PostMapping("/save")
