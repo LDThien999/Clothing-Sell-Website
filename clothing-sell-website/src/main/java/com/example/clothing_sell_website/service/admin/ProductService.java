@@ -5,11 +5,11 @@ import java.util.List;
 import com.example.clothing_sell_website.entity.Product;
 
 public interface ProductService {
-    public List<Product> getProducts();
+    List<Product> getProducts();
 
-    public Product getProductById(String id);
+    Product getProductById(String id);
 
-    public Product save(Product product);
+    Product save(Product product);
 
-    public void delete(String id);
+    void delete(String id);
 }

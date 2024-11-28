@@ -36,7 +36,7 @@
         <div class="col-sm-4">
             <div class="page-header float-left">
                 <div class="page-title">
-                    <h1>Hóa đơn</h1>
+                    <h1>Sản phẩm trong đơn hàng</h1>
                 </div>
             </div>
         </div>
@@ -44,7 +44,7 @@
             <div class="page-header float-right">
                 <div class="page-title">
                     <ol class="breadcrumb text-right">
-                        <li class="active">Hóa đơn</li>
+                        <li class="active">Sản phẩm trong đơn hàng</li>
                     </ol>
                 </div>
             </div>
@@ -63,61 +63,29 @@
 
                     <div class="card">
                         <div class="card-header">
-                            <strong class="card-title">Hóa đơn</strong>
+                            <strong class="card-title">Sản phẩm trong đơn hàng</strong>
                         </div>
+
                         <div class="card-body">
                             <table id="bootstrap-data-table-export" class="table table-striped table-bordered">
                                 <thead>
                                 <tr>
-                                    <th>ID</th>
+                                    <th>Mã chi tiết đơn hàng</th>
+                                    <th>Mã đơn hàng</th>
+                                    <th>Sản phẩm</th>
+                                    <th>Số lượng</th>
+                                    <th>Giá</th>
                                     <th>Tổng tiền</th>
-                                    <th>Thời gian</th>
-                                    <th>Nhân viên</th>
-                                    <th>Chức năng</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:each="bill : ${billList}">
-                                    <td th:text="${bill.billCode != null ? bill.billCode : 'N/A'}"></td>
-                                    <td th:text="${bill.totalAmount != null ? bill.totalAmount : 0}"></td>
-                                    <td th:text="${bill.date != null ? #temporals.format(bill.date, 'HH:mm:ss dd-MM-yyyy') : 'N/A'}"></td>
-                                    <td th:text="${bill.staff != null && bill.staff.name != null ? bill.staff.name : 'N/A'}"></td>
-
-                                    <td>
-<!--                                        <button type="button" class="btn btn-danger"-->
-<!--                                                data-toggle="modal"-->
-<!--                                                th:data-target="|#deletemodal${order.orderId}|">-->
-<!--                                            <i class="fa fa-trash-o"></i>-->
-<!--                                        </button>-->
-
-                                        <a th:href="@{/admin/order/update-bill/{id}(id=${bill.billCode})}">
-                                            <button type="button" class="btn btn-primary">
-                                                <i class="fa fa-pencil-square-o"></i>
-                                            </button>
-                                        </a>
-
-
-<!--                                        <div class="modal fade" th:id="'deletemodal' + ${order.orderId}" tabindex="-1" role="dialog" aria-labelledby="smallmodalLabel" aria-hidden="true">-->
-<!--                                            <div class="modal-dialog modal-sm" role="document">-->
-<!--                                                <div class="modal-content">-->
-<!--                                                    <div class="modal-header">-->
-<!--                                                        <h5 class="modal-title" id="smallmodalLabel">Thông báo</h5>-->
-<!--                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
-<!--                                                            <span aria-hidden="true">&times;</span>-->
-<!--                                                        </button>-->
-<!--                                                    </div>-->
-<!--                                                    <div class="modal-body">-->
-<!--                                                        <p>Bạn có chắc muốn xóa?</p>-->
-<!--                                                    </div>-->
-<!--                                                    <div class="modal-footer">-->
-<!--                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>-->
-<!--                                                        <a th:href="@{/admin/order/delete/{id}(id=${order.orderId})}">-->
-<!--                                                            <button type="button" class="btn btn-primary">Xác nhận</button>-->
-<!--                                                        </a>-->
-<!--                                                    </div>-->
-<!--                                                </div>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
+                                <tr th:each="orderList : ${orderListList}">
+                                    <td th:text="${orderList.orderListId}"></td>
+                                    <td th:text="${orderList.order.orderId}"></td>
+                                    <td th:text="${orderList.cart.product.productName}"></td>
+                                    <td th:text="${orderList.quantity}"></td>
+                                    <td th:text="${orderList.cart.product.price}"></td>
+                                    <td th:text="${orderList.quantity * orderList.cart.product.price}"></td>
 
 
                                     </td>
@@ -136,6 +104,8 @@
 
 <!-- Right Panel -->
 
+<script th:src="@{/admin/assets/js/base.js}"></script>
+<script th:src="@{/admin/assets/js/indexAdmin.js}"></script>
 
 <script th:src="@{/admin/vendors/jquery/dist/jquery.min.js}"></script>
 <script th:src="@{/admin/vendors/popper.js/dist/umd/popper.min.js}"></script>

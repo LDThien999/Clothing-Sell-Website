@@ -1,7 +1,5 @@
 package com.example.clothing_sell_website.configuration;
 
-import com.example.clothing_sell_website.security.JwtAuthenticationFilter;
-import com.example.clothing_sell_website.service.auth.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,12 +19,16 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+import com.example.clothing_sell_website.security.JwtAuthenticationFilter;
+import com.example.clothing_sell_website.service.auth.CustomUserDetailsService;
+
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
+
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
 
@@ -36,17 +38,15 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/clothing-sell/user/info.html").authenticated()
-                        .anyRequest().permitAll())
-                .logout(logout -> logout
-                        .logoutUrl("/logout")
+                .authorizeHttpRequests((auth) -> auth.requestMatchers("/clothing-sell/user/info.html")
+                        .authenticated()
+                        .anyRequest()
+                        .permitAll())
+                .logout(logout -> logout.logoutUrl("/logout")
                         .logoutSuccessUrl("/index.html")
-                        .invalidateHttpSession(true)
-                )
+                        .invalidateHttpSession(true))
                 .authenticationProvider(authenticationProvider())
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-        ;
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
 
@@ -64,9 +64,8 @@ public class SecurityConfig {
         return new CorsFilter(urlBasedCorsConfigurationSource);
     }
 
-
     @Bean
-    public AuthenticationProvider authenticationProvider(){
+    public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
         authenticationProvider.setUserDetailsService(customUserDetailsService);
         authenticationProvider.setPasswordEncoder(passwordEncoder());
@@ -85,7 +84,6 @@ public class SecurityConfig {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return web->web.ignoring().requestMatchers("/static/**");
+        return web -> web.ignoring().requestMatchers("/static/**");
     }
 }
-

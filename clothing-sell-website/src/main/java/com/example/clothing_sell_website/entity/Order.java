@@ -4,9 +4,10 @@ import java.time.LocalDateTime;
 
 import jakarta.persistence.*;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Data
@@ -34,8 +35,4 @@ public class Order {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "StaffId")
     Staff staff;
-
-    @OneToOne
-    @JoinColumn(name = "BillCode", referencedColumnName = "BillCode")
-    Bill bill;
 }

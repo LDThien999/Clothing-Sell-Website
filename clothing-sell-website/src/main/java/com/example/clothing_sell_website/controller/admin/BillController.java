@@ -1,20 +1,19 @@
 package com.example.clothing_sell_website.controller.admin;
 
-import com.example.clothing_sell_website.entity.Bill;
-import com.example.clothing_sell_website.entity.Customer;
-import com.example.clothing_sell_website.service.admin.StaffService;
 import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.clothing_sell_website.entity.Bill;
 import com.example.clothing_sell_website.service.admin.BillService;
+import com.example.clothing_sell_website.service.admin.impl.StaffServiceImpl;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/admin/bill")
@@ -22,7 +21,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class BillController {
     BillService billService;
-    StaffService staffService;
+
+    StaffServiceImpl staffService;
 
     private static final String NOTIFICATION_TYPE = "notificationType";
     private static final String NOTIFICATION_MESSAGE = "notificationMessage";

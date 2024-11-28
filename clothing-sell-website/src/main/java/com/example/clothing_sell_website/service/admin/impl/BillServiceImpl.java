@@ -25,12 +25,18 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public Bill getBillById(Integer id) {
-        return billRepository.findById(id).orElseThrow(()
-                -> new RuntimeException("Không tìm thấy hóa đơn với id là " + id));
+        return billRepository
+                .findById(id)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy hóa đơn với id là " + id));
     }
 
     @Override
     public Bill save(Bill bill) {
         return billRepository.save(bill);
+    }
+
+    @Override
+    public Float getTotalAmount(Integer orderId) {
+        return billRepository.getTotalAmount(orderId);
     }
 }

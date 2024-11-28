@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.example.clothing_sell_website.entity.Order;
+import com.example.clothing_sell_website.entity.OrderList;
 import com.example.clothing_sell_website.repository.OrderRepository;
 import com.example.clothing_sell_website.service.admin.OrderService;
 
@@ -25,8 +26,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order findOrderById(Integer id) {
-        return orderRepository.findById(id).orElseThrow(()
-                -> new RuntimeException("Không tìm thấy đơn hàng với id là " + id));
+        return orderRepository
+                .findById(id)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy đơn hàng với id là " + id));
     }
 
     @Override
@@ -34,9 +36,13 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.save(order);
     }
 
-//    @Override
-//    public Order update(Integer id) {
-//        Order order = orderRepository.fin
-//        return save();
-//    }
+    @Override
+    public List<OrderList> getOrderListsByOrderId(Integer id) {
+        return orderRepository.getOrderListsByOrderId(id);
+    }
+
+    @Override
+    public List<Order> getOrdersByStatus(Boolean status) {
+        return orderRepository.findByStatus(status);
+    }
 }
