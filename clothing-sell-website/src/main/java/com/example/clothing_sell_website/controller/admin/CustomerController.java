@@ -1,17 +1,18 @@
 package com.example.clothing_sell_website.controller.admin;
 
-import com.example.clothing_sell_website.entity.Customer;
-import com.example.clothing_sell_website.entity.Product;
-import com.example.clothing_sell_website.service.admin.BillService;
-import com.example.clothing_sell_website.service.admin.CustomerService;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.example.clothing_sell_website.entity.Customer;
+import com.example.clothing_sell_website.service.admin.CustomerService;
+
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 
 @Controller
 @RequestMapping("/admin/customer")

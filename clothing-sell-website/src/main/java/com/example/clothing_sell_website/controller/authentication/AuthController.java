@@ -1,12 +1,5 @@
 package com.example.clothing_sell_website.controller.authentication;
 
-
-import com.example.clothing_sell_website.dto.request.AuthenticationRequest;
-import com.example.clothing_sell_website.dto.request.RegisterRequest;
-import com.example.clothing_sell_website.dto.respone.AuthenticationResponse;
-import com.example.clothing_sell_website.dto.respone.RegisterResponse;
-import com.example.clothing_sell_website.service.auth.AuthService;
-import com.example.clothing_sell_website.service.auth.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,53 +9,52 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
+import com.example.clothing_sell_website.dto.request.AuthenticationRequest;
+import com.example.clothing_sell_website.dto.request.RegisterRequest;
+import com.example.clothing_sell_website.dto.respone.AuthenticationResponse;
+import com.example.clothing_sell_website.dto.respone.RegisterResponse;
+import com.example.clothing_sell_website.service.auth.AuthService;
+import com.example.clothing_sell_website.service.auth.JwtService;
+
 @Controller
 public class AuthController {
     @Autowired
     private JwtService jwtService;
+
     @Autowired
     private AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<AuthenticationResponse> authenticateLogin(
-            @RequestBody AuthenticationRequest request
-    ) {
+    public ResponseEntity<AuthenticationResponse> authenticateLogin(@RequestBody AuthenticationRequest request) {
         AuthenticationResponse response = authService.authenticate(request);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/register")
-    public ResponseEntity<RegisterResponse> registerAccount(
-            @RequestBody RegisterRequest request
-    ){
+    public ResponseEntity<RegisterResponse> registerAccount(@RequestBody RegisterRequest request) {
         RegisterResponse response = authService.registerNewAccount(request);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/user/info")
-    public ResponseEntity<String> getUserInfo(
-            @RequestHeader("Authorization") String authorizationHeader
-    ){
-        ResponseEntity<String> response= getStringResponseEntity(authorizationHeader);
-        if (response.getStatusCode()==HttpStatus.OK){
+    public ResponseEntity<String> getUserInfo(@RequestHeader("Authorization") String authorizationHeader) {
+        ResponseEntity<String> response = getStringResponseEntity(authorizationHeader);
+        if (response.getStatusCode() == HttpStatus.OK) {
             String username = response.getBody();
 
-            //Xu ly backend
+            // Xu ly backend
             return response;
         }
         return response;
     }
 
-
     @GetMapping("/admin/info")
-    public ResponseEntity<String> getAdminInfo(
-            @RequestHeader("Authorization") String authorizationHeader
-    ){
-        ResponseEntity<String> response= getStringResponseEntity(authorizationHeader);
-        if (response.getStatusCode()==HttpStatus.OK){
+    public ResponseEntity<String> getAdminInfo(@RequestHeader("Authorization") String authorizationHeader) {
+        ResponseEntity<String> response = getStringResponseEntity(authorizationHeader);
+        if (response.getStatusCode() == HttpStatus.OK) {
             String username = response.getBody();
 
-            //Xu ly backend
+            // Xu ly backend
             return response;
         }
         return response;

@@ -1,5 +1,17 @@
 package com.example.clothing_sell_website.service.auth;
 
+import java.util.Optional;
+import java.util.Random;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import com.example.clothing_sell_website.dto.request.AuthenticationRequest;
 import com.example.clothing_sell_website.dto.request.RegisterRequest;
@@ -11,51 +23,39 @@ import com.example.clothing_sell_website.entity.Role;
 import com.example.clothing_sell_website.repository.AccountRepository;
 import com.example.clothing_sell_website.repository.CustomerRepository;
 import com.example.clothing_sell_website.repository.RoleRepository;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
-
-import java.util.Optional;
-import java.util.Random;
-
 
 @Service
 @RequiredArgsConstructor
 public class AuthService {
     @Autowired
     private final AuthenticationManager authenticationManager;
+
     @Autowired
     private final JwtService jwtService;
+
     @Autowired
     private final JavaMailSender javaMailSender;
+
     @Autowired
     private final CustomerRepository customerRepository;
+
     @Autowired
     private final AccountRepository accountRepository;
+
     @Autowired
     private final BCryptPasswordEncoder passwordEncoder;
+
     @Autowired
     private final RoleRepository roleRepository;
-
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         try {
             Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            request.getUsername(),
-                            request.getPassword()
-                    )
-            );
+                    new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
             Optional<Account> accountOtp = accountRepository.findByUsername(request.getUsername());
-            if(accountOtp.isPresent()){
+            if (accountOtp.isPresent()) {
                 Account account = accountOtp.get();
                 String token = jwtService.generateToken(authentication);
 
@@ -66,7 +66,6 @@ public class AuthService {
                         .success(true)
                         .build();
             }
-
 
         } catch (AuthenticationException e) {
             return AuthenticationResponse.builder()
@@ -80,30 +79,30 @@ public class AuthService {
                 .build();
     }
 
-    public RegisterResponse registerNewAccount(RegisterRequest request){
-        String message="Đăng ký thành công";
-        boolean success=true;
+    public RegisterResponse registerNewAccount(RegisterRequest request) {
+        String message = "Đăng ký thành công";
+        boolean success = true;
 
         Optional<Account> accountOptional = accountRepository.findByUsername(request.getUsername());
-        if (accountOptional.isPresent()){
-            message="Username đã tồn tại";
-            success=false;
+        if (accountOptional.isPresent()) {
+            message = "Username đã tồn tại";
+            success = false;
         }
 
         Customer customer = new Customer();
-        try{
+        try {
             customer.setName(request.getName());
             customer.setEmail(request.getEmail());
             customer.setPhoneNum(request.getPhoneNum());
             customer.setCreditNum(request.getCreditNum());
             customerRepository.save(customer);
         } catch (Exception e) {
-            message="Không thể tạo user";
-            success=false;
+            message = "Không thể tạo user";
+            success = false;
         }
 
         Role role = roleRepository.findByRoleId("0");
-        try{
+        try {
             Account account = new Account();
             account.setUsername(request.getUsername());
             account.setPassword(passwordEncoder.encode(request.getPassword()));
@@ -111,24 +110,20 @@ public class AuthService {
             account.setRole(role);
             accountRepository.save(account);
         } catch (Exception e) {
-            message="Không thể tạo tài khoản";
-            success=false;
+            message = "Không thể tạo tài khoản";
+            success = false;
         }
         try {
-             return RegisterResponse.builder()
-                     .message(message)
-                     .success(success)
-                     .build();
+            return RegisterResponse.builder().message(message).success(success).build();
         } catch (Exception e) {
-            return
-            RegisterResponse.builder()
+            return RegisterResponse.builder()
                     .message("Đã xảy ra sự cố")
                     .success(false)
                     .build();
         }
     }
 
-    public void sendSimpleMail(String to, String subject, String text){
+    public void sendSimpleMail(String to, String subject, String text) {
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setTo(to);
         simpleMailMessage.setSubject(subject);
@@ -136,26 +131,26 @@ public class AuthService {
         javaMailSender.send(simpleMailMessage);
     }
 
-    private String generateRandomPassword(){
+    private String generateRandomPassword() {
         int length = 10;
         String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         Random random = new Random();
         StringBuilder sb = new StringBuilder(length);
-        for (int i = 0; i<length;i++){
+        for (int i = 0; i < length; i++) {
             sb.append(chars.charAt(random.nextInt(chars.length())));
         }
         return sb.toString();
     }
 
-    public void forgotPassword(String email){
+    public void forgotPassword(String email) {
         Optional<Customer> customerOptional = customerRepository.findByEmail(email);
-        if (customerOptional.isEmpty()){
+        if (customerOptional.isEmpty()) {
             throw new RuntimeException("Email không tồn tại.");
         }
         Customer customer = customerOptional.get();
 
         Optional<Account> accountOp = accountRepository.findByCustomer(customer);
-        if (accountOp.isEmpty()){
+        if (accountOp.isEmpty()) {
             throw new RuntimeException("Tài khoản cho email không tồn tại.");
         }
         Account account = accountOp.get();
@@ -164,7 +159,8 @@ public class AuthService {
         accountRepository.save(account);
 
         String subject = "Reset mật khẩu thành công";
-        String text = "Mật khẩu mới của bạn là: " + newPassword + "\nVui lòng đăng nhập và thay đổi mật khẩu ngay lập tức.";
+        String text =
+                "Mật khẩu mới của bạn là: " + newPassword + "\nVui lòng đăng nhập và thay đổi mật khẩu ngay lập tức.";
         sendSimpleMail(email, subject, text);
     }
 }
