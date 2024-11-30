@@ -7,9 +7,17 @@ window.onload = function() {
 };
 
 document.getElementById("approveBtn").addEventListener("click", function () {
+    const button = $(this);
     const id = this.getAttribute("data-id");
     const url = `/clothing-sell/admin/order/update-order/${id}`;
-    fetchData(url, "GET")
+    // Disable nút và đổi màu sang xám
+    button.prop('disabled', true);
+    button.removeClass('btn-success').addClass('btn-secondary');
+
+    const row = button.closest('tr');
+    const statusCell = row.find('td:eq(3)'); // Cột thứ 4 (index 3) là cột status
+    statusCell.text('Đã giao');
+    fetchData(url, "POST", id)
 });
 
 

@@ -56,11 +56,19 @@
                 </li>
 
                 <li th:classappend="${currentUri.endsWith('/bill')} ? 'active' : ''">
-                    <a th:href="@{/admin/bill}"> <i class="menu-icon fa fa-list-alt"></i>Hóa đơn </a>
+                    <a th:href="@{/admin/bill}"> <i class="menu-icon fa fa-credit-card"></i>Hóa đơn </a>
                 </li>
 
                 <li th:classappend="${currentUri.endsWith('/customer')} ? 'active' : ''">
                     <a th:href="@{/admin/customer}"> <i class="menu-icon fa fa-user"></i>Khách hàng </a>
+                </li>
+
+                <li class="menu-item-has-children dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-tasks"></i>Tài khoản</a>
+                    <ul class="sub-menu children dropdown-menu">
+                        <li><i class="menu-icon fa fa-fort-awesome"></i><a th:href="@{/admin/staff-account}">Nhân viên</a></li>
+                        <li><i class="menu-icon ti-themify-logo"></i><a th:href="@{/admin/customer-account}">Khách hàng</a></li>
+                    </ul>
                 </li>
 
             </ul>

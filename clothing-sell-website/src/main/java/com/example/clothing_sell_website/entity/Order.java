@@ -32,7 +32,7 @@ public class Order {
     @Column(name = "Status")
     Boolean status;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "StaffId")
     Staff staff;
 }

@@ -15,7 +15,7 @@ import com.example.clothing_sell_website.entity.Order;
 import com.example.clothing_sell_website.service.admin.AccountService;
 import com.example.clothing_sell_website.service.admin.BillService;
 import com.example.clothing_sell_website.service.admin.OrderService;
-import com.example.clothing_sell_website.service.admin.impl.StaffService;
+import com.example.clothing_sell_website.service.admin.StaffService;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +41,7 @@ public class OrderController {
         return "admin/order";
     }
 
-    @GetMapping("/update-order/{id}")
+    @PostMapping("/update-order/{id}")
     public String updateProduct(@PathVariable Integer id, HttpServletRequest request, Model model) {
         model.addAttribute("currentUri", request.getRequestURI());
         //        model.addAttribute("order", orderService.findOrderById(id));
@@ -59,6 +59,7 @@ public class OrderController {
         billService.save(Bill.builder()
                 .totalAmount(billService.getTotalAmount(id))
                 .date(LocalDateTime.now())
+                .order(order)
                 .build());
         return "redirect:/admin/order";
     }

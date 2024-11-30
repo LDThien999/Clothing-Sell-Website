@@ -28,7 +28,7 @@ public class Cart {
     @Column(name = "Status")
     Boolean status;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "CustomerId")
     Customer customer;
 }
