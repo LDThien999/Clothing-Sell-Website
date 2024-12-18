@@ -15,7 +15,7 @@ import java.util.Date;
 
 @Service
 public class JwtService {
-    private static final String SECRET_KEY = "Y2VydC1kZXZlbG9wbWVudC1pbnRlcm5hbC1rZXktc2VjcmV0LWhpcy1leGFtcGxlLXN0cmluZw==";
+    private static final String SECRET_KEY = "Y2FzaGFzZGZhc2hkaW92Y2xvY3RlcnByb2plY3RhcGlrY2hyb3Bva2VzZWRsaGZsa21uYXZsb2RhbWZpcGVkY3J5cA==";
 
     // Lấy Key từ SECRET_KEY
     private Key getSigningKey() {

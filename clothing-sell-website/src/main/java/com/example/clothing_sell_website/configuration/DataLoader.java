@@ -42,7 +42,7 @@ public class DataLoader implements CommandLineRunner {
 
         if (customerRepository.count() == 0){
             customerRepository.saveAll(List.of(
-                    Customer.builder().customerId("0001").name("Nguyen Van An")
+                    Customer.builder().customerId("KH002").name("Nguyen Van An")
                             .phoneNum("0123456789").email("vanan@gmail.com")
                             .creditNum("0111222333")
                             .build()
@@ -51,7 +51,7 @@ public class DataLoader implements CommandLineRunner {
 
         if (staffRepository.count() == 0) {
             staffRepository.saveAll(List.of(
-                    Staff.builder().staffId("1001").name("Tran Ngoc Ba")
+                    Staff.builder().staffId("NV002").name("Tran Ngoc Ba")
                             .phoneNum("0123321123").email("ngocba@gmail.com")
                             .sex("male").status(true)
                             .build()
@@ -59,7 +59,7 @@ public class DataLoader implements CommandLineRunner {
         }
 
         if (accountRepository.count()==0){
-            Optional<Customer> customerOptional = customerRepository.findById("KH001");
+            Optional<Customer> customerOptional = customerRepository.findById("KH002");
             if (customerOptional.isPresent()){
             accountRepository.saveAll(List.of(
                     Account.builder().username("customer01")
@@ -69,7 +69,7 @@ public class DataLoader implements CommandLineRunner {
                             .build()
             ));
             }
-            Optional<Staff> staffOptional = staffRepository.findById("NV001");
+            Optional<Staff> staffOptional = staffRepository.findById("NV002");
             if (staffOptional.isPresent()){
                 accountRepository.saveAll(List.of(
                         Account.builder().username("admin")
