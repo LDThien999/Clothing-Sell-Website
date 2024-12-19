@@ -17,9 +17,15 @@ import java.util.Optional;
 public class AccountServiceImpl implements AccountService {
     @Autowired
     private AccountRepository accountRepository;
+
     @Override
     public Account getAccountById(String username) {
         Optional<Account> accountOpt = accountRepository.findByUsername(username);
-        return accountOpt.orElseThrow(() -> new RuntimeException("không tìm thấy tài khoản với username + "+username));
+        return accountOpt.orElseThrow(() -> new RuntimeException("không tìm thấy tài khoản với username + " + username));
+    }
+
+    @Override
+    public Account getAccountByUsername(String username) {
+        return accountRepository.findByUsername(username).get();
     }
 }

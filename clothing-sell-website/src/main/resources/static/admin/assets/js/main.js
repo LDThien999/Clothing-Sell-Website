@@ -1,58 +1,133 @@
 $.noConflict();
+/*CÁC NÚT ĐÃ GIAO TẤT CẢ CHƯA DUYỆT*/
+// Đảm bảo DOM đã load xong
+jQuery(document).ready(function($) {
+    // Khởi tạo DataTable một lần duy nhất
+    var table = $('#bootstrap-data-table-export-orders').DataTable({
+//        dom: 'Bfrtip',
+        buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
+        language: {
+            "sProcessing":   "Đang xử lý...",
+            "sLengthMenu":   "Xem _MENU_ mục",
+            "sZeroRecords":  "Không tìm thấy dòng nào phù hợp",
+            "sInfo":         "Đang xem _START_ đến _END_ trong tổng số _TOTAL_ mục",
+            "sInfoEmpty":    "Đang xem 0 đến 0 trong tổng số 0 mục",
+            "sInfoFiltered": "(được lọc từ _MAX_ mục)",
+            "sSearch":       "Tìm:",
+            "oPaginate": {
+                "sFirst":    "Đầu",
+                "sPrevious": "Trước",
+                "sNext":     "Tiếp",
+                "sLast":     "Cuối"
+            }
+        }
+    });
 
-//sendNotification("info", "Hello user!");
+    // Hàm format date
+    function formatDate(dateString) {
+        if (!dateString) return '';
+        const date = new Date(dateString);
 
-//function sendNotification(type, text) {
-//  let notificationBox = document.querySelector(".notification-box");
-//  const alerts = {
-//    info: {
-//      icon: `<svg class="w-6 h-6 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-//  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-//</svg>`,
-//      color: "bg-info"
-//    },
-//    error: {
-//      icon: `<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-//  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-//</svg>`,
-//      color: "bg-danger"
-//    },
-//    warning: {
-//      icon: `<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-//  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-//</svg>`,
-//      color: "bg-warning"
-//    },
-//    success: {
-//      icon: `<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-//  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-//</svg>`,
-//      color: "bg-success"
-//    }
-//  };
-//  let component = document.createElement("div");
-//  component.className = `relative flex items-center ${alerts[type].color} text-dark text-sm font-bold px-4 py-3 rounded-md opacity-0 transform transition-all duration-500 mb-1`;
-//  component.innerHTML = `${alerts[type].icon}<p>${text}</p>`;
-//  notificationBox.appendChild(component);
-//  setTimeout(() => {
-//    component.classList.remove("opacity-0");
-//    component.classList.add("opacity-1");
-//  }, 1); //1ms For fixing opacity on new element
-//  setTimeout(() => {
-//    component.classList.remove("opacity-1");
-//    component.classList.add("opacity-0");
-//    //component.classList.add("-translate-y-80"); //it's a little bit buggy when send multiple alerts
-//    component.style.margin = 0;
-//    component.style.padding = 0;
-//  }, 5000);
-//  setTimeout(() => {
-//    component.style.setProperty("height", "0", "important");
-//  }, 5100);
-//  setTimeout(() => {
-//    notificationBox.removeChild(component);
-//  }, 5700);
-//  //If you can do something more elegant than timeouts, please do, but i can't
-//}
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const seconds = String(date.getSeconds()).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear();
+
+        return `${hours}:${minutes}:${seconds} ${day}-${month}-${year}`;
+    }
+
+    // Hàm tạo buttons
+    function createActionButtons(order) {
+        let html = '<div style="display: inline-flex;">';
+
+        if (!order.status) {
+            html += `
+                <button data-id="${order.orderId}" class="btn btn-success mr-2 approve-btn">
+                    Chấp thuận
+                </button>`;
+        } else {
+            html += `
+                <button class="btn btn-secondary mr-2" disabled>
+                    Chấp thuận
+                </button>`;
+        }
+
+        html += `
+            <a href="/clothing-sell/admin/order/order-list/${order.orderId}">
+                <button type="button" class="btn btn-primary">
+                    <i class="fa fa-eye"></i>
+                </button>
+            </a>`;
+
+        html += '</div>';
+        return html;
+    }
+
+    // Xử lý sự kiện khi radio button thay đổi
+    $('input[name="options"]').on('change', function() {
+        const status = $(this).val();
+        console.log("Selected status:", status);
+
+        // Gọi API để lấy dữ liệu
+        $.ajax({
+            url: '/clothing-sell/admin/api/orders/filter',
+            method: 'GET',
+            data: { status: status },
+            success: function(response) {
+                console.log("API response:", response);
+                // Xóa dữ liệu cũ
+                table.clear();
+
+                // Thêm dữ liệu mới
+                response.forEach(function(order) {
+                    table.row.add([
+                        order.orderId,
+                        formatDate(order.date),
+                        order.paymentMethod,
+                        order.status ? 'Đã giao' : 'Chưa duyệt',
+                        order.staff ? order.staff.name : '',
+                        createActionButtons(order)
+                    ]);
+                });
+
+                // Vẽ lại bảng
+                table.draw();
+            },
+            error: function(xhr, status, error) {
+                console.error("Error fetching data:", error);
+                alert("Có lỗi xảy ra khi tải dữ liệu!");
+            }
+        });
+    });
+
+    // Xử lý sự kiện nút chấp thuận
+    $(document).on('click', '.approve-btn', function() {
+        const orderId = $(this).data('id');
+        if (confirm('Bạn có chắc chắn muốn chấp thuận đơn hàng này?')) {
+            console.log('Chấp thuận đơn hàng:', orderId);
+            // Thêm code xử lý chấp thuận đơn hàng ở đây
+        }
+    });
+
+    // Các xử lý menu và UI khác
+    $('#menuToggle').on('click', function(event) {
+        $('body').toggleClass('open');
+    });
+
+    $('.search-trigger').on('click', function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        $('.search-trigger').parent('.header-left').addClass('open');
+    });
+
+    $('.search-close').on('click', function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        $('.search-trigger').parent('.header-left').removeClass('open');
+    });
+});
 
 function sendNotification(type, message) {
   const notificationBox = document.querySelector(".notification-box");

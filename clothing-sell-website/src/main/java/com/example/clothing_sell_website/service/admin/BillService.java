@@ -5,8 +5,12 @@ import java.util.List;
 import com.example.clothing_sell_website.entity.Bill;
 
 public interface BillService {
-    public List<Bill> getBills();
-        public Bill getBillById(Integer id);
-        public Bill save(Bill bill);
+    List<Bill> getBills();
+
+    Bill getBillById(Integer id);
+
+    Bill save(Bill bill);
+
+    Float getTotalAmount(Integer orderId);
     //    public void delete(String id);
 }

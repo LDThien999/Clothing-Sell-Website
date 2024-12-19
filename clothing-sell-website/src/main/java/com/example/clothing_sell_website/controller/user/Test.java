@@ -50,7 +50,9 @@ public class Test {
     }
 
     @GetMapping("/login.html")
-    public String loginPage() {return "user/login";}
+    public String loginPage() {
+        return "user/login";
+    }
 
     @GetMapping("/register.html")
     public String registerPage() {return "user/register";}

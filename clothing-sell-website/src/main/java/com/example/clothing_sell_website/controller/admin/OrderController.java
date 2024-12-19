@@ -1,20 +1,25 @@
 package com.example.clothing_sell_website.controller.admin;
 
-import com.example.clothing_sell_website.entity.Order;
-import com.example.clothing_sell_website.entity.Product;
-import com.example.clothing_sell_website.service.admin.StaffService;
+import java.time.LocalDateTime;
+
 import jakarta.servlet.http.HttpServletRequest;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.clothing_sell_website.entity.Bill;
+import com.example.clothing_sell_website.entity.Order;
+import com.example.clothing_sell_website.service.admin.AccountService;
+import com.example.clothing_sell_website.service.admin.BillService;
 import com.example.clothing_sell_website.service.admin.OrderService;
+import com.example.clothing_sell_website.service.admin.StaffService;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/admin/order")
@@ -23,6 +28,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class OrderController {
     OrderService orderService;
     StaffService staffService;
+    BillService billService;
+    AccountService accountService;
 
     private static final String NOTIFICATION_TYPE = "notificationType";
     private static final String NOTIFICATION_MESSAGE = "notificationMessage";
@@ -34,12 +41,27 @@ public class OrderController {
         return "admin/order";
     }
 
-    @GetMapping("/update-order/{id}")
+    @PostMapping("/update-order/{id}")
     public String updateProduct(@PathVariable Integer id, HttpServletRequest request, Model model) {
         model.addAttribute("currentUri", request.getRequestURI());
-        model.addAttribute("order", orderService.findOrderById(id));
-        model.addAttribute("staffList", staffService.getStaffs());
-        return "admin/update-order";
+        //        model.addAttribute("order", orderService.findOrderById(id));
+        //        model.addAttribute("staffList", staffService.getStaffs());
+        Order order = orderService.findOrderById(id);
+
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        //        System.out.println("Tên account " + username);
+        //        Account account = accountService.getAccountByUsername(username);
+
+        order.setStatus(true);
+        //        order.setStaff(staffService.getStaffById());
+        orderService.save(order);
+
+        billService.save(Bill.builder()
+                .totalAmount(billService.getTotalAmount(id))
+                .date(LocalDateTime.now())
+                .order(order)
+                .build());
+        return "redirect:/admin/order";
     }
 
     @PostMapping("/save")
@@ -58,5 +80,12 @@ public class OrderController {
             redirectAttributes.addFlashAttribute(NOTIFICATION_MESSAGE, "Đơn hàng này không thể cập nhật.");
         }
         return "redirect:/admin/order";
+    }
+
+    @GetMapping("/order-list/{id}")
+    public String getOrderLists(@PathVariable Integer id, HttpServletRequest request, Model model) {
+        model.addAttribute("currentUri", request.getRequestURI());
+        model.addAttribute("orderListList", orderService.getOrderListsByOrderId(id));
+        return "admin/order-list";
     }
 }

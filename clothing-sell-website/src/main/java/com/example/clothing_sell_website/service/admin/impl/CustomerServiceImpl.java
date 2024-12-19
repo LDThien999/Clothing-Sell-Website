@@ -1,17 +1,16 @@
 package com.example.clothing_sell_website.service.admin.impl;
 
-import com.example.clothing_sell_website.entity.Bill;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import com.example.clothing_sell_website.entity.Customer;
-import com.example.clothing_sell_website.repository.BillRepository;
 import com.example.clothing_sell_website.repository.CustomerRepository;
-import com.example.clothing_sell_website.service.admin.BillService;
 import com.example.clothing_sell_website.service.admin.CustomerService;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -26,8 +25,9 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer getCustomerById(String id) {
-        return customerRepository.findById(id).orElseThrow(()
-                -> new RuntimeException("Không tìm thấy khách hàng với id là " + id));
+        return customerRepository
+                .findById(id)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy khách hàng với id là " + id));
     }
 
     @Override

@@ -36,7 +36,7 @@
         <div class="col-sm-4">
             <div class="page-header float-left">
                 <div class="page-title">
-                    <h1>Khách hàng</h1>
+                    <h1>Nhân viên</h1>
                 </div>
             </div>
         </div>
@@ -44,7 +44,8 @@
             <div class="page-header float-right">
                 <div class="page-title">
                     <ol class="breadcrumb text-right">
-                        <li class="active">Khách hàng</li>
+                        <li><a href="#">Tài khoản</a></li>
+                        <li class="active">Nhân viên</li>
                     </ol>
                 </div>
             </div>
@@ -63,42 +64,38 @@
 
                     <div class="card">
                         <div class="card-header">
-                            <strong class="card-title">Khách hàng</strong>
+                            <strong class="card-title">Nhân viên</strong>
                         </div>
                         <div class="card-body">
                             <table id="bootstrap-data-table-export" class="table table-striped table-bordered">
                                 <thead>
                                 <tr>
-                                    <th>ID</th>
+                                    <th>Username</th>
+                                    <th>Vai trò</th>
                                     <th>Tên</th>
-                                    <th>SDT</th>
-                                    <th>Email</th>
-                                    <th>Thẻ tín dụng</th>
                                     <th>Chức năng</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:each="customer : ${customerList}">
-                                    <td th:text="${customer.customerId}"></td>
-                                    <td th:text="${customer.name}"></td>
-                                    <td th:text="${customer.phoneNum}"></td>
-                                    <td th:text="${customer.email}"></td>
-                                    <td th:text="${customer.creditNum}"></td>
+                                <tr th:each="account : ${accountList}">
+                                    <td th:text="${account.username}"></td>
+                                    <td th:text="${account.role.roleName}"></td>
+                                    <td th:text="${account.staff.name}"></td>
                                     <td>
 <!--                                        <button type="button" class="btn btn-danger"-->
 <!--                                                data-toggle="modal"-->
-<!--                                                th:data-target="|#deletemodal${order.orderId}|">-->
+<!--                                                th:data-target="|#deletemodal${account.accountId}|">-->
 <!--                                            <i class="fa fa-trash-o"></i>-->
 <!--                                        </button>-->
 
-                                        <a th:href="@{/admin/customer/update-customer/{id}(id=${customer.customerId})}">
-                                            <button type="button" class="btn btn-primary">
-                                                <i class="fa fa-pencil-square-o"></i>
-                                            </button>
-                                        </a>
+<!--                                        <a th:href="@{/admin/account/update-account/{id}(id=${account.accountId})}">-->
+<!--                                            <button type="button" class="btn btn-primary">-->
+<!--                                                <i class="fa fa-pencil-square-o"></i>-->
+<!--                                            </button>-->
+<!--                                        </a>-->
 
 
-<!--                                        <div class="modal fade" th:id="'deletemodal' + ${order.orderId}" tabindex="-1" role="dialog" aria-labelledby="smallmodalLabel" aria-hidden="true">-->
+<!--                                        <div class="modal fade" th:id="'deletemodal' + ${account.accountId}" tabindex="-1" role="dialog" aria-labelledby="smallmodalLabel" aria-hidden="true">-->
 <!--                                            <div class="modal-dialog modal-sm" role="document">-->
 <!--                                                <div class="modal-content">-->
 <!--                                                    <div class="modal-header">-->
@@ -112,7 +109,7 @@
 <!--                                                    </div>-->
 <!--                                                    <div class="modal-footer">-->
 <!--                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>-->
-<!--                                                        <a th:href="@{/admin/order/delete/{id}(id=${order.orderId})}">-->
+<!--                                                        <a th:href="@{/admin/account/delete/{id}(id=${account.accountId})}">-->
 <!--                                                            <button type="button" class="btn btn-primary">Xác nhận</button>-->
 <!--                                                        </a>-->
 <!--                                                    </div>-->
@@ -125,6 +122,9 @@
                                 </tr>
                                 </tbody>
                             </table>
+                            <a th:href="@{/admin/account/create-account}">
+                                <input class="btn btn-info" type="button" value="Tạo tài khoản">
+                            </a>
                         </div>
                     </div>
                 </div>

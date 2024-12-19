@@ -5,11 +5,11 @@ import java.util.List;
 import com.example.clothing_sell_website.entity.Brand;
 
 public interface BrandService {
-    public List<Brand> getBrands();
+    List<Brand> getBrands();
 
-    public Brand findBrandById(String id);
+    Brand findBrandById(String id);
 
-    public Brand save(Brand brand);
+    Brand save(Brand brand);
 
-    public void delete(String id);
+    void delete(String id);
 }

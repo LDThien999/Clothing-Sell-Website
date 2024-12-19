@@ -3,5 +3,12 @@ package com.example.clothing_sell_website.service.admin;
 import com.example.clothing_sell_website.entity.Account;
 
 public interface AccountService {
-    public Account getAccountById(String username);
+    Account getAccountById(String username);
+    //    public List<Type> getTypes();
+
+    Account getAccountByUsername(String username);
+
+    //    public Type save(Type type);
+    //
+    //    public void delete(String id);
 }

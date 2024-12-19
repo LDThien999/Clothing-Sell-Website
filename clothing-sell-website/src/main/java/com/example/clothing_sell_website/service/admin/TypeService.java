@@ -5,11 +5,11 @@ import java.util.List;
 import com.example.clothing_sell_website.entity.Type;
 
 public interface TypeService {
-    public List<Type> getTypes();
+    List<Type> getTypes();
 
-    public Type findTypeById(String id);
+    Type findTypeById(String id);
 
-    public Type save(Type type);
+    Type save(Type type);
 
-    public void delete(String id);
+    void delete(String id);
 }

@@ -1,5 +1,17 @@
 package com.example.clothing_sell_website.service.auth;
 
+import java.util.Optional;
+import java.util.Random;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import com.example.clothing_sell_website.dto.request.AuthenticationRequest;
 import com.example.clothing_sell_website.dto.request.RegisterRequest;
@@ -12,52 +24,37 @@ import com.example.clothing_sell_website.repository.AccountRepository;
 import com.example.clothing_sell_website.repository.CustomerRepository;
 import com.example.clothing_sell_website.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
-
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Random;
-import java.util.concurrent.TimeUnit;
-
 
 @Service
 @RequiredArgsConstructor
 public class AuthService {
     @Autowired
     private final AuthenticationManager authenticationManager;
+
     @Autowired
     private final JwtService jwtService;
+
     @Autowired
     private final JavaMailSender javaMailSender;
+
     @Autowired
     private final CustomerRepository customerRepository;
+
     @Autowired
     private final AccountRepository accountRepository;
+
     @Autowired
     private final BCryptPasswordEncoder passwordEncoder;
+
     @Autowired
     private final RoleRepository roleRepository;
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         try {
             Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            request.getUsername(),
-                            request.getPassword()
-                    )
-            );
+                    new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
             Optional<Account> accountOtp = accountRepository.findByUsername(request.getUsername());
-            if(accountOtp.isPresent()){
+            if (accountOtp.isPresent()) {
                 Account account = accountOtp.get();
                 String token = jwtService.generateToken(authentication);
 
@@ -69,7 +66,6 @@ public class AuthService {
                         .success(true)
                         .build();
             }
-
 
         } catch (AuthenticationException e) {
             return AuthenticationResponse.builder()
@@ -135,7 +131,7 @@ public class AuthService {
         }
     }
 
-    public void sendSimpleMail(String to, String subject, String text){
+    public void sendSimpleMail(String to, String subject, String text) {
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setTo(to);
         simpleMailMessage.setSubject(subject);
@@ -148,21 +144,21 @@ public class AuthService {
         String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         Random random = new Random();
         StringBuilder sb = new StringBuilder(length);
-        for (int i = 0; i<length;i++){
+        for (int i = 0; i < length; i++) {
             sb.append(chars.charAt(random.nextInt(chars.length())));
         }
         return sb.toString();
     }
 
-    public void forgotPassword(String email){
+    public void forgotPassword(String email) {
         Optional<Customer> customerOptional = customerRepository.findByEmail(email);
-        if (customerOptional.isEmpty()){
+        if (customerOptional.isEmpty()) {
             throw new RuntimeException("Email không tồn tại.");
         }
         Customer customer = customerOptional.get();
 
         Optional<Account> accountOp = accountRepository.findByCustomer(customer);
-        if (accountOp.isEmpty()){
+        if (accountOp.isEmpty()) {
             throw new RuntimeException("Tài khoản cho email không tồn tại.");
         }
         Account account = accountOp.get();
@@ -171,7 +167,8 @@ public class AuthService {
         accountRepository.save(account);
 
         String subject = "Reset mật khẩu thành công";
-        String text = "Mật khẩu mới của bạn là: " + newPassword + "\nVui lòng đăng nhập và thay đổi mật khẩu ngay lập tức.";
+        String text =
+                "Mật khẩu mới của bạn là: " + newPassword + "\nVui lòng đăng nhập và thay đổi mật khẩu ngay lập tức.";
         sendSimpleMail(email, subject, text);
     }
 
@@ -184,3 +181,4 @@ public class AuthService {
         return customerId;
     }
 }
+
