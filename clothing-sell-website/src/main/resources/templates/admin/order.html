@@ -134,8 +134,26 @@
 
 <!-- Right Panel -->
 
+<<<<<<< HEAD
+<script>
+    window.onload = function() {
+        const token = localStorage.getItem("jwtToken");
+
+        if (token && isTokenValid(token)) {
+            fetchData("/clothing-sell/admin/info", "GET")
+        }
+    };
+
+    document.getElementById("approveBtn").addEventListener("click", function () {
+        const id = this.getAttribute("data-id");
+        const url = `/clothing-sell/admin/order/update-order/${id}`;
+        fetchData(url, "POST", id)
+    });
+</script>
+=======
 <script th:src="@{/admin/assets/js/base.js}"></script>
 <script th:src="@{/admin/assets/js/indexAdmin.js}"></script>
+>>>>>>> 349ea91cb97250d9de5ba3bebfea8016e8a217c5
 
 <script th:src="@{/admin/vendors/jquery/dist/jquery.min.js}"></script>
 <script th:src="@{/admin/vendors/popper.js/dist/umd/popper.min.js}"></script>

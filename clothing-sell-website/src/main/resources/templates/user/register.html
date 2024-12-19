@@ -1,27 +1,42 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head th:replace="user/fragments :: meta_css"></head>
-<body>
 
-<!--================Header Area =================-->
+<body>
+<!-- Page Preloder -->
+<div id="preloder">
+    <div class="loader"></div>
+</div>
+
+<!-- Offcanvas Menu Begin -->
+<div class="offcanvas-menu-overlay"></div>
+<div th:replace="user/fragments :: menu"></div>
+<!-- Offcanvas Menu End -->
+
+<!-- Header Section Begin -->
 <header th:replace="user/fragments :: header"></header>
-<!--================Header Area =================-->
-<img class="wave" th:src="@{user/image/login/wave.png}">
+<!-- Header Section End -->
+
+<div id="notification-container" th:replace="user/notification :: notificationFragment"></div>
+
+
+<img class="wave" th:src="@{user/img/login/wave.png}">
 <div class="container-login">
     <div class="img-login">
-        <img th:src="@{user/image/login/bg.svg}">
+        <img th:src="@{user/img/login/bg.svg}">
     </div>
     <div class="login-content">
         <form id="step1" class="form-step active">
-            <img th:src="@{user/image/login/avatar.svg}">
-            <h2 class="title">Thông tin cá nhân</h2>
+            <img th:src="@{user/img/login/avatar.svg}">
+            <h2 class="title">Tạo tài khoản</h2>
             <div class="input-div one">
                 <div class="i-login">
                     <i class="fas fa-user"></i>
                 </div>
                 <div class="div">
 <!--                    <h5>Họ và tên</h5>-->
-                    <input type="text" class="input" placeholder = "Họ và tên" required>
+                    <input type="text" name="fullname" class="input" placeholder = "Họ và tên"
+                           required minlength="6" maxlength="20" title="Họ và tên phải từ 6 đến 20 ký tự">
                 </div>
             </div>
             <div class="input-div">
@@ -30,7 +45,8 @@
                 </div>
                 <div class="div">
 <!--                    <h5>Số điện thoại</h5>-->
-                    <input type="tel" class="input" placeholder = "Số điện thoại" required>
+                    <input type="text" name="telephone" class="input" placeholder = "Số điện thoại" required
+                           pattern="^\d{8,10}$" maxlength="10" title="Số điện thoại gồm 10 ký tự">
                 </div>
             </div>
             <div class="input-div">
@@ -39,16 +55,8 @@
                 </div>
                 <div class="div">
 <!--                    <h5>Email</h5>-->
-                    <input type="email" class="input" placeholder = "Email" required>
-                </div>
-            </div>
-            <div class="input-div">
-                <div class="i-login">
-                    <i class="fas fa-id-card"></i>
-                </div>
-                <div class="div">
-<!--                    <h5>Căn cước công dân</h5>-->
-                    <input type="text" class="input" placeholder = "Căn cước công dân" required>
+                    <input type="email" name="email" class="input" placeholder = "Email" required
+                           maxlength="50" title="Nhập đúng định dạng email và không quá 50 ký tự">
                 </div>
             </div>
             <div class="input-div">
@@ -57,7 +65,8 @@
                 </div>
                 <div class="div">
 <!--                    <h5>Số thẻ</h5>-->
-                    <input type="text" class="input" placeholder = "Số thẻ" required>
+                    <input type="text" name="cardNum" class="input" placeholder = "Số thẻ" required
+                           pattern="^\d+$" maxlength="12" title="Số thẻ tối đa 12 ký tự">
                 </div>
             </div>
             <a href="#" class="btn-next" onclick="nextStep()">Tiếp tục <span class="arrow">&rarr;</span></a>
@@ -71,7 +80,7 @@
 
         <!-- Form bước 2 -->
         <form id="step2" class="form-step">
-            <img th:src="@{user/image/login/avatar.svg}">
+            <img th:src="@{user/img/login/avatar.svg}">
             <h2 class="title">Tạo tài khoản</h2>
             <div class="input-div one">
                 <div class="i-login">
@@ -79,7 +88,8 @@
                 </div>
                 <div class="div">
 <!--                    <h5>Tên đăng nhập</h5>-->
-                    <input type="text" class="input" placeholder="Tên đăng nhập" required>
+                    <input type="text" class="input" name="username" placeholder="Tên đăng nhập" required
+                           pattern="^[a-zA-Z0-9]{5,12}$" title="Tên đăng nhập từ 6 đến 12 ký tự, chỉ chứa chữ và số">
                 </div>
             </div>
             <div class="input-div">
@@ -88,7 +98,7 @@
                 </div>
                 <div class="div">
 <!--                    <h5>Mật khẩu</h5>-->
-                    <input type="password" class="input" placeholder = "Mật khẩu" required>
+                    <input type="password" class="input" name="password" placeholder = "Mật khẩu" required>
                 </div>
             </div>
             <div class="input-div">
@@ -97,7 +107,7 @@
                 </div>
                 <div class="div">
 <!--                    <h5>Nhập lại mật khẩu</h5>-->
-                    <input type="password" class="input" placeholder = "Nhập lại mật khẩu" required>
+                    <input type="password" class="input" name="rewritePassword" placeholder = "Nhập lại mật khẩu" required>
                 </div>
             </div>
             <a href="#" class="btn-next" onclick="prevStep()">Quay về <span class="arrow">&larr;</span></a>
@@ -106,19 +116,34 @@
 
     </div>
 </div>
-<script th:src="@{/user/js/login.js}"></script>
+<script th:src="@{/admin/assets/js/base.js}"></script>
+<script th:src="@{/user/js/register.js}"></script>
 <script>
-    // JavaScript điều khiển bước chuyển form
     function nextStep() {
+        if (!step1Form.checkValidity()) {
+            step1Form.reportValidity(); //tra ve report neu co loi
+            return;
+        }
         document.getElementById('step1').classList.remove('active'); // Ẩn form bước 1
         document.getElementById('step2').classList.add('active');   // Hiển thị form bước 2
     }
 
     function prevStep() {
-    // Hiển thị form bước 1, ẩn form bước 2
         document.getElementById('step2').classList.remove('active');
         document.getElementById('step1').classList.add('active');
     }
 </script>
+
+<!-- Footer Section Begin -->
+<footer th:replace="user/fragments :: footer"></footer>
+<!-- Footer Section End -->
+
+<!-- Search Begin -->
+<div th:replace="user/fragments :: search"></div>
+<!-- Search End -->
+
+<!-- Js Plugins -->
+<div th:replace="user/fragments :: scripts"></div>
+
 </body>
 </html>

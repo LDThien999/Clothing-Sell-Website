@@ -6,7 +6,7 @@
     <meta name="keywords" content="Male_Fashion, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Male-Fashion | Template</title>
+    <title>Male-Fashion</title>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
@@ -22,20 +22,27 @@
     <link rel="stylesheet" th:href="@{/user/css/owl.carousel.min.css}" type="text/css">
     <link rel="stylesheet" th:href="@{/user/css/slicknav.min.css}" type="text/css">
     <link rel="stylesheet" th:href="@{/user/css/style.css}" type="text/css">
+
+    <style>
+        .hidden {
+            display: none !important;
+        }
+    </style>
 </head>
 <body>
 <!-- Offcanvas Menu Begin -->
 <div class="offcanvas-menu-wrapper" th:fragment="menu">
     <div class="offcanvas__option">
-        <div class="offcanvas__links">
-            <a href="#">Sign in</a>
-            <a href="#">FAQs</a>
+        <div class="offcanvas__links non-login">
+            <a th:href="@{/login.html}">Đăng nhập</a>
+            <a th:href="@{/register.html}">Đăng ký</a>
         </div>
-        <div class="offcanvas__top__hover">
+
+        <div class="offcanvas__top__hover logged-in">
             <span>Usd <i class="arrow_carrot-down"></i></span>
             <ul>
-                <li>USD</li>
-                <li>EUR</li>
+                <li><a th:href="@{/user-information.html}" >Thông tin cá nhân</a></li>
+                <li>><a class="logout-btn" th:href="@{/logout.html}" >Đăng xuất</a></li>
                 <li>USD</li>
             </ul>
         </div>
@@ -48,7 +55,7 @@
     </div>
     <div id="mobile-menu-wrap"></div>
     <div class="offcanvas__text">
-        <p>Free shipping, 30-day return or refund guarantee.</p>
+        <p>Miễn phí vận chuyển, đảm bảo hoàn tiền hoặc trả hàng trong vòng 30 ngày.</p>
     </div>
 </div>
 <!-- Offcanvas Menu End -->
@@ -60,23 +67,23 @@
             <div class="row">
                 <div class="col-lg-6 col-md-7">
                     <div class="header__top__left">
-                        <p>Free shipping, 30-day return or refund guarantee.</p>
+                        <p>Miễn phí vận chuyển, đảm bảo hoàn tiền hoặc trả hàng trong vòng 30 ngày.</p>
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-5">
                     <div class="header__top__right">
-                        <div class="header__top__links">
-                            <a href="login.html">Đăng nhập</a>
-                            <a href="#">FAQs</a>
+                        <div class="header__top__links non-login">
+                            <a th:href="@{/login.html}">Đăng nhập</a>
+                            <a th:href="@{/register.html}">Đăng ký</a>
                         </div>
-                        <div class="header__top__hover">
-                            <span>Usd <i class="arrow_carrot-down"></i></span>
+                        <div class="header__top__hover logged-in">
+                            <span>Tài khoản của tôi <i class="arrow_carrot-down"></i></span>
                             <ul>
-                                <li>USD</li>
-                                <li>EUR</li>
-                                <li>USD</li>
+                                <li><a th:href="@{/user-information.html}" style="font-size: 16px;" >Thông tin cá nhân</a></li>
+                                <li><a class="logout-btn" th:href="@{/logout.html}" style="font-size: 16px;" >Đăng xuất</a></li>
                             </ul>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -92,9 +99,9 @@
             <div class="col-lg-6 col-md-6">
                 <nav class="header__menu mobile-menu">
                     <ul>
-                        <li class="active"><a href="./index.html">Home</a></li>
-                        <li><a href="./shop.html">Shop</a></li>
-                        <li><a href="#">Pages</a>
+                        <li class="active"><a href="./index.html">Trang chủ</a></li>
+                        <li><a href="./shop.html">Sản phẩm</a></li>
+                        <li><a href="#">Trang liên quan</a>
                             <ul class="dropdown">
                                 <li><a href="./about.html">About Us</a></li>
                                 <li><a href="./shop-details.html">Shop Details</a></li>
@@ -103,8 +110,7 @@
                                 <li><a href="./blog-details.html">Blog Details</a></li>
                             </ul>
                         </li>
-                        <li><a href="./blog.html">Blog</a></li>
-                        <li><a href="./contact.html">Contacts</a></li>
+                        <li><a href="./contact.html">Liên hệ</a></li>
                     </ul>
                 </nav>
             </div>
@@ -131,7 +137,7 @@
                     <div class="footer__logo">
                         <a href="#"><img th:src="@{/user/img/footer-logo.png}" alt=""></a>
                     </div>
-                    <p>The customer is at the heart of our unique business model, which includes design.</p>
+                    <p>Khách hàng là trọng tâm trong mô hình kinh doanh độc đáo của chúng tôi, bao gồm cả thiết kế.</p>
                     <a href="#"><img th:src="@{/user/img/payment.png}" alt=""></a>
                 </div>
             </div>
@@ -212,6 +218,7 @@
     <script th:src="@{/user/js/mixitup.min.js}"></script>
     <script th:src="@{/user/js/owl.carousel.min.js}"></script>
     <script th:src="@{/user/js/main.js}"></script>
+    <script th:src="@{/user/js/fragments.js}"></script>
 </th:block>
 
 </body>

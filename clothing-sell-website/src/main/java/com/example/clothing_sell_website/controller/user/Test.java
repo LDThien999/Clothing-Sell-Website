@@ -55,7 +55,8 @@ public class Test {
     }
 
     @GetMapping("/register.html")
-    public String registerPage() {
-        return "user/register";
-    }
+    public String registerPage() {return "user/register";}
+
+    @GetMapping("/user-information.html")
+    public String profile() {return "user/profile";}
 }
