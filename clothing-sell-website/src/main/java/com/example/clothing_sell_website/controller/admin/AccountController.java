@@ -31,8 +31,15 @@ public class AccountController {
     @GetMapping("/staff-account")
     public String getStaffAccounts(HttpServletRequest request, Model model) {
         model.addAttribute("currentUri", request.getRequestURI());
-        model.addAttribute("staffList", orderService.getOrders());
-        return "admin/bill-register";
+        model.addAttribute("accountList", accountService.getStaffAccounts());
+        return "admin/staff-account";
+    }
+
+    @GetMapping("/customer-account")
+    public String getCustomerAccounts(HttpServletRequest request, Model model) {
+        model.addAttribute("currentUri", request.getRequestURI());
+        model.addAttribute("accountList", accountService.getCustomerAccounts());
+        return "admin/customer-account";
     }
 
     @GetMapping("/create-account")
