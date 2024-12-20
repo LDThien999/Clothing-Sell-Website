@@ -316,6 +316,10 @@ ol {
 -----------------------*/
 
 .header {
+    left: 0;
+    z-index: 99;
+    right: 0;
+    position: fixed;
     background: #ffffff;
 }
 
@@ -335,7 +339,6 @@ ol {
 
 .header__top__links {
     display: inline-block;
-    margin-right: 25px;
 }
 
 .header__top__links a {
@@ -4192,6 +4195,7 @@ a:hover {
 }
 
 .form-step.active {
+    margin-top: 10vh;
     display: block;
 }
 
@@ -4238,3 +4242,109 @@ a:hover {
 .btn-next:hover .arrow {
     transform: translateX(5px); /* Mũi tên di chuyển khi hover */
 }
+
+/* ContainerNotification */
+.card {
+    display: none;
+    width: 330px;
+    height: 80px;
+    right: 0;
+    top: 20%;
+    border-radius: 8px;
+    box-sizing: border-box;
+    padding: 10px 15px;
+    background-color: #ffffff;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    position: fixed;
+    overflow: hidden;
+    align-items: center;
+    justify-content: space-around;
+    gap: 15px;
+    z-index: 100;
+}
+.cardwave {
+    position: absolute;
+    transform: rotate(90deg);
+    left: -31px;
+    top: 32px;
+    width: 80px;
+
+}
+.error-notice .cardwave{
+    fill: rgba(255, 26, 26, 0.82);
+}
+
+.success-notice .cardwave{
+    fill: rgba(5, 245, 0, 0.62);
+
+}
+
+.icon-container {
+    width: 35px;
+    height: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    margin-left: 8px;
+}
+
+.error-notice .icon-container{
+    background-color: #fc0c0c48;
+}
+
+.success-notice .icon-container{
+    background-color: #04e40048;
+}
+
+.icon {
+    width: 17px;
+    height: 17px;
+}
+
+.error-notice .icon{
+    color: #d10d0d;
+
+}
+
+.success-notice .icon{
+    color: #269b24;
+}
+
+.message-text-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    flex-grow: 1;
+}
+.message-text,
+.sub-text {
+    margin: 0;
+    cursor: default;
+}
+.message-text {
+    font-size: 17px;
+    font-weight: 700;
+    padding: 2px;
+}
+
+.error-notice .message-text{
+    color: #d10d0d;
+}
+
+.success-notice .message-text{
+    color: #269b24;
+}
+
+.sub-text {
+    font-size: 16px;
+    color: black;
+}
+.cross-icon {
+    width: 18px;
+    height: 18px;
+    color: #555;
+    cursor: pointer;
+}
+

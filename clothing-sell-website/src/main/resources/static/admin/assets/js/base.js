@@ -1,4 +1,4 @@
-function fetchData(url, method = "GET", body = null) {
+function fetchData(url, method, body = null) {
     const token = localStorage.getItem("jwtToken");
     const headers = {
         "Content-Type": "application/json"
@@ -14,14 +14,7 @@ function fetchData(url, method = "GET", body = null) {
         options.body = JSON.stringify(body);
     }
 
-    fetch(url, options)
-        .then(response => response.text())
-        .then(data => {
-            console.log(data);
-        })
-        .catch(error => {
-            console.error("Error:", error);
-        });
+    return  fetch(url, options);
 }
 
 function isTokenValid(token) {

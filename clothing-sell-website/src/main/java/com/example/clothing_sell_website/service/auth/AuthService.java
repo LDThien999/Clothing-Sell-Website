@@ -23,7 +23,6 @@ import com.example.clothing_sell_website.entity.Role;
 import com.example.clothing_sell_website.repository.AccountRepository;
 import com.example.clothing_sell_website.repository.CustomerRepository;
 import com.example.clothing_sell_website.repository.RoleRepository;
-
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -59,6 +58,7 @@ public class AuthService {
                 Account account = accountOtp.get();
                 String token = jwtService.generateToken(authentication);
 
+
                 return AuthenticationResponse.builder()
                         .token(token)
                         .message("Đăng nhập thành công")
@@ -79,30 +79,32 @@ public class AuthService {
                 .build();
     }
 
-    public RegisterResponse registerNewAccount(RegisterRequest request) {
-        String message = "Đăng ký thành công";
-        boolean success = true;
-
+    public RegisterResponse registerNewCustomerAccount(RegisterRequest request){
         Optional<Account> accountOptional = accountRepository.findByUsername(request.getUsername());
-        if (accountOptional.isPresent()) {
-            message = "Username đã tồn tại";
-            success = false;
+        if (accountOptional.isPresent()){
+            return RegisterResponse.builder()
+                    .message("Username đã tồn tại")
+                    .success(false)
+                    .build();
         }
 
         Customer customer = new Customer();
-        try {
+        try{
+            customer.setCustomerId(generateCustomerId());
             customer.setName(request.getName());
             customer.setEmail(request.getEmail());
             customer.setPhoneNum(request.getPhoneNum());
             customer.setCreditNum(request.getCreditNum());
             customerRepository.save(customer);
         } catch (Exception e) {
-            message = "Không thể tạo user";
-            success = false;
+            return RegisterResponse.builder()
+                    .message("Không thể tạo user")
+                    .success(false)
+                    .build();
         }
 
-        Role role = roleRepository.findByRoleId("0");
-        try {
+        Role role = roleRepository.findByRoleId("1");
+        try{
             Account account = new Account();
             account.setUsername(request.getUsername());
             account.setPassword(passwordEncoder.encode(request.getPassword()));
@@ -110,16 +112,22 @@ public class AuthService {
             account.setRole(role);
             accountRepository.save(account);
         } catch (Exception e) {
-            message = "Không thể tạo tài khoản";
-            success = false;
-        }
-        try {
-            return RegisterResponse.builder().message(message).success(success).build();
-        } catch (Exception e) {
             return RegisterResponse.builder()
-                    .message("Đã xảy ra sự cố")
+                    .message("Không thể tạo tài khoản")
                     .success(false)
                     .build();
+        }
+        try {
+            return RegisterResponse.builder()
+                    .message("Đăng ký thành công")
+                    .success(true)
+                    .build();
+        } catch (Exception e) {
+            return
+                    RegisterResponse.builder()
+                            .message("Đã xảy ra sự cố")
+                            .success(false)
+                            .build();
         }
     }
 
@@ -131,8 +139,8 @@ public class AuthService {
         javaMailSender.send(simpleMailMessage);
     }
 
-    private String generateRandomPassword() {
-        int length = 10;
+    private String generateRandomString(){
+        int length = 7;
         String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         Random random = new Random();
         StringBuilder sb = new StringBuilder(length);
@@ -154,7 +162,7 @@ public class AuthService {
             throw new RuntimeException("Tài khoản cho email không tồn tại.");
         }
         Account account = accountOp.get();
-        String newPassword = generateRandomPassword();
+        String newPassword = generateRandomString();
         account.setPassword(passwordEncoder.encode(newPassword));
         accountRepository.save(account);
 
@@ -163,4 +171,14 @@ public class AuthService {
                 "Mật khẩu mới của bạn là: " + newPassword + "\nVui lòng đăng nhập và thay đổi mật khẩu ngay lập tức.";
         sendSimpleMail(email, subject, text);
     }
+
+    public String generateCustomerId() {
+        Random random = new Random();
+        String customerId = "";
+        while (customerId.isEmpty() || customerRepository.findById(customerId).isPresent()){
+            customerId = "KH" + generateRandomString();
+        }
+        return customerId;
+    }
 }
+
