@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -27,5 +29,15 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account getAccountByUsername(String username) {
         return accountRepository.findByUsername(username).get();
+    }
+
+    @Override
+    public List<Account> getStaffAccounts() {
+        return accountRepository.getStaffAccounts();
+    }
+
+    @Override
+    public List<Account> getCustomerAccounts() {
+        return accountRepository.getCustomerAccounts();
     }
 }
