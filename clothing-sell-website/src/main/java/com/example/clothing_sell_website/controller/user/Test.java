@@ -1,15 +1,16 @@
 package com.example.clothing_sell_website.controller.user;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class Test {
     @GetMapping({"/", "/index.html"})
-    public String index() {
+    public String index(HttpServletRequest request) {
+        String username = (String) request.getSession().getAttribute("currentCustomer");
         return "user/index";
     }
-
     @GetMapping("/about.html")
     public String about() {
         return "user/about";

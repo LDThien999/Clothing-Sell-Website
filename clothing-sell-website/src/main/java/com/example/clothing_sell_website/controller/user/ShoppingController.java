@@ -1,8 +1,10 @@
 package com.example.clothing_sell_website.controller.user;
 
 import com.example.clothing_sell_website.entity.*;
+import com.example.clothing_sell_website.service.admin.AccountService;
 import com.example.clothing_sell_website.service.customer.*;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.hibernate.validator.internal.constraintvalidators.bv.PatternValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,15 +27,19 @@ public class ShoppingController {
     private CustomerCusService customerService;
     @Autowired
     private OrderListService orderListService;
+    @Autowired
+    private AccountService accountService;
 
     @GetMapping("/shop.html")
-    public String shop(Model model, HttpSession session) {
+    public String shop(Model model, HttpServletRequest request) {
         List<Product> products = shopService.getAllProduct();
         List<Type> types = typeService.getAllType();
         List<Brand> brands = brandService.getAllBrand();
-        Customer cus = customerService.getCustomerById("KH001");
+        String username = (String) request.getSession().getAttribute("currentCustomer");
+        System.out.println(username);
+        Customer cus = accountService.getAccountById(username).getCustomer();
+        //Customer cus = customerService.getCustomerById("KH001");
         model.addAttribute("customer",cus);
-        session.setAttribute("customerss", cus);
         model.addAttribute("products", products);
         model.addAttribute("types", types);
         model.addAttribute("brands", brands);
@@ -65,10 +71,16 @@ public class ShoppingController {
     }
 
     @GetMapping("/shop/detail/{productId}")
-    public String shopDetail(@PathVariable String productId, Model model,HttpSession session) {
+    public String shopDetail(@PathVariable String productId, Model model,HttpSession session
+    ,HttpServletRequest request) {
         Product product = shopService.getProductById(productId);
-        Customer cus = customerService.getCustomerById("KH001");
+        String username = (String) request.getSession().getAttribute("currentCustomer");
+        System.out.println(username);
+        Customer cus = accountService.getAccountById(username).getCustomer();
+        //Customer cus = customerService.getCustomerById("KH001");
         model.addAttribute("customer",cus);
+        //Customer cus = customerService.getCustomerById("KH001");
+        //model.addAttribute("customer",cus);
         model.addAttribute("product", product);
         return "user/shopping/shop-details";
 
