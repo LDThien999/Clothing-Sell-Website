@@ -221,7 +221,7 @@
                                         <li><a href="#"><img th:src="@{/user/img/icon/heart.png}" alt=""></a></li>
                                         <li><a href="#"><img th:src="@{/user/img/icon/compare.png}" alt=""> <span>Compare</span></a>
                                         </li>
-                                        <li><a th:href="@{'/shop/detail/' + ${product.productId}}"><img th:src="@{/user/img/icon/search.png}" alt=""></a></li>
+                                        <li><a onclick="getRecommend(this)" th:href="@{'/shop/detail/' + ${product.productId}}" th:data-product-id="${product.productId}"><img th:src="@{/user/img/icon/search.png}" alt=""></a></li>
 
                                     </ul>
                                 </div>
@@ -317,6 +317,19 @@
                     console.error('Lỗi:', error);
                     alert(error);
                 });
+        }
+    </script>
+    <script>
+        function getRecommend(anchor) {
+            event.preventDefault()
+            // Lấy giá trị của data-product-id
+            const productId = anchor.getAttribute("data-product-id");
+
+            if (productId) {
+                alert("Sản phẩm ID: " + productId); // Hiển thị ID sản phẩm
+            } else {
+                alert("Không tìm thấy thông tin sản phẩm!");
+            }
         }
     </script>
     <!-- Footer Section Begin -->

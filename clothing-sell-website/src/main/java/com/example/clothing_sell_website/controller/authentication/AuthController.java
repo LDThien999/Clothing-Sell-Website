@@ -9,6 +9,7 @@ import com.example.clothing_sell_website.service.admin.AccountService;
 import com.example.clothing_sell_website.service.admin.CustomerService;
 import com.example.clothing_sell_website.service.auth.AuthService;
 import com.example.clothing_sell_website.service.auth.JwtService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+
+import java.util.Objects;
 
 
 @Controller
@@ -34,8 +37,16 @@ public class AuthController {
     private AccountService accountService;
 
     @PostMapping("/login")
-    public ResponseEntity<AuthenticationResponse> authenticateLogin(@RequestBody AuthenticationRequest request) {
+    public ResponseEntity<AuthenticationResponse> authenticateLogin(@RequestBody AuthenticationRequest request,
+                                                                    HttpServletRequest httpRequest) {
         AuthenticationResponse response = authService.authenticate(request);
+        if(Objects.equals(response.getRole(), "customer")) {
+            httpRequest.getSession().setAttribute("currentCustomer",request.getUsername());
+        }
+        else if (Objects.equals(response.getRole(), "staff"))
+        {
+            httpRequest.getSession().setAttribute("currentStaff",request.getUsername());
+        }
         return ResponseEntity.ok(response);
     }
 
@@ -68,12 +79,12 @@ public class AuthController {
     }
     @GetMapping("/admin/info")
     private ResponseEntity<String> getStringResponseEntity() {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            System.out.println(authentication.getName());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println(authentication.getName());
 
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token không hợp lệ");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token không hợp lệ");
 
-       }
+    }
 
     @GetMapping("/api/user/profile")
     public ResponseEntity<Customer> profile(@RequestHeader("Authorization") String authorizationHeader) {
