@@ -1,0 +1,141 @@
+<!doctype html>
+<!--[if lt IE 7]>
+<html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js lt-ie9" lang=""> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html xmlns:th="http://www.thymeleaf.org" class="no-js" lang="en">
+<!--<![endif]-->
+
+<head th:replace="admin/fragments :: meta_css"></head>
+<head>
+    <link rel="stylesheet" th:href="@{/admin/vendors/datatables.net-bs4/css/dataTables.bootstrap4.min.css}">
+    <link rel="stylesheet" th:href="@{/admin/vendors/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css}">
+</head>
+
+<body>
+
+
+<!-- Left Panel -->
+<aside th:replace="admin/fragments :: left-panel"></aside>
+
+<!-- Left Panel -->
+
+<!-- Right Panel -->
+
+<div id="right-panel" class="right-panel">
+
+    <!-- Header-->
+    <header th:replace="admin/fragments :: header"></header>
+    <!-- /header -->
+    <!-- Header-->
+
+    <div class="breadcrumbs">
+        <div class="col-sm-4">
+            <div class="page-header float-left">
+                <div class="page-title">
+                    <h1>Sản phẩm trong đơn hàng</h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-8">
+            <div class="page-header float-right">
+                <div class="page-title">
+                    <ol class="breadcrumb text-right">
+                        <li class="active">Sản phẩm trong đơn hàng</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="content mt-3">
+        <div class="animated fadeIn">
+            <div class="row">
+
+                <div class="col-md-12">
+
+                    <div class="notification-box">
+
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <strong class="card-title">Sản phẩm trong đơn hàng</strong>
+                        </div>
+
+                        <div class="card-body">
+                            <table id="bootstrap-data-table-export" class="table table-striped table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>Mã chi tiết đơn hàng</th>
+                                    <th>Mã đơn hàng</th>
+                                    <th>Sản phẩm</th>
+                                    <th>Số lượng</th>
+                                    <th>Giá</th>
+                                    <th>Tổng tiền</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="orderList : ${orderListList}">
+                                    <td th:text="${orderList.orderListId}"></td>
+                                    <td th:text="${orderList.order.orderId}"></td>
+                                    <td th:text="${orderList.cart.product.productName}"></td>
+                                    <td th:text="${orderList.quantity}"></td>
+                                    <td th:text="${orderList.cart.product.price}"></td>
+                                    <td th:text="${orderList.quantity * orderList.cart.product.price}"></td>
+
+
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div><!-- .animated -->
+    </div><!-- .content -->
+</div><!-- /#right-panel -->
+
+<!-- Right Panel -->
+
+<script th:src="@{/admin/assets/js/base.js}"></script>
+<script th:src="@{/admin/assets/js/indexAdmin.js}"></script>
+
+<script th:src="@{/admin/vendors/jquery/dist/jquery.min.js}"></script>
+<script th:src="@{/admin/vendors/popper.js/dist/umd/popper.min.js}"></script>
+<script th:src="@{/admin/vendors/bootstrap/dist/js/bootstrap.min.js}"></script>
+<script th:src="@{/admin/assets/js/main.js}"></script>
+
+<script th:inline="javascript">
+    var notificationType = '';
+    var notificationMessage = '';
+    notificationType = [[${notificationType}]];
+    notificationMessage = [[${notificationMessage}]]
+
+    if (notificationType && notificationMessage) {
+        sendNotification(notificationType, notificationMessage);
+    }
+</script>
+
+<script th:src="@{/admin/vendors/datatables.net/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/admin/vendors/datatables.net-bs4/js/dataTables.bootstrap4.min.js}"></script>
+<script th:src="@{/admin/vendors/datatables.net-buttons/js/dataTables.buttons.min.js}"></script>
+<script th:src="@{/admin/vendors/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js}"></script>
+<script th:src="@{/admin/vendors/jszip/dist/jszip.min.js}"></script>
+<script th:src="@{/admin/vendors/pdfmake/build/pdfmake.min.js}"></script>
+<script th:src="@{/admin/vendors/pdfmake/build/vfs_fonts.js}"></script>
+<script th:src="@{/admin/vendors/datatables.net-buttons/js/buttons.html5.min.js}"></script>
+<script th:src="@{/admin/vendors/datatables.net-buttons/js/buttons.print.min.js}"></script>
+<script th:src="@{/admin/vendors/datatables.net-buttons/js/buttons.colVis.min.js}"></script>
+<script th:src="@{/admin/assets/js/init-scripts/data-table/datatables-init.js}"></script>
+
+
+</body>
+
+</html>

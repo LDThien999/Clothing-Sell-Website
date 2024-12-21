@@ -1,0 +1,72 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="user/fragments :: meta_css"></head>
+
+<body>
+<!-- Page Preloder -->
+<div id="preloder">
+    <div class="loader"></div>
+</div>
+
+<!-- Offcanvas Menu Begin -->
+<div class="offcanvas-menu-overlay"></div>
+<div th:replace="user/fragments :: menu"></div>
+<!-- Offcanvas Menu End -->
+
+<!-- Header Section Begin -->
+<header th:replace="user/fragments :: header"></header>
+<!-- Header Section End -->
+
+
+<img class="wave" th:src="@{user/img/login/wave.png}">
+<div class="container-login">
+    <div class="img-login">
+        <img th:src="@{user/img/login/bg.svg}">
+    </div>
+    <div class="login-content">
+        <form id="loginForm">
+            <img th:src="@{user/img/login/avatar.svg}">
+            <h2 class="title">ĐĂNG NHẬP</h2>
+            <div class="input-div one">
+                <div class="i-login">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="div">
+                    <!--                    <h5>Tên đăng nhập</h5>-->
+                    <input name="username" type="text" class="input" placeholder="Tên đăng nhập" required>
+                </div>
+            </div>
+            <div class="input-div pass">
+                <div class="i-login">
+                    <i class="fas fa-lock"></i>
+                </div>
+                <div class="div">
+                    <!--                    <h5>Mật khẩu</h5>-->
+                    <input name="password" type="password" class="input" placeholder="Mật khẩu" required>
+                </div>
+            </div>
+            <a href="#">Quên mật khẩu?</a>
+            <input type="submit" class="btn" value="Đăng nhập">
+            <div class="inline-container">
+                <p>Bạn chưa có tài khoản?</p>
+                <a href="register.html">Đăng ký</a>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<!-- Footer Section Begin -->
+<footer th:replace="user/fragments :: footer"></footer>
+<!-- Footer Section End -->
+
+<!-- Search Begin -->
+<div th:replace="user/fragments :: search"></div>
+<!-- Search End -->
+
+<!-- Js Plugins -->
+<div th:replace="user/fragments :: scripts"></div>
+<script th:src="@{/user/js/login.js}"></script>
+
+</body>
+</html>

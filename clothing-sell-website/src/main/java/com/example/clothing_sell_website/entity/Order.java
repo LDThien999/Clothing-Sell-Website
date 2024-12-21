@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 
 import jakarta.persistence.*;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -21,6 +23,7 @@ public class Order {
     Integer orderId;
 
     @Column(name = "Date")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     LocalDateTime date;
 
     @Column(name = "PaymentMethod")
@@ -29,7 +32,7 @@ public class Order {
     @Column(name = "Status")
     Boolean status;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "StaffId")
     Staff staff;
 
