@@ -6,8 +6,9 @@ import java.util.List;
 
 public interface CartService {
     Cart saveCart(Cart cart);
-    void deleteCart(Long cartId);
+    void deleteCart(long cartId);
     Cart getCartByCP(String customerId, String productId);
     List <Cart> getCartByCus(String customerId);
+    Cart getCartById(long cartId);
 }
 

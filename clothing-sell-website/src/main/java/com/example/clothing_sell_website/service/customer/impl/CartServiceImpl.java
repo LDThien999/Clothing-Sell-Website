@@ -16,7 +16,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public void deleteCart(Long cartId) {
+    public void deleteCart(long cartId) {
         cartRepo
                 .findById(cartId);
         cartRepo.deleteById(cartId);
@@ -28,9 +28,16 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    public Cart getCartById(long cartId){
+        return cartRepo.findById(cartId).orElseThrow(() -> new RuntimeException("Id không tồn tại!"));
+    }
+
+
+    @Override
     public List<Cart> getCartByCus(String customerId){
         return cartRepo.getCartByCus(customerId);
     }
+
 
 
 }

@@ -146,7 +146,30 @@
                                         <input id="quantity-input" type="text" value="1">
                                     </div>
                                 </div>
-                                <a id="add-to-cart-btn" th:href="@{'/shop/addCart/' + ${product.productId.replace(' ','')} +'/1/' + ${customer.customerId.replace(' ','')}}" class="primary-btn">add to cart</a>
+                                <button id="open-modal" class="modal__button" onclick="addCart(this)" th:value="${product.productId}" >
+                                    Thêm vào giỏ
+                                </button>
+
+                                <div class="modal__container" id="modal-container">
+                                    <div class="modal__content">
+                                        <div class="modal__close close-modal" title="Close">
+                                            <i class='bx bx-x'></i>
+                                        </div>
+
+                                        <img th:src="@{/modelPopup/img/checkingCart_rm.png}" alt="" class="modal__img">
+
+                                        <h1 class="modal__title">Thêm vào giỏ thành công!</h1>
+                                        <p class="modal__description">Chúc bạn mua sắm vui vẻ</p>
+
+                                        <button class="modal__button modal__button-width" onclick="window.location.href='/clothing-sell/cart.html';">
+                                            Xem giỏ hàng
+                                        </button>
+
+                                        <button class="modal__button-link close-modal" onclick="window.location.href='/clothing-sell/shop.html';">
+                                            Tiếp tục mua sắm
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                             <script>
                                 // Lấy các phần tử cần thao tác
@@ -455,8 +478,41 @@
             </div>
         </div>
     </section>
-    <!-- Related Section End -->
+    <script>
+        function addCart(button) {
+            const productId = button.value;
+            const inp = document.getElementById("quantity-input")
+            const quantity = parseInt(inp.value)
+            const data = {
+                productId: productId,
+                quantity: quantity
+            };
 
+            fetch('/clothing-sell/addCart', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json(); // Giải mã JSON từ server
+                    } else {
+                        throw new Error(response.url);
+                    }
+                })
+                .then(result => {
+                    showModal()
+                })
+                .catch(error => {
+                    console.error('Lỗi:', error);
+                    alert(error);
+                });
+        }
+    </script>
+    <!-- Related Section End -->
+    <script th:src="@{/modelPopup/js/main.js}"></script>
     <!-- Footer Section Begin -->
     <footer th:replace="user/fragments :: footer"></footer>
     <!-- Footer Section End -->

@@ -1,15 +1,10 @@
 package com.example.clothing_sell_website.controller.user;
 
-import com.example.clothing_sell_website.entity.Brand;
-import com.example.clothing_sell_website.entity.Customer;
-import com.example.clothing_sell_website.entity.Product;
-import com.example.clothing_sell_website.entity.Type;
-import com.example.clothing_sell_website.service.customer.BrandService;
-import com.example.clothing_sell_website.service.customer.CustomerService;
-import com.example.clothing_sell_website.service.customer.ShopService;
-import com.example.clothing_sell_website.service.customer.TypeService;
+import com.example.clothing_sell_website.entity.*;
+import com.example.clothing_sell_website.service.customer.*;
 
 import jakarta.servlet.http.HttpSession;
+import org.hibernate.validator.internal.constraintvalidators.bv.PatternValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import  org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
@@ -28,6 +23,9 @@ public class ShoppingController {
     private BrandService brandService;
     @Autowired
     private CustomerService customerService;
+    @Autowired
+    private OrderListService orderListService;
+
     @GetMapping("/shop.html")
     public String shop(Model model, HttpSession session) {
         List<Product> products = shopService.getAllProduct();
@@ -75,4 +73,14 @@ public class ShoppingController {
         return "user/shopping/shop-details";
 
     }
+
+    @GetMapping("/checkout/{orderId}")
+    public String checkout(@PathVariable int orderId, Model model){
+        List<OrderList> orderLists = orderListService.getOrderListByOrder(orderId);
+        Order order = orderLists.get(0).getOrder();
+        model.addAttribute("orderLists", orderLists);
+        model.addAttribute("order", order);
+        return "user/shopping/checkout";
+    }
+
 }

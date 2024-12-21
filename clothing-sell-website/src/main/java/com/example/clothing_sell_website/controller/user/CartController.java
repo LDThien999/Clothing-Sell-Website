@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -43,8 +44,16 @@ public class CartController {
     @GetMapping("/cart.html")
     public String cart(Model model) {
         List <Cart> carts = cartService.getCartByCus("KH001");
-        model.addAttribute("carts", carts);
+        List<Cart> realCart = new ArrayList<Cart>();
+        for(Cart cart : carts){
+            if(cart.getQuantity() > 0){
+                realCart.add(cart);
+            }
+        }
+        model.addAttribute("carts", realCart);
         return "user/Shopping/shopping-cart";
     }
+
+
 
 }

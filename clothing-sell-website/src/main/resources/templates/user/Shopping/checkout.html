@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head th:replace="user/fragments :: meta_css"></head>
+
+<body>
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Offcanvas Menu Begin -->
+    <div class="offcanvas-menu-overlay"></div>
+    <div th:replace="user/fragments :: menu"></div>
+    <!-- Offcanvas Menu End -->
+
+    <!-- Header Section Begin -->
+    <header th:replace="user/fragments :: header"></header>
+    <!-- Header Section End -->
+
+    <!-- Breadcrumb Section Begin -->
+    <section class="breadcrumb-option">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb__text">
+                        <h4>Check Out</h4>
+                        <div class="breadcrumb__links">
+                            <a href="../index.html">Home</a>
+                            <a href="shop.html">Shop</a>
+                            <span>Check Out</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb Section End -->
+
+    <!-- Checkout Section Begin -->
+    <section class="checkout spad">
+        <div class="container">
+            <div class="checkout__form">
+                <form action="#">
+                    <div class="row">
+                        <div class="col-lg-8 col-md-6">
+                            <h6 class="coupon__code"><span class="icon_tag_alt"></span> Have a coupon? <a href="#">Click
+                            here</a> to enter your code</h6>
+                            <h6 class="checkout__title">Billing Details</h6>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="checkout__input">
+                                        <p>Họ tên<span>*</span></p>
+                                        <input type="text" th:value="${order.customer.name}" disabled >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="checkout__input">
+                                <p>Country<span>*</span></p>
+                                <input type="text" value="Việt Nam" disabled>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="checkout__input">
+                                        <p>Phone<span>*</span></p>
+                                        <input type="text" th:value="${order.customer.phoneNum}" disabled>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="checkout__input">
+                                        <p>Email<span>*</span></p>
+                                        <input type="text" th:value="${order.customer.email}" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-6">
+                            <div class="checkout__order">
+                                <h4 class="order__title">Your order</h4>
+                                <div class="checkout__order__products">Product <span>Total</span></div>
+                                <ul class="checkout__total__products">
+                                    <li th:each="orderList : ${orderLists}" th:text="${orderList.cart.product.productName}"><span th:text="${orderList.cart.product.price*orderList.quantity} + ' VND'"></span></li>
+                                </ul>
+                                <ul class="checkout__total__all">
+                                    <li>Subtotal <span>$750.99</span></li>
+                                    <li>Total <span>$750.99</span></li>
+                                </ul>
+                                <button class="site-btn" onclick="getFastAPI()">Chấp thuận đơn hàng</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+    <script>
+        function getFastAPI(){
+            fetch('http://127.0.0.1:8000/')  // Địa chỉ của FastAPI server
+                .then(response => response.json())   // Chuyển dữ liệu từ JSON
+                .then(data => {
+                    alert(data)
+                    // Dữ liệu trả về từ FastAPI có thể được xử lý ở đây
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+    </script>
+    <!-- Checkout Section End -->
+
+    <!-- Footer Section Begin -->
+    <footer th:replace="user/fragments :: footer"></footer>
+    <!-- Footer Section End -->
+
+    <!-- Search Begin -->
+    <div th:replace="user/fragments :: search"></div>
+    <!-- Search End -->
+
+    <!-- Js Plugins -->
+    <div th:replace="user/fragments :: scripts"></div>
+</body>
+
+</html>

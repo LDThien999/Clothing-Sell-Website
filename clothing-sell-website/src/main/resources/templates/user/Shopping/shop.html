@@ -222,11 +222,32 @@
                                         <li><a href="#"><img th:src="@{/user/img/icon/compare.png}" alt=""> <span>Compare</span></a>
                                         </li>
                                         <li><a th:href="@{'/shop/detail/' + ${product.productId}}"><img th:src="@{/user/img/icon/search.png}" alt=""></a></li>
+
                                     </ul>
                                 </div>
                                 <div class="product__item__text">
                                     <h6 th:text="${product.productName}"></h6>
-                                    <a th:href="@{'/shop/addCart/' + ${product.productId.replace(' ','')} +'/1/' + ${customer.customerId.replace(' ','')}}" class="add-cart">+ Thêm vào giỏ hàng</a>
+                                    <a id="open-modal" onclick="addCart(this)"  th:data-product-id="${product.productId}" class="add-cart" style=" cursor: pointer;">+ Thêm vào giỏ hàng</a>
+                                    <div class="modal__container" id="modal-container">
+                                        <div class="modal__content">
+                                            <div class="modal__close close-modal" title="Close">
+                                                <i class='bx bx-x'></i>
+                                            </div>
+
+                                            <img th:src="@{/modelPopup/img/checkingCart_rm.png}" alt="" class="modal__img">
+
+                                            <h1 class="modal__title">Thêm vào giỏ thành công!</h1>
+                                            <p class="modal__description">Chúc bạn mua sắm vui vẻ</p>
+
+                                            <button class="modal__button modal__button-width" onclick="window.location.href='/clothing-sell/cart.html';">
+                                                Xem giỏ hàng
+                                            </button>
+
+                                            <button class="modal__button-link close-modal" onclick="window.location.href='/clothing-sell/shop.html';">
+                                                Tiếp tục mua sắm
+                                            </button>
+                                        </div>
+                                    </div>
                                     <div class="rating">
                                         <i class="fa fa-star-o"></i>
                                         <i class="fa fa-star-o"></i>
@@ -266,7 +287,38 @@
         </div>
     </section>
     <!-- Shop Section End -->
+    <script>
+        function addCart(element) {
+            const productId = element.dataset.productId;
+            const quantity = 1
+            const data = {
+                productId: productId,
+                quantity: quantity
+            };
 
+            fetch('/clothing-sell/addCart', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json(); // Giải mã JSON từ server
+                    } else {
+                        throw new Error(response.url);
+                    }
+                })
+                .then(result => {
+                    openModalActive()
+                })
+                .catch(error => {
+                    console.error('Lỗi:', error);
+                    alert(error);
+                });
+        }
+    </script>
     <!-- Footer Section Begin -->
     <footer th:replace="user/fragments :: footer"></footer>
     <!-- Footer Section End -->
@@ -274,7 +326,7 @@
     <!-- Search Begin -->
     <div th:replace="user/fragments :: search"></div>
     <!-- Search End -->
-
+    <script th:src="@{/modelPopup/js/main.js}"></script>
     <!-- Js Plugins -->
     <div th:replace="user/fragments :: scripts"></div>
 </body>
