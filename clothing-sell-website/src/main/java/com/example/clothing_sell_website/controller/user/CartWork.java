@@ -2,7 +2,7 @@ package com.example.clothing_sell_website.controller.user;
 import com.example.clothing_sell_website.entity.*;
 import com.example.clothing_sell_website.service.admin.ProductService;
 import com.example.clothing_sell_website.service.customer.CartService;
-import com.example.clothing_sell_website.service.customer.CustomerService;
+import com.example.clothing_sell_website.service.customer.CustomerCusService;
 import com.example.clothing_sell_website.service.customer.OrderCusService;
 import com.example.clothing_sell_website.service.customer.OrderListService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ public class CartWork{
     @Autowired
     private CartService cartService;
     @Autowired
-    private CustomerService cusService;
+    private CustomerCusService cusService;
     @Autowired
     private ProductService productService;
     @Autowired

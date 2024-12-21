@@ -3,7 +3,7 @@ import com.example.clothing_sell_website.entity.Cart;
 import com.example.clothing_sell_website.entity.Product;
 import com.example.clothing_sell_website.service.admin.ProductService;
 import com.example.clothing_sell_website.service.customer.CartService;
-import com.example.clothing_sell_website.service.customer.CustomerService;
+import com.example.clothing_sell_website.service.customer.CustomerCusService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import  org.springframework.ui.Model;
@@ -19,7 +19,7 @@ public class CartController {
     @Autowired
     private CartService cartService;
     @Autowired
-    private CustomerService cusService;
+    private CustomerCusService cusService;
     @Autowired
     private ProductService productService;
 

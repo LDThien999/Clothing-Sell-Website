@@ -22,7 +22,7 @@ public class ShoppingController {
     @Autowired
     private BrandService brandService;
     @Autowired
-    private CustomerService customerService;
+    private CustomerCusService customerService;
     @Autowired
     private OrderListService orderListService;
 
