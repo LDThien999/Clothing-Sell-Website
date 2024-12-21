@@ -1,9 +1,14 @@
 package com.example.clothing_sell_website.controller.admin;
 
+import java.time.LocalDate;
 import java.util.List;
 
+import com.example.clothing_sell_website.dto.respone.MonthlyRevenueResponse;
+import com.example.clothing_sell_website.dto.respone.WeeklyRevenueResponse;
 import jakarta.servlet.http.HttpServletRequest;
 
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -97,4 +102,25 @@ public class BillController {
         printResponse.setOrderListResponses(details);
         return printResponse;
     }
+
+    @GetMapping("/api/yearly-revenue-chart-data")
+    @ResponseBody
+    public ResponseEntity<?> getYearlyChartData() {
+        return ResponseEntity.ok(billService.getYearlyRevenueChartData());
+    }
+
+    @GetMapping("/api/monthly-revenue-chart-data")
+    @ResponseBody
+    public List<MonthlyRevenueResponse> getMonthlyChartData(@RequestParam int year) {
+        return billService.getMonthlyRevenueByYear(year);
+    }
+
+    @GetMapping("/api/weekly-revenue")
+    @ResponseBody
+    public List<WeeklyRevenueResponse> getWeeklyRevenue(
+            @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+        return billService.getWeeklyRevenue(startDate, endDate);
+    }
+
 }

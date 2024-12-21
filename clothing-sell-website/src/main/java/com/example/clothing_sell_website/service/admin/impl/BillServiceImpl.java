@@ -1,7 +1,11 @@
 package com.example.clothing_sell_website.service.admin.impl;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
+import com.example.clothing_sell_website.dto.respone.MonthlyRevenueResponse;
+import com.example.clothing_sell_website.dto.respone.WeeklyRevenueResponse;
 import org.springframework.stereotype.Service;
 
 import com.example.clothing_sell_website.entity.Bill;
@@ -38,5 +42,31 @@ public class BillServiceImpl implements BillService {
     @Override
     public Float getTotalAmount(Integer orderId) {
         return billRepository.getTotalAmount(orderId);
+    }
+
+    @Override
+    public List<Map<String, Object>> getYearlyRevenueChartData() {
+        return billRepository.getYearlyRevenueChartData();
+    }
+
+    @Override
+    public List<MonthlyRevenueResponse> getMonthlyRevenueByYear(int year) {
+        List<Object[]> monthlyRevenueList = billRepository.getMonthlyRevenueByYear(year);
+        return monthlyRevenueList.stream()
+                .map(record -> new MonthlyRevenueResponse(
+                        (int) record[0],
+                        (double) record[1]/1000000,
+                        (long) record[2]
+                )).toList();
+    }
+
+    @Override
+    public List<WeeklyRevenueResponse> getWeeklyRevenue(LocalDate startDate, LocalDate endDate) {
+        List<Object[]> weeklyRevenueList = billRepository.getWeeklyRevenue(startDate, endDate);
+        return weeklyRevenueList.stream()
+                .map(record -> new WeeklyRevenueResponse(
+                        (int) record[0],
+                        (double) record[1]
+                )).toList();
     }
 }

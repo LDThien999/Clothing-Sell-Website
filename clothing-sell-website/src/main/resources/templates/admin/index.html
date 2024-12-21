@@ -247,107 +247,47 @@
             </div>
             <!--/.col-->
 
+
             <div class="col-lg-6">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="mb-3">Yearly Sales </h4>
-                        <canvas id="sales-chart"></canvas>
+                        <div class="weekly-revenue-chart-container">
+                            <h4 class="mb-3">Doanh thu theo ngày trong tuần </h4>
+                            <div style="text-align: center; margin-bottom: 20px;">
+                                <button id="prevWeekBtn" class="btn btn-outline-link">⟵ </button>
+                                <span id="currentWeek"></span>
+                                <button id="nextWeekBtn" class="btn btn-outline-link"> ⟶</button>
+                            </div>
+                            <canvas id="weekly-revenue-chart"></canvas>
+                        </div>
                     </div>
                 </div>
             </div><!-- /# column -->
 
 
-            <div class="col-xl-3 col-lg-6">
-                <section class="card">
-                    <div class="twt-feed blue-bg">
-                        <div class="corner-ribon black-ribon">
-                            <i class="fa fa-twitter"></i>
-                        </div>
-                        <div class="fa fa-twitter wtt-mark"></div>
-
-                        <div class="media">
-                            <a href="#">
-                                <img class="align-self-center rounded-circle mr-3" style="width:85px; height:85px;" alt="" src="images/admin.jpg">
-                            </a>
-                            <div class="media-body">
-                                <h2 class="text-white display-6">Jim Doe</h2>
-                                <p class="text-light">Project Manager</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="weather-category twt-category">
-                        <ul>
-                            <li class="active">
-                                <h5>750</h5>
-                                Tweets
-                            </li>
-                            <li>
-                                <h5>865</h5>
-                                Following
-                            </li>
-                            <li>
-                                <h5>3645</h5>
-                                Followers
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="twt-write col-sm-12">
-                        <textarea placeholder="Write your Tweet and Enter" rows="1" class="form-control t-text-area"></textarea>
-                    </div>
-                    <footer class="twt-footer">
-                        <a href="#"><i class="fa fa-camera"></i></a>
-                        <a href="#"><i class="fa fa-map-marker"></i></a>
-                        New Castle, UK
-                        <span class="pull-right">
-                            32
-                        </span>
-                    </footer>
-                </section>
-            </div>
-
-
-            <div class="col-xl-3 col-lg-6">
+            <div class="col-lg-6">
                 <div class="card">
                     <div class="card-body">
-                        <div class="stat-widget-one">
-                            <div class="stat-icon dib"><i class="ti-money text-success border-success"></i></div>
-                            <div class="stat-content dib">
-                                <div class="stat-text">Total Profit</div>
-                                <div class="stat-digit">1,012</div>
-                            </div>
+                        <h4 class="mb-3">Doanh thu theo tháng </h4>
+                        <div style="text-align: center; margin-bottom: 20px;">
+                            <button id="prevYearBtnMonth" class="btn btn-outline-link">⟵ </button>
+                            <span id="currentYear"></span>
+                            <button id="nextYearBtnMonth" class="btn btn-outline-link"> ⟶</button>
                         </div>
+                        <canvas id="monthly-customer-sale-chart"></canvas>
                     </div>
                 </div>
-            </div>
+            </div><!-- /# column -->
 
-
-            <div class="col-xl-3 col-lg-6">
+            <div class="col-lg-6">
                 <div class="card">
                     <div class="card-body">
-                        <div class="stat-widget-one">
-                            <div class="stat-icon dib"><i class="ti-user text-primary border-primary"></i></div>
-                            <div class="stat-content dib">
-                                <div class="stat-text">New Customer</div>
-                                <div class="stat-digit">961</div>
-                            </div>
-                        </div>
+                        <h4 class="mb-3">Doanh thu theo năm </h4>
+                        <canvas id="yearly-sale-chart"></canvas>
                     </div>
                 </div>
-            </div>
+            </div><!-- /# column -->
 
-            <div class="col-xl-3 col-lg-6">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="stat-widget-one">
-                            <div class="stat-icon dib"><i class="ti-layout-grid2 text-warning border-warning"></i></div>
-                            <div class="stat-content dib">
-                                <div class="stat-text">Active Projects</div>
-                                <div class="stat-digit">770</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <div class="col-xl-6">
                 <div class="card">
@@ -368,6 +308,11 @@
     <!-- Right Panel -->
     <script th:src="@{/admin/assets/js/base.js}"></script>
     <div th:replace="admin/fragments :: scripts"></div>
+
+
+    <script th:src="@{/admin/assets/js/indexAdmin.js}"></script>
+    <script th:src="@{/admin/vendors/chart.js/dist/Chart.bundle.min.js}"></script>
+    <script th:src="@{/admin/assets/js/init-scripts/chart-js/chartjs-init.js}"></script>
     <script>
         (function($) {
             "use strict";
@@ -385,11 +330,49 @@
                 normalizeFunction: 'polynomial'
             });
         })(jQuery);
-    </script>
 
-    <script th:src="@{/admin/assets/js/indexAdmin.js}"></script>
-    <script th:src="@{/admin/vendors/chart.js/dist/Chart.bundle.min.js}"></script>
-    <script th:src="@{/admin/assets/js/init-scripts/chart-js/chartjs-init.js}"></script>
+<!--        Vẽ biểu đồ doanh thu theo năm-->
+        document.addEventListener("DOMContentLoaded", function () {
+    // Biểu đồ doanh thu hàng năm
+    createChart(
+        "yearly-sale-chart",
+        "/clothing-sell/admin/bill/api/yearly-revenue-chart-data",
+        {
+            label: "Doanh thu (đồng)",
+            type: "line",
+            backgroundColor: "rgba(0,123,255,0.15)",
+            borderColor: "rgba(0,123,255,0.75)",
+        }
+    );
+
+    // Biểu đồ doanh thu hàng tháng
+    initMonthlyChart("monthly-customer-sale-chart", function (year) {
+        return fetch(
+            `/clothing-sell/admin/bill/api/monthly-revenue-chart-data?year=${year}`
+        ).then((response) => response.json());
+    });
+
+    // Lấy ngày đầu tuần hiện tại
+    let currentStartDate = getStartOfWeek(new Date());
+
+    // Cập nhật biểu đồ và hiển thị tuần
+    updateWeeklyChart(currentStartDate);
+
+    // Xử lý nút bấm tuần trước
+    document.getElementById("prevWeekBtn").addEventListener("click", function () {
+        currentStartDate.setDate(currentStartDate.getDate() - 7);
+        updateWeeklyChart(currentStartDate);
+    });
+
+    // Xử lý nút bấm tuần sau
+    document.getElementById("nextWeekBtn").addEventListener("click", function () {
+        currentStartDate.setDate(currentStartDate.getDate() + 7);
+        updateWeeklyChart(currentStartDate);
+    });
+
+});
+
+    </script>
 
 </body>
 

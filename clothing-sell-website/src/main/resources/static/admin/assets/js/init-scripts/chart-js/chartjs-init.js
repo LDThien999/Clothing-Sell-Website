@@ -1,3 +1,192 @@
+function createChart(canvasId, apiUrl, chartConfig) {
+    const ctx = document.getElementById(canvasId);
+    if (ctx) {
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                // Chuẩn bị dữ liệu từ API
+                const labels = data.map(item => item.year || item.label); // Tùy thuộc vào cấu trúc API
+                const dataset = data.map(item => item.total || item.value); // Tùy thuộc vào cấu trúc API
+
+                // Dùng cấu hình biểu đồ đã cho (chartConfig)
+                const finalConfig = {
+                    type: chartConfig.type || 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            data: dataset,
+                            label: chartConfig.label || "Data",
+                            backgroundColor: chartConfig.backgroundColor || 'rgba(0,103,255,.15)',
+                            borderColor: chartConfig.borderColor || 'rgba(0,103,255,0.5)',
+                            borderWidth: chartConfig.borderWidth || 3.5,
+                            pointStyle: chartConfig.pointStyle || 'circle',
+                            pointRadius: chartConfig.pointRadius || 5,
+                            pointBorderColor: chartConfig.pointBorderColor || 'transparent',
+                            pointBackgroundColor: chartConfig.pointBackgroundColor || 'rgba(0,103,255,0.5)',
+                        }]
+                    },
+                    options: chartConfig.options || {
+                        responsive: true,
+                        scales: {
+                            xAxes: [{
+                                display: true,
+                                gridLines: { display: false }
+                            }],
+                            yAxes: [{
+                                display: true,
+                                gridLines: { display: false }
+                            }]
+                        }
+                    }
+                };
+
+                // Tạo biểu đồ
+                new Chart(ctx, finalConfig);
+            })
+            .catch(error => console.error("Error loading chart data:", error));
+    } else {
+        console.error(`Canvas with ID '${canvasId}' not found.`);
+    }
+}
+
+function initMonthlyChart(containerId, fetchDataCallback) {
+    const container = document.getElementById(containerId);
+    const prevYearBtn = document.getElementById("prevYearBtnMonth"); // container.querySelector(".prevYearBtn");
+    const nextYearBtn = document.getElementById("nextYearBtnMonth"); // container.querySelector(".nextYearBtn");
+    const currentYearSpan = document.getElementById("currentYear"); // container.querySelector(".currentYear");
+
+    let currentYear = new Date().getFullYear();
+    currentYearSpan.textContent = currentYear;
+
+    let chartInstance;
+
+    function loadChart(year) {
+        fetchDataCallback(year).then(data => {
+            const labels = data.map(item => `${item.month}`);
+            const revenueData = data.map(item => item.revenue);
+            const customerData = data.map(item => item.customerCount);
+
+            if (chartInstance) {
+                chartInstance.destroy();
+            }
+
+            chartInstance = new Chart(containerId, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: "Doanh thu (triệu đồng)",
+                            data: revenueData,
+                            borderColor: "rgba(0, 123, 255, 0.9)",
+                            backgroundColor: "rgba(0, 123, 255, 0.5)"
+                        },
+                        {
+                            label: "Số lượng khách hàng (người)",
+                            data: customerData,
+                            borderColor: "rgba(40, 167, 69, 0.9)",
+                            backgroundColor: "rgba(40, 167, 69, 0.5)"
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+        });
+    }
+
+    prevYearBtn.addEventListener("click", function () {
+        currentYear--;
+        currentYearSpan.textContent = currentYear;
+        loadChart(currentYear);
+    });
+
+    nextYearBtn.addEventListener("click", function () {
+        currentYear++;
+        currentYearSpan.textContent = currentYear;
+        loadChart(currentYear);
+    });
+
+    loadChart(currentYear);
+}
+
+// Hàm lấy ngày đầu tuần (Thứ Hai)
+    function getStartOfWeek(date) {
+        const day = date.getDay(); // 0 = Chủ nhật
+        const diff = date.getDate() - day + (day === 0 ? -6 : 1); // Điều chỉnh để bắt đầu từ Thứ Hai
+        return new Date(date.setDate(diff));
+    }
+
+    // Hàm cập nhật biểu đồ
+    function updateWeeklyChart(startDate) {
+        // Lấy ngày bắt đầu và ngày kết thúc tuần
+        const endDate = new Date(startDate);
+        endDate.setDate(startDate.getDate() + 6);
+
+        // Hiển thị tuần hiện tại
+        const options = { year: "numeric", month: "long", day: "numeric" };
+        document.getElementById("currentWeek").textContent =
+            `${startDate.toLocaleDateString("vi-VN", options)} - ${endDate.toLocaleDateString("vi-VN", options)}`;
+
+        // Gọi API để lấy dữ liệu
+        fetch(`/clothing-sell/admin/bill/api/weekly-revenue?startDate=${startDate.toISOString().split("T")[0]}&endDate=${endDate.toISOString().split("T")[0]}`)
+            .then(response => response.json())
+            .then(data => {
+                const labels = ["Chủ nhật", "Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm", "Thứ Sáu", "Thứ Bảy"];
+                const revenues = Array(7).fill(0); // Mặc định 0 cho các ngày không có dữ liệu
+
+                // Điền dữ liệu vào mảng revenues
+                data.forEach(item => {
+                    const dayOfWeek = item.dayOfWeek; // 1 = Chủ nhật, 7 = Thứ Bảy
+                    revenues[dayOfWeek - 1] = item.revenue;
+                });
+
+                // Tạo hoặc cập nhật biểu đồ
+                if (window.weeklyChart) {
+                    // Cập nhật biểu đồ
+                    window.weeklyChart.data.datasets[0].data = revenues;
+                    window.weeklyChart.update();
+                } else {
+                    // Tạo biểu đồ
+                    const ctx = document.getElementById("weekly-revenue-chart");
+                    window.weeklyChart = new Chart(ctx, {
+                        type: "bar",
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: "Doanh thu (VND)",
+                                data: revenues,
+                                borderColor: "rgba(0, 123, 255, 0.9)",
+                                borderWidth: "0",
+                                backgroundColor: "rgba(0, 123, 255, 0.5)"
+                            }],
+                        },
+                        options: {
+                            responsive: true,
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        beginAtZero: true,
+                                    },
+                                }],
+                            },
+                        },
+                    });
+                }
+            });
+    }
+
+
+
+
 ( function ( $ ) {
     "use strict";
 
