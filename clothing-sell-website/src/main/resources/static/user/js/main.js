@@ -180,8 +180,8 @@
     });
 
     var proQty = $('.pro-qty-2');
-    proQty.prepend('<span class="fa fa-angle-left dec qtybtn"></span>');
-    proQty.append('<span class="fa fa-angle-right inc qtybtn"></span>');
+    proQty.prepend('<span class="fa fa-angle-left dec qtybtn" th:name="${cart.cartId}"></span>');
+    proQty.append('<span class="fa fa-angle-right inc qtybtn" th:name="${cart.cartId}"></span>');
     proQty.on('click', '.qtybtn', function () {
         var $button = $(this);
         var oldValue = $button.parent().find('input').val();
@@ -196,6 +196,24 @@
             }
         }
         $button.parent().find('input').val(newVal);
+            //const name = event.target.getAttribute("name");
+        var name = $button.parent().find('input').attr('name');
+        // Tìm thẻ td có cùng name
+        const td = document.querySelector(`td[name="${name}"]`);
+        if (td) {
+            // Lấy giá trị cũ từ nội dung của td và chuyển đổi thành số
+            oldValue = parseFloat(oldValue);
+            const oldTotal = parseFloat(td.textContent)
+            // Tính giá trị mới
+            newVal = parseFloat(newVal); // Giả sử giá trị mới được lấy từ input
+            const updatedValue = (newVal / oldValue) * oldTotal;
+
+            // Cập nhật nội dung của td
+            td.textContent = updatedValue.toFixed(0);
+            var checkbox = document.querySelector(`input[type="checkbox"][name="${name}"]`);
+            checkbox.value = updatedValue
+        }
+
     });
 
     /*------------------

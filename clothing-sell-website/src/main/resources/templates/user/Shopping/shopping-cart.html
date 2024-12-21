@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head th:replace="user/fragments :: meta_css"></head>
+
+<body>
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Offcanvas Menu Begin -->
+    <div class="offcanvas-menu-overlay"></div>
+    <div th:replace="user/fragments :: menu"></div>
+    <!-- Offcanvas Menu End -->
+
+    <!-- Header Section Begin -->
+    <header th:replace="user/fragments :: header"></header>
+    <!-- Header Section End -->
+
+    <!-- Breadcrumb Section Begin -->
+    <section class="breadcrumb-option">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb__text">
+                        <h4>Shopping Cart</h4>
+                        <div class="breadcrumb__links">
+                            <a href="../index.html">Home</a>
+                            <a href="shop.html">Shop</a>
+                            <span>Shopping Cart</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb Section End -->
+
+    <!-- Shopping Cart Section Begin -->
+    <section class="shopping-cart spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="shopping__cart__table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Quantity</th>
+                                    <th>Total</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each ="cart : ${carts}">
+                                    <td class="product__cart__item">
+
+                                        <div class="product__cart__item__pic" style="display: flex">
+                                            <label class="custom-checkbox">
+                                                <input type="checkbox" th:name="${cart.cartId}" class="checkbox" th:value="${cart.quantity*cart.product.price}">
+                                                <span class="checkbox-mark"></span>
+                                            </label>
+                                            <img th:src="@{'user/img/product/' + ${cart.product.image}}" style="height:90px; width:90px" alt="">
+                                        </div>
+                                        <div class="product__cart__item__text">
+                                            <h6 th:text ="${cart.product.productName}"></h6>
+                                            <h5 th:text="${cart.product.price}"></h5>
+                                        </div>
+                                    </td>
+                                    <td class="quantity__item">
+                                        <div class="quantity">
+                                            <div class="pro-qty-2" th:name="${cart.cartId}">
+                                                <input  type="text" th:name="${cart.cartId}" class="inputText" th:value="${cart.quantity}">
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="cart__price" th:name="${cart.cartId}"  th:text = "${cart.quantity*cart.product.price}"></td>
+                                    <td class="cart__close"><button onclick="deleteCart(this)" th:value="${cart.cartId}" class="fa fa-close"></button></td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="continue__btn">
+                                <a id="selectAllButton" href="#">Chọn tất cả</a>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="continue__btn update__btn">
+                                <a href="#"><i class="fa fa-spinner"></i> Update cart</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="cart__discount">
+                        <h6>Discount codes</h6>
+                        <form action="#">
+                            <input type="text" placeholder="Coupon code">
+                            <button type="submit">Apply</button>
+                        </form>
+                    </div>
+                    <div class="cart__total">
+                        <h6>Cart total</h6>
+                        <ul>
+                            <li>Miễn giảm: <span>0 VND</span></li>
+                            <li>Tổng tiền: <span id="result"></span></li>
+                        </ul>
+                        <script>
+                            const items = document.querySelectorAll('.cart__price');
+
+                            const total = Array.from(items).reduce((sum, item) => {
+                                return sum + parseFloat(item.getAttribute("value"));
+                            }, 0);
+
+                            // Hiển thị tổng trong thẻ <div>
+                            const resultDiv = document.getElementById("result");
+                            resultDiv.textContent = `${total}`.toFixed(0);
+                        </script>
+                        <a onclick="order(this)" href="" class="primary-btn" style=" cursor: pointer;">Proceed to checkout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Shopping Cart Section End -->
+    <script>
+        function deleteCart(button) {
+            const cartId = button.value;
+            const data = {
+                cartId: cartId
+            };
+
+            fetch('/clothing-sell/deleteCart', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json(); // Giải mã JSON từ server
+                    } else {
+                        throw new Error(response.url);
+                    }
+                })
+                .then(result => {
+                    console.log('Dữ liệu đã được xóa:', result);
+                    alert('Dữ liệu đã xóa lưu thành công!');
+                    location.reload();
+                })
+                .catch(error => {
+                    console.error('Lỗi:', error);
+                    alert(error);
+                });
+        }
+    </script>
+
+    <script>
+        function calculateTotal() {
+            let total = 0;
+
+            // Lấy tất cả checkbox có class "checkbox"
+            const checkboxes = document.querySelectorAll(".checkbox");
+
+            // Duyệt qua từng checkbox
+            checkboxes.forEach(function(checkbox) {
+                if (checkbox.checked) { // Nếu checkbox được chọn
+                    total += parseFloat(checkbox.value); // Cộng giá trị vào tổng
+                }
+            });
+
+            // Cập nhật tổng vào thẻ span có id "total"
+            document.getElementById("result").textContent = total;
+        }
+
+        // Thêm sự kiện "change" cho tất cả checkbox
+        const checkboxes = document.querySelectorAll(".checkbox");
+        checkboxes.forEach(function(checkbox) {
+            checkbox.addEventListener("change", calculateTotal);
+        });
+
+        const inputs = document.querySelectorAll(".inputText");
+
+        // Hàm xử lý khi giá trị trong input thay đổi
+        function handleInputChange(event) {
+            const inputValue = event.target.value; // Lấy giá trị của input hiện tại
+            //alert(inputValue)
+        }
+
+        // Thêm sự kiện "input" cho từng input
+        inputs.forEach((input) => {
+            input.addEventListener("change", handleInputChange);
+        });
+
+
+        document.getElementById('selectAllButton').addEventListener('click', function() {
+            event.preventDefault();
+            var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            var allChecked = Array.from(checkboxes).every(function(checkbox) {
+
+                return checkbox.checked;
+            }
+            );
+            calculateTotal()
+            checkboxes.forEach(function(checkbox) {
+                checkbox.checked = !allChecked;
+                calculateTotal()// Đảo trạng thái
+            });
+        });
+    </script>
+
+
+
+
+
+    <script>
+        function order(element) {
+            event.preventDefault();
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            const objectList = [];
+
+            checkboxes.forEach(checkbox => {
+                if (checkbox.checked) { // Kiểm tra nếu checkbox được chọn
+                    const name = checkbox.getAttribute("name")
+                    var inputText = document.querySelector(`input[type="text"][name="${name}"]`);
+                    const newObject = {
+                        cartId: name,  // Giá trị của checkbox làm thuộc tính thứ nhất
+                        quantity: inputText.value               // Thuộc tính thứ hai là số 5
+                    };
+                    objectList.push(newObject); // Thêm đối tượng vào danh sách
+                }
+            });
+
+                const data = {
+                    objectList: objectList
+                };
+
+                fetch('/clothing-sell/order', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            return response.json(); // Giải mã JSON từ server
+                        } else {
+                            throw new Error(response.url);
+                        }
+                    })
+                    .then(result => {
+                        alert(result.message)
+                        location.href = `/clothing-sell/checkout/` + result.message
+                    })
+                    .catch(error => {
+                        console.error('Lỗi:', error);
+                        alert(error);
+                    });
+        }
+
+    </script>
+
+
+
+
+
+
+
+    <!-- Footer Section Begin -->
+    <footer th:replace="user/fragments :: footer"></footer>
+    <!-- Footer Section End -->
+
+    <!-- Search Begin -->
+    <div th:replace="user/fragments :: search"></div>
+    <!-- Search End -->
+
+    <!-- Js Plugins -->
+    <div th:replace="user/fragments :: scripts"></div>
+</body>
+
+</html>

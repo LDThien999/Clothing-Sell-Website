@@ -28,4 +28,5 @@ public class OrderList {
 
     @Column(name = "Quantity")
     Integer quantity;
+
 }
