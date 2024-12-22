@@ -90,6 +90,7 @@
                                     <th>Phương thức thanh toán</th>
                                     <th>Trạng thái</th>
                                     <th>Nhân viên</th>
+                                    <th>Khách hàng</th>
                                     <th>Chức năng</th>
                                 </tr>
                                 </thead>
@@ -99,13 +100,20 @@
                                     <td th:text="${#temporals.format(order.date, 'HH:mm:ss dd-MM-yyyy')}"></td>
                                     <td th:text="${order.paymentMethod}"></td>
                                     <td th:text="${order.status ? 'Đã giao' : 'Chưa duyệt'}"></td>
-                                    <td th:text="${order.staff.name}"></td>
+                                    <td th:text="${order?.staff?.name ?: 'N/A'}"></td>
+                                    <td th:text="${order?.customer?.name ?: 'N/A'}"></td>
 
                                     <td style="display: inline-flex;">
 
                                         <div th:if="${!order.status}">
-                                            <button th:data-id="${order.orderId}" id="approveBtn" type="button" class="btn btn-success">
-                                                Chấp thuận</button>
+                                            <button th:id="'approveBtn-' + ${order.orderId}"
+                                                    th:data-id="${order.orderId}"
+                                                    th:staff-name="${staffName}"
+                                                    class="btn btn-success approveBtn"
+                                                    type="button">
+                                                Chấp thuận
+                                            </button>
+
                                         </div>
                                         <div th:if="${order.status}">
                                             <button type="button" class="btn btn-secondary disabled" style="pointer-events: none;">
@@ -134,7 +142,6 @@
 
 <!-- Right Panel -->
 
-<<<<<<< HEAD
 <script>
     window.onload = function() {
         const token = localStorage.getItem("jwtToken");
@@ -144,16 +151,14 @@
         }
     };
 
-    document.getElementById("approveBtn").addEventListener("click", function () {
-        const id = this.getAttribute("data-id");
-        const url = `/clothing-sell/admin/order/update-order/${id}`;
-        fetchData(url, "POST", id)
-    });
+<!--    document.getElementById("approveBtn").addEventListener("click", function () {-->
+<!--        const id = this.getAttribute("data-id");-->
+<!--        const url = `/clothing-sell/admin/order/update-order/${id}`;-->
+<!--        fetchData(url, "POST", id)-->
+<!--    });-->
 </script>
-=======
 <script th:src="@{/admin/assets/js/base.js}"></script>
 <script th:src="@{/admin/assets/js/indexAdmin.js}"></script>
->>>>>>> 349ea91cb97250d9de5ba3bebfea8016e8a217c5
 
 <script th:src="@{/admin/vendors/jquery/dist/jquery.min.js}"></script>
 <script th:src="@{/admin/vendors/popper.js/dist/umd/popper.min.js}"></script>
@@ -181,6 +186,7 @@
     if (notificationType && notificationMessage) {
         sendNotification(notificationType, notificationMessage);
     }
+
 
 </script>
 <div th:replace="admin/fragments :: scripts"></div>

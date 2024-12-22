@@ -26,11 +26,11 @@ public class Bill {
     @Column(name = "Date")
     LocalDateTime date;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "StaffId")
     Staff staff;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "OrderId")
     Order order;
 }
