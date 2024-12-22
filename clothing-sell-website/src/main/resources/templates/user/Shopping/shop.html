@@ -45,7 +45,7 @@
                         <div class="shop__sidebar__search">
                             <form action="#">
                                 <input type="text" placeholder="Search...">
-                                <button type="submit"><span class="icon_search"></span></button>
+                                <button id="cus-taker" th:value="${customer.customerId}" type="submit"><span class="icon_search"></span></button>
                             </form>
                         </div>
                         <div class="shop__sidebar__accordion">
@@ -213,7 +213,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
+                    <div id="product-list" class="row">
                         <div class="col-lg-4 col-md-6 col-sm-6" th:each ="product : ${products}">
                             <div class="product__item">
                                 <div class="product__item__pic set-bg" th:data-setbg="@{'/user/img/product/' + ${product.image}}">
@@ -221,7 +221,7 @@
                                         <li><a href="#"><img th:src="@{/user/img/icon/heart.png}" alt=""></a></li>
                                         <li><a href="#"><img th:src="@{/user/img/icon/compare.png}" alt=""> <span>Compare</span></a>
                                         </li>
-                                        <li><a onclick="getRecommend(this)" th:href="@{'/shop/detail/' + ${product.productId}}" th:data-product-id="${product.productId}"><img th:src="@{/user/img/icon/search.png}" alt=""></a></li>
+                                        <li><a onclick="getRecommend(this)" href="#" th:data-product-id="${product.productId}"><img th:src="@{/user/img/icon/search.png}" alt=""></a></li>
 
                                     </ul>
                                 </div>
@@ -319,19 +319,58 @@
                 });
         }
     </script>
-    <script>
+    <script >
         function getRecommend(anchor) {
             event.preventDefault()
             // Lấy giá trị của data-product-id
             const productId = anchor.getAttribute("data-product-id");
-
-            if (productId) {
-                alert("Sản phẩm ID: " + productId); // Hiển thị ID sản phẩm
-            } else {
-                alert("Không tìm thấy thông tin sản phẩm!");
+            const btnCus = document.getElementById("cus-taker")
+            const customerId = btnCus.value
+            const dataArg = {
+                ok: "ok"
             }
+            const url0 = `/clothing-sell/increaseLevel/${customerId}/${productId}`
+            fetch(url0, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(dataArg),
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json(); // Giải mã JSON từ server
+                    } else {
+                        throw new Error(response.url);
+                    }
+                })
+                .then(result => {
+                        const urlStr = `http://127.0.0.1:8000/${customerId}/${productId}`;
+                        fetch(urlStr)  // Địa chỉ của FastAPI server
+                            .then(response => response.json())   // Chuyển dữ liệu từ JSON
+                            .then(fastData => {
+                                alert(fastData)
+                                location.href = `/clothing-sell/shop/detail/${productId}/` + fastData
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                            });
+
+                })
+                .catch(error => {
+                    console.error('Lỗi:', error);
+                    alert(error);
+                });
+
+
+
         }
     </script>
+
+
+
+
+
     <!-- Footer Section Begin -->
     <footer th:replace="user/fragments :: footer"></footer>
     <!-- Footer Section End -->

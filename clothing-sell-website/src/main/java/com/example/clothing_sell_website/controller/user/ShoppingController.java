@@ -29,6 +29,8 @@ public class ShoppingController {
     private OrderListService orderListService;
     @Autowired
     private AccountService accountService;
+    @Autowired
+    private LevelService lvService;
 
     @GetMapping("/shop.html")
     public String shop(Model model, HttpServletRequest request) {
@@ -70,18 +72,22 @@ public class ShoppingController {
 
     }
 
-    @GetMapping("/shop/detail/{productId}")
-    public String shopDetail(@PathVariable String productId, Model model,HttpSession session
+    @GetMapping("/shop/detail/{productId}/{label}")
+    public String shopDetail(@PathVariable("productId") String productId,@PathVariable("label") int label, Model model,HttpSession session
     ,HttpServletRequest request) {
         Product product = shopService.getProductById(productId);
         String username = (String) request.getSession().getAttribute("currentCustomer");
-        System.out.println(username);
         Customer cus = accountService.getAccountById(username).getCustomer();
         //Customer cus = customerService.getCustomerById("KH001");
         model.addAttribute("customer",cus);
         //Customer cus = customerService.getCustomerById("KH001");
         //model.addAttribute("customer",cus);
         model.addAttribute("product", product);
+        List<Product> recommendProducts = shopService.getTop10Products(label);
+        model.addAttribute("recommendProducts", recommendProducts);
+        LevelOfInterest lv = lvService.getLVByCusPro(cus.getCustomerId(), productId);
+        lv.setLabel(label);
+        lvService.saveLV(lv);
         return "user/shopping/shop-details";
 
     }
