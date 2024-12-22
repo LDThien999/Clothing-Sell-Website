@@ -151,7 +151,7 @@
                         <hr>
                         <div class="row">
                             <div class="col-sm-12">
-                                <a class="btn btn-info" href="#">Chỉnh sửa</a>
+                                <a class="btn btn-info" id="edit-btn" href="#">Chỉnh sửa</a>
                             </div>
                         </div>
                     </div>
@@ -173,7 +173,9 @@
 <div th:replace="user/fragments :: scripts"></div>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        const editBtn = document.getElementById("edit-btn");
         const token = localStorage.getItem('jwtToken');
+        const inputs = document.querySelectorAll("#name, #email, #phoneNum, #creditNum");
 
         // Kiểm tra nếu không có token
         if (!token) {
@@ -193,11 +195,51 @@
                 document.getElementById('phoneNum').value = data.phoneNum;
                 document.getElementById('email').value = data.email;
                 document.getElementById('creditNum').value = data.creditNum;
+
+
+                editBtn.addEventListener("click", function () {
+                    if (editBtn.textContent === "Chỉnh sửa") {
+                        inputs.forEach(input => {
+                            input.readOnly = false;
+                            input.style.border = "1px solid #ccc";
+                        });
+                        editBtn.textContent = "Lưu chỉnh sửa";
+                    } else {
+                        inputs.forEach(input => {
+                            input.readOnly = true;
+                            input.style.border = "none";
+                        });
+
+                        const updatedData = {
+                            name: document.getElementById('name').value,
+                            phoneNum: document.getElementById('phoneNum').value,
+                            email: document.getElementById('email').value,
+                            creditNum: document.getElementById('creditNum').value,
+                        };
+
+                        fetchDataApi("/clothing-sell/api/user/profile-update", "GET",updatedData)
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error(`HTTP error! status: ${response.status}`);
+                                }
+                                return response.json();
+                            })
+                            .then(data => {
+                                document.getElementById('name').value = data.name;
+                                document.getElementById('phoneNum').value = data.phoneNum;
+                                document.getElementById('email').value = data.email;
+                                document.getElementById('creditNum').value = data.creditNum;
+                            });
+                        editBtn.textContent = "Chỉnh sửa";
+                    }
+                });
             })
             .catch(error => {
                 console.error("Error fetching user info:", error);
                 throw error;
             });
+
+
     });
 </script>
 </body>

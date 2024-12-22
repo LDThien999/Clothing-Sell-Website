@@ -1,6 +1,7 @@
 package com.example.clothing_sell_website.controller.authentication;
 import com.example.clothing_sell_website.dto.request.AuthenticationRequest;
 import com.example.clothing_sell_website.dto.request.RegisterRequest;
+import com.example.clothing_sell_website.dto.request.UpdateCustomerRequest;
 import com.example.clothing_sell_website.dto.respone.AuthenticationResponse;
 import com.example.clothing_sell_website.dto.respone.RegisterResponse;
 
@@ -58,6 +59,14 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping("/register-staff")
+    public ResponseEntity<RegisterResponse> registerStaffAccount(
+            @RequestBody RegisterRequest request
+    ){
+        RegisterResponse response = authService.registerNewStaffAccount(request);
+        return ResponseEntity.ok(response);
+    }
+
 
     @GetMapping("/user/info")
     public ResponseEntity<?> getUserInfo(@RequestHeader("Authorization") String authorizationHeader) {
@@ -91,6 +100,25 @@ public class AuthController {
         try {
             String username = SecurityContextHolder.getContext().getAuthentication().getName();
             Customer customer = accountService.getAccountById(username).getCustomer();
+            return ResponseEntity.ok(customer);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @GetMapping("/api/user/profile-update")
+    public ResponseEntity<Customer> profileUpdate(@RequestHeader("Authorization") String authorizationHeader,
+                                                  @RequestBody UpdateCustomerRequest request) {
+        try {
+            String username = SecurityContextHolder.getContext().getAuthentication().getName();
+            Customer customer = accountService.getAccountById(username).getCustomer();
+            customer.setName(request.getName());
+            customer.setEmail(request.getEmail());
+            customer.setPhoneNum(request.getPhoneNum());
+            customer.setCreditNum(request.getCreditNum());
+
+            customerService.save(customer);
             return ResponseEntity.ok(customer);
         } catch (Exception e) {
             e.printStackTrace();

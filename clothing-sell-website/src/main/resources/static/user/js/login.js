@@ -18,11 +18,12 @@ document.getElementById("loginForm").addEventListener("submit", function(event) 
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                localStorage.setItem("jwtToken", data.token);
                 if (data.role === "customer"){
+                    localStorage.setItem("jwtToken", data.token);
                     window.location.href = "/clothing-sell/index.html";
                 }
                 else{
+                    localStorage.setItem("jwtStaffToken", data.token);
                     window.location.href = "/clothing-sell/admin";
                 }
             } else {
