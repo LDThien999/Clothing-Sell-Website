@@ -34,7 +34,7 @@ function fetchDataApi(url, method, body = null) {
         options.body = JSON.stringify(body);
     }
 
-    return  fetch(url, options);
+    return fetch(url, options);
 }
 
 function TokenValid(token) {
@@ -55,9 +55,25 @@ document.addEventListener("DOMContentLoaded", () => {
     const nonLoginSections = document.querySelectorAll(".non-login");
     const loggedInSections = document.querySelectorAll(".logged-in");
     const logoutButtons = document.querySelectorAll(".logout-btn");
+    var currentUrl = window.location.pathname; // Lấy đường dẫn hiện tại
 
-    logoutButtons.forEach(function(logoutButton) {
-        logoutButton.addEventListener("click", function(e) {
+
+    //Cập nhat active
+    var menuItems = document.querySelectorAll("ul li.director a");
+
+    menuItems.forEach(function (item) {
+        var itemHref = item.getAttribute("href"); // Lấy href của từng item
+        var absoluteHref = new URL(itemHref, window.location.origin).pathname;
+
+        if (currentUrl.endsWith(absoluteHref)) {
+            item.parentElement.classList.add("active");
+        }
+    })
+
+
+//logout Btn
+    logoutButtons.forEach(function (logoutButton) {
+        logoutButton.addEventListener("click", function (e) {
             //Ngừng sự kiện mặc định
             e.preventDefault();
 
@@ -69,7 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // Gọi hàm lấy thông tin người dùng
+// Gọi hàm lấy thông tin người dùng
     getUserInfo()
         .then(data => {
             if (data) {
@@ -81,8 +97,9 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         })
         .catch(() => {
-            // Xử lý lỗi, mặc định hiển thị phần 'non-login' và ẩn phần 'logged-in'
+            // Xử lý lỗi, mặc định hiển thị phần "non-login" và ẩn phần "logged-in"
             nonLoginSections.forEach(section => section.classList.remove("hidden"));
             loggedInSections.forEach(section => section.classList.add("hidden"));
         });
-});
+})
+;
