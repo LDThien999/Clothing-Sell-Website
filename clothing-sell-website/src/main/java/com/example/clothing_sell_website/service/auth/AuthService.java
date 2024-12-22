@@ -3,6 +3,8 @@ package com.example.clothing_sell_website.service.auth;
 import java.util.Optional;
 import java.util.Random;
 
+import com.example.clothing_sell_website.entity.Staff;
+import com.example.clothing_sell_website.repository.StaffRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -48,6 +50,8 @@ public class AuthService {
 
     @Autowired
     private final RoleRepository roleRepository;
+    @Autowired
+    private final StaffRepository staffRepository;
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         try {
@@ -131,6 +135,59 @@ public class AuthService {
         }
     }
 
+    public RegisterResponse registerNewStaffAccount(RegisterRequest request){
+        Optional<Account> accountOptional = accountRepository.findByUsername(request.getUsername());
+        if (accountOptional.isPresent()){
+            return RegisterResponse.builder()
+                    .message("Username đã tồn tại")
+                    .success(false)
+                    .build();
+        }
+
+        Staff staff = new Staff();
+        try{
+            staff.setStaffId(generateStaffId());
+            staff.setName(request.getName());
+            staff.setEmail(request.getEmail());
+            staff.setPhoneNum(request.getPhoneNum());
+            staff.setSex("male");
+            staff.setStatus(true);
+            staffRepository.save(staff);
+        } catch (Exception e) {
+            return RegisterResponse.builder()
+                    .message("Không thể tạo nhân viên")
+                    .success(false)
+                    .build();
+        }
+
+        Role role = roleRepository.findByRoleId("0");
+        try{
+            Account account = new Account();
+            account.setUsername(request.getUsername());
+            account.setPassword(passwordEncoder.encode(request.getPassword()));
+            account.setStaff(staff);
+            account.setRole(role);
+            accountRepository.save(account);
+        } catch (Exception e) {
+            return RegisterResponse.builder()
+                    .message("Không thể tạo tài khoản")
+                    .success(false)
+                    .build();
+        }
+        try {
+            return RegisterResponse.builder()
+                    .message("Đăng ký thành công")
+                    .success(true)
+                    .build();
+        } catch (Exception e) {
+            return
+                    RegisterResponse.builder()
+                            .message("Đã xảy ra sự cố")
+                            .success(false)
+                            .build();
+        }
+    }
+
     public void sendSimpleMail(String to, String subject, String text) {
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setTo(to);
@@ -179,6 +236,15 @@ public class AuthService {
             customerId = "KH" + generateRandomString();
         }
         return customerId;
+    }
+
+    public String generateStaffId() {
+        Random random = new Random();
+        String staffId = "";
+        while (staffId.isEmpty() || staffRepository.findById(staffId).isPresent()){
+            staffId = "NV" + generateRandomString();
+        }
+        return staffId;
     }
 }
 
