@@ -239,7 +239,7 @@
                                             <h1 class="modal__title">Thêm vào giỏ thành công!</h1>
                                             <p class="modal__description">Chúc bạn mua sắm vui vẻ</p>
 
-                                            <button class="modal__button modal__button-width" onclick="window.location.href='/clothing-sell/cart.html';">
+                                            <button class="modal__button modal__button-width" onclick="window.location.href='/clothing-sell/cart';">
                                                 Xem giỏ hàng
                                             </button>
 
@@ -349,7 +349,6 @@
                         fetch(urlStr)  // Địa chỉ của FastAPI server
                             .then(response => response.json())   // Chuyển dữ liệu từ JSON
                             .then(fastData => {
-                                alert(fastData)
                                 location.href = `/clothing-sell/shop/detail/${productId}/` + fastData
                             })
                             .catch(error => {

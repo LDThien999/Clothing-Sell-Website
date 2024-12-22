@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -31,6 +32,8 @@ public class ShoppingController {
     private AccountService accountService;
     @Autowired
     private LevelService lvService;
+    @Autowired
+    private ReviewService reviewService;
 
     @GetMapping("/shop.html")
     public String shop(Model model, HttpServletRequest request) {
@@ -78,16 +81,21 @@ public class ShoppingController {
         Product product = shopService.getProductById(productId);
         String username = (String) request.getSession().getAttribute("currentCustomer");
         Customer cus = accountService.getAccountById(username).getCustomer();
-        //Customer cus = customerService.getCustomerById("KH001");
         model.addAttribute("customer",cus);
-        //Customer cus = customerService.getCustomerById("KH001");
-        //model.addAttribute("customer",cus);
         model.addAttribute("product", product);
         List<Product> recommendProducts = shopService.getTop10Products(label);
         model.addAttribute("recommendProducts", recommendProducts);
         LevelOfInterest lv = lvService.getLVByCusPro(cus.getCustomerId(), productId);
         lv.setLabel(label);
         lvService.saveLV(lv);
+
+        List<Review> reviews = reviewService.getReviewByPro(productId);
+        // Xáo trộn danh sách
+        Collections.shuffle(reviews);
+
+        // Lấy 5 phần tử ngẫu nhiên
+        List<Review> randomItems = reviews.size() > 3 ? reviews.subList(0, 3) : reviews;
+        model.addAttribute("reviews", randomItems);
         return "user/shopping/shop-details";
 
     }
