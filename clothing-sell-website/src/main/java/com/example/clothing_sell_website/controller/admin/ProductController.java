@@ -65,6 +65,8 @@ public class ProductController {
             Model model,
             RedirectAttributes redirectAttributes) {
         model.addAttribute("currentUri", request.getRequestURI());
+        product.setImage("product11.jpg");
+        product.setTraffic(1);
         try {
             productService.save(product);
             redirectAttributes.addFlashAttribute(NOTIFICATION_TYPE, "success");

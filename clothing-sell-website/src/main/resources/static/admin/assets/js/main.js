@@ -2,26 +2,10 @@ $.noConflict();
 /*CÁC NÚT ĐÃ GIAO TẤT CẢ CHƯA DUYỆT*/
 // Đảm bảo DOM đã load xong
 jQuery(document).ready(function($) {
+//    const staffName = document.getElementById('staffInfo').getAttribute('data-staff-name');
+
     // Khởi tạo DataTable một lần duy nhất
-    var table = $('#bootstrap-data-table-export-orders').DataTable({
-//        dom: 'Bfrtip',
-        buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
-        language: {
-            "sProcessing":   "Đang xử lý...",
-            "sLengthMenu":   "Xem _MENU_ mục",
-            "sZeroRecords":  "Không tìm thấy dòng nào phù hợp",
-            "sInfo":         "Đang xem _START_ đến _END_ trong tổng số _TOTAL_ mục",
-            "sInfoEmpty":    "Đang xem 0 đến 0 trong tổng số 0 mục",
-            "sInfoFiltered": "(được lọc từ _MAX_ mục)",
-            "sSearch":       "Tìm:",
-            "oPaginate": {
-                "sFirst":    "Đầu",
-                "sPrevious": "Trước",
-                "sNext":     "Tiếp",
-                "sLast":     "Cuối"
-            }
-        }
-    });
+    var table = $('#bootstrap-data-table-export-orders').DataTable();
 
     // Hàm format date
     function formatDate(dateString) {
@@ -40,16 +24,22 @@ jQuery(document).ready(function($) {
 
     // Hàm tạo buttons
     function createActionButtons(order) {
+
         let html = '<div style="display: inline-flex;">';
 
         if (!order.status) {
             html += `
-                <button data-id="${order.orderId}" class="btn btn-success mr-2 approve-btn">
+                <button id="approveBtn-${order.orderId}"
+                 data-id="${order.orderId}"
+                 class="btn btn-success approveBtn"
+                 type="button">
                     Chấp thuận
                 </button>`;
         } else {
             html += `
-                <button class="btn btn-secondary mr-2" disabled>
+                <button type="button"
+                class="btn btn-secondary disabled"
+                style="pointer-events: none;">
                     Chấp thuận
                 </button>`;
         }
@@ -88,6 +78,7 @@ jQuery(document).ready(function($) {
                         order.paymentMethod,
                         order.status ? 'Đã giao' : 'Chưa duyệt',
                         order.staff ? order.staff.name : '',
+                        order.customer ? order.customer.name : '',
                         createActionButtons(order)
                     ]);
                 });

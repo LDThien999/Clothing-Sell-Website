@@ -30,7 +30,7 @@ document.querySelectorAll(".approveBtn").forEach((button) => {
     button.addEventListener("click", function () {
         const id = this.getAttribute("data-id");
         const url = `/clothing-sell/admin/order/update-order/${id}`;
-        const staffName = this.getAttribute("staff-name");
+        const staffName = document.getElementById('staffInfo').getAttribute('data-staff-name');
 
         const button = $(this);
         button.prop('disabled', true);

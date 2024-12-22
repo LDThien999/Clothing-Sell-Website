@@ -52,10 +52,10 @@
         <div class="card">
             <div class="card-header"><strong>Cập nhật thương hiệu</strong><small> Form</small></div>
             <div class="card-body card-block">
-                <form action="#" th:action="@{/admin/brand/save-brand}" th:object="${brand}" method="post">
+                <form action="#" th:action="@{/admin/brand-type/save-brand}" th:object="${brand}" method="post">
                     <div class="form-group"><label for="brandId" class=" form-control-label">Mã thương hiệu</label>
                         <input type="text" th:field="*{brandId}" id="brandId" placeholder="Nhập mã thương hiệu"
-                               class="form-control">
+                               class="form-control" readonly>
                     </div>
 
                     <div class="form-group"><label for="brandName" class=" form-control-label">Tên thương hiệu</label>
