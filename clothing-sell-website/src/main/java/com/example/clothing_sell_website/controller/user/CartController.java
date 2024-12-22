@@ -46,7 +46,7 @@ public class CartController {
         return "redirect:/shop.html";
     }
 
-    @GetMapping("/cart.html")
+    @GetMapping("/cart")
     public String cart(Model model, HttpServletRequest request) {
         String username = (String) request.getSession().getAttribute("currentCustomer");
         Customer cus = accountService.getAccountById(username).getCustomer();

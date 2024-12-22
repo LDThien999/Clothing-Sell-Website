@@ -86,28 +86,13 @@
                                     <li>Miễn giảm: <span>0 VND</span></li>
                                     <li>Tổng tiền: <span id="result"></span></li>
                                 </ul>
-                                <button class="site-btn" onclick="getFastAPI()">Chấp thuận đơn hàng</button>
+                                <button class="site-btn">Chấp thuận đơn hàng</button>
                             </div>
-                        </div>
                     </div>
                 </form>
             </div>
         </div>
     </section>
-    <script>
-        function getFastAPI(){
-            fetch('http://127.0.0.1:8000/')  // Địa chỉ của FastAPI server
-                .then(response => response.json())   // Chuyển dữ liệu từ JSON
-                .then(data => {
-                    alert(data)
-
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-        }
-
-    </script>
     <script>
         // Đảm bảo sự kiện onload được khai báo đúng
         window.onload = function() {

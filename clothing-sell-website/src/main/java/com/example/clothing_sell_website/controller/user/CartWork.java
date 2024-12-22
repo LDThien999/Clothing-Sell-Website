@@ -29,6 +29,8 @@ public class CartWork{
     private LevelService lvService;
     @Autowired
     private AccountService accountService;
+    @Autowired
+    private ReviewService reviewService;
 
     @PostMapping("/deleteCart")
     public ResponseEntity<?> deleteData(@RequestBody Map<String, Long> data) {
@@ -124,5 +126,45 @@ public class CartWork{
         return ResponseEntity.ok(Map.of("message","tương tác thành công "));
     }
 
+    @PostMapping("/pushCmt")
+    public ResponseEntity<?> deleteData(@RequestBody Map<String, Object> data, HttpServletRequest request) {
+        String productId = (String) data.get("productId");
+        String comment = (String) data.get("comment");
+        int score = Integer.parseInt((String) data.get("score"));
+        LocalDateTime currentTime = LocalDateTime.now();
+        String username = (String) request.getSession().getAttribute("currentCustomer");
+        Customer cus = accountService.getAccountById(username).getCustomer();
+        try{
+            Review review = reviewService.getReviewByProCus(productId,cus.getCustomerId());
+            if(review == null){
+                review = new Review();
+                review.setCustomer(cus);
+                review.setProduct(productService.getProductById(productId));
+                review.setComment(comment);
+                review.setScore(score);
+                review.setDate(currentTime);
+                reviewService.saveReview(review);
+            }
+            else{
+                review.setComment(comment);
+                review.setScore(score);
+                review.setDate(currentTime);
+                reviewService.saveReview(review);
+            }
+        }catch(RuntimeException e){
+            throw new RuntimeException("Error updating Comment", e);
+        }
+
+
+        return ResponseEntity.ok(Map.of("message", "Bình luận của bạn đã được đăng lên!"));
+    }
+
+    @PostMapping("/getDataAPI")
+    public ResponseEntity<?> getDataAPI(@RequestBody Map<String, Object> data, HttpServletRequest request) {
+        List<String> listRe = (List<String>) data.get("items");
+        request.getSession().setAttribute("listRecomm",listRe);
+
+        return ResponseEntity.ok(Map.of("message", "Giỏ hàng đã được xóa"));
+    }
 
 }

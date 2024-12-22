@@ -95,13 +95,14 @@
                     <div class="col-lg-8">
                         <div class="product__details__text">
                             <h4 th:text="${product.productName}"></h4>
+                            <img  th:src="@{'/user/img/product/' + ${product.image}}" alt="">
                             <div class="rating">
                                 <i class="fa fa-star"></i>
                                 <i class="fa fa-star"></i>
                                 <i class="fa fa-star"></i>
                                 <i class="fa fa-star"></i>
                                 <i class="fa fa-star"></i>
-                                <span> Sản phẩm cao cấp 5 sao </span>
+                                <span id="product-taker" th:data-value="${product.productId}"> Sản phẩm cao cấp 5 sao </span>
                             </div>
                             <h3 th:text="${product.price}"> <span th:text="${product.price}"></span></h3>
                             <p>Sản phẩm cao cấp với chất lượng cao luôn là tiêu chí hàng đầu để chúng tôi lựa chọn và mang đến cho các bạn.</p>
@@ -161,7 +162,7 @@
                                         <h1 class="modal__title">Thêm vào giỏ thành công!</h1>
                                         <p class="modal__description">Chúc bạn mua sắm vui vẻ</p>
 
-                                        <button class="modal__button modal__button-width" onclick="window.location.href='/clothing-sell/cart.html';">
+                                        <button class="modal__button modal__button-width" onclick="window.location.href='/clothing-sell/cart';">
                                             Xem giỏ hàng
                                         </button>
 
@@ -200,7 +201,7 @@
                                     <li><span>Tag:</span> Clothes, Skin, Body</li>
                                 </ul>
                             </div>
-                        </div>
+                        </img>
                     </div>
                 </div>
                 <div class="row">
@@ -209,123 +210,105 @@
                             <ul class="nav nav-tabs" role="tablist">
                                 <li class="nav-item">
                                     <a class="nav-link active" data-toggle="tab" href="#tabs-5"
-                                    role="tab">Description</a>
+                                    role="tab">Nhận xét của khách hàng</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" data-toggle="tab" href="#tabs-6" role="tab">Customer
-                                    Previews(5)</a>
+                                    <a class="nav-link" data-toggle="tab" href="#tabs-6" role="tab">Mô tả sản phẩm</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" data-toggle="tab" href="#tabs-7" role="tab">Additional
-                                    information</a>
+                                    <a class="nav-link" data-toggle="tab" href="#tabs-7" role="tab">Cam kết của cửa hàng</a>
                                 </li>
                             </ul>
                             <div class="tab-content">
                                 <div class="tab-pane active" id="tabs-5" role="tabpanel">
                                     <div class="product__details__tab__content">
-                                        <p class="note">Nam tempus turpis at metus scelerisque placerat nulla deumantos
-                                            solicitud felis. Pellentesque diam dolor, elementum etos lobortis des mollis
-                                            ut risus. Sedcus faucibus an sullamcorper mattis drostique des commodo
-                                        pharetras loremos.</p>
-                                        <div class="product__details__tab__content__item">
-                                            <h5>Products Infomation</h5>
-                                            <p>A Pocket PC is a handheld computer, which features many of the same
-                                                capabilities as a modern PC. These handy little devices allow
-                                                individuals to retrieve and store e-mail messages, create a contact
-                                                file, coordinate appointments, surf the internet, exchange text messages
-                                                and more. Every product that is labeled as a Pocket PC must be
-                                                accompanied with specific software to operate the unit and must feature
-                                            a touchscreen and touchpad.</p>
-                                            <p>As is the case with any new technology product, the cost of a Pocket PC
-                                                was substantial during it’s early release. For approximately $700.00,
-                                                consumers could purchase one of top-of-the-line Pocket PCs in 2003.
-                                                These days, customers are finding that prices have become much more
-                                                reasonable now that the newness is wearing off. For approximately
-                                            $350.00, a new Pocket PC can now be purchased.</p>
-                                        </div>
-                                        <div class="product__details__tab__content__item">
-                                            <h5>Material used</h5>
-                                            <p>Polyester is deemed lower quality due to its none natural quality’s. Made
-                                                from synthetic materials, not natural like wool. Polyester suits become
-                                                creased easily and are known for not being breathable. Polyester suits
-                                                tend to have a shine to them compared to wool and cotton suits, this can
-                                                make the suit look cheap. The texture of velvet is luxurious and
-                                                breathable. Velvet is a great choice for dinner party jacket and can be
-                                            worn all year round.</p>
-                                        </div>
+                                        <p class="note">Một số bình luận nổi bật</p>
+                                        <div class="container">
+                                            <div class="row">
+                                                <div class="col-lg-4 col-md-6 col-sm-6" th:each="review : ${reviews}">
+                                                    <div class="blog__item">
+                                                        <div class="blog__item__pic set-bg" th:data-setbg="@{/user/img/blog/blog-4.jpg}"></div>
+                                                        <div class="blog__item__text">
+                                                            <span><img th:src="@{/user/img/icon/calendar.png}" alt=""> 16 February 2020</span>
+                                                            <h5 th:text="${review.customer.name}"></h5>
+                                                            <img style="height:100px; width:100px" th:src="@{/user/img/customer.jpg}" alt="">
+                                                            <h5 th:text="'Điểm đánh giá: '+${review.score}"></h5>
+                                                            <h5 th:text="${review.comment}"></h5>
+                                                            <a href="#">Read More</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                     </div>
                                 </div>
-                                <div class="tab-pane" id="tabs-6" role="tabpanel">
-                                    <div class="product__details__tab__content">
-                                        <div class="product__details__tab__content__item">
-                                            <h5>Products Infomation</h5>
-                                            <p>A Pocket PC is a handheld computer, which features many of the same
-                                                capabilities as a modern PC. These handy little devices allow
-                                                individuals to retrieve and store e-mail messages, create a contact
-                                                file, coordinate appointments, surf the internet, exchange text messages
-                                                and more. Every product that is labeled as a Pocket PC must be
-                                                accompanied with specific software to operate the unit and must feature
-                                            a touchscreen and touchpad.</p>
-                                            <p>As is the case with any new technology product, the cost of a Pocket PC
-                                                was substantial during it’s early release. For approximately $700.00,
-                                                consumers could purchase one of top-of-the-line Pocket PCs in 2003.
-                                                These days, customers are finding that prices have become much more
-                                                reasonable now that the newness is wearing off. For approximately
-                                            $350.00, a new Pocket PC can now be purchased.</p>
-                                        </div>
-                                        <div class="product__details__tab__content__item">
-                                            <h5>Material used</h5>
-                                            <p>Polyester is deemed lower quality due to its none natural quality’s. Made
-                                                from synthetic materials, not natural like wool. Polyester suits become
-                                                creased easily and are known for not being breathable. Polyester suits
-                                                tend to have a shine to them compared to wool and cotton suits, this can
-                                                make the suit look cheap. The texture of velvet is luxurious and
-                                                breathable. Velvet is a great choice for dinner party jacket and can be
-                                            worn all year round.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="tab-pane" id="tabs-7" role="tabpanel">
-                                    <div class="product__details__tab__content">
-                                        <p class="note">Nam tempus turpis at metus scelerisque placerat nulla deumantos
-                                            solicitud felis. Pellentesque diam dolor, elementum etos lobortis des mollis
-                                            ut risus. Sedcus faucibus an sullamcorper mattis drostique des commodo
-                                        pharetras loremos.</p>
-                                        <div class="product__details__tab__content__item">
-                                            <h5>Products Infomation</h5>
-                                            <p>A Pocket PC is a handheld computer, which features many of the same
-                                                capabilities as a modern PC. These handy little devices allow
-                                                individuals to retrieve and store e-mail messages, create a contact
-                                                file, coordinate appointments, surf the internet, exchange text messages
-                                                and more. Every product that is labeled as a Pocket PC must be
-                                                accompanied with specific software to operate the unit and must feature
-                                            a touchscreen and touchpad.</p>
-                                            <p>As is the case with any new technology product, the cost of a Pocket PC
-                                                was substantial during it’s early release. For approximately $700.00,
-                                                consumers could purchase one of top-of-the-line Pocket PCs in 2003.
-                                                These days, customers are finding that prices have become much more
-                                                reasonable now that the newness is wearing off. For approximately
-                                            $350.00, a new Pocket PC can now be purchased.</p>
-                                        </div>
-                                        <div class="product__details__tab__content__item">
-                                            <h5>Material used</h5>
-                                            <p>Polyester is deemed lower quality due to its none natural quality’s. Made
-                                                from synthetic materials, not natural like wool. Polyester suits become
-                                                creased easily and are known for not being breathable. Polyester suits
-                                                tend to have a shine to them compared to wool and cotton suits, this can
-                                                make the suit look cheap. The texture of velvet is luxurious and
-                                                breathable. Velvet is a great choice for dinner party jacket and can be
-                                            worn all year round.</p>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                    <div class="blog__details__comment">
+                        <h4>Để lại đánh giá của bạn</h4>
+                        <form action="#">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4">
+                                    <input type="text" th:placeholder="'Tên: '+${customer.name}" disabled>
+                                </div>
+                                <div class="col-lg-4 col-md-4">
+                                    <input id="score-cmt" type="text" placeholder="Nhập điểm đánh giá của bạn">
+                                </div>
+                                <div class="col-lg-4 col-md-4">
+                                    <input type="text" th:placeholder="'Số điện thoại: '+${customer.phoneNum}" disabled>
+                                </div>
+                                <div class="col-lg-12 text-center">
+                                    <textarea id="cmt-cmt" placeholder="Comment"></textarea>
+                                    <button onclick="pushCmt(this)" class="site-btn">Bình luận</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
             </div>
         </div>
     </section>
+
+    <script>
+        function pushCmt(button) {
+            const textarea = document.getElementById("cmt-cmt");
+            const text = textarea.value;
+
+            const input = document.getElementById("score-cmt");
+            const score = input.value;
+
+            const spanElement = document.getElementById("product-taker");
+            const productId = spanElement.getAttribute("data-value");
+            const data = {
+                score: score,
+                comment: text,
+                productId: productId
+            };
+
+            fetch('/clothing-sell/pushCmt', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json(); // Giải mã JSON từ server
+                    } else {
+                        throw new Error(response.url);
+                    }
+                })
+                .then(result => {
+                    alert("Bạn đã đăng bình luận!")
+                })
+                .catch(error => {
+                    console.error('Lỗi:', error);
+                    alert(error);
+                });
+        }
+    </script>
     <!-- Shop Details Section End -->
 
     <!-- Related Section Begin -->
