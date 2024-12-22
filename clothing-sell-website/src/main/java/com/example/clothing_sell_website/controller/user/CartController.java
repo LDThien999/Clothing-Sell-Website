@@ -1,9 +1,12 @@
 package com.example.clothing_sell_website.controller.user;
 import com.example.clothing_sell_website.entity.Cart;
+import com.example.clothing_sell_website.entity.Customer;
 import com.example.clothing_sell_website.entity.Product;
+import com.example.clothing_sell_website.service.admin.AccountService;
 import com.example.clothing_sell_website.service.admin.ProductService;
 import com.example.clothing_sell_website.service.customer.CartService;
 import com.example.clothing_sell_website.service.customer.CustomerCusService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import  org.springframework.ui.Model;
@@ -22,6 +25,8 @@ public class CartController {
     private CustomerCusService cusService;
     @Autowired
     private ProductService productService;
+    @Autowired
+    private AccountService accountService;
 
     @GetMapping("/shop/addCart/{productId}/{quantity}/{customerId}")
     public String addCart(@PathVariable String productId, @PathVariable int quantity, @PathVariable String customerId, Model model) {
@@ -42,8 +47,10 @@ public class CartController {
     }
 
     @GetMapping("/cart.html")
-    public String cart(Model model) {
-        List <Cart> carts = cartService.getCartByCus("KH001");
+    public String cart(Model model, HttpServletRequest request) {
+        String username = (String) request.getSession().getAttribute("currentCustomer");
+        Customer cus = accountService.getAccountById(username).getCustomer();
+        List <Cart> carts = cartService.getCartByCus(cus.getCustomerId());
         List<Cart> realCart = new ArrayList<Cart>();
         for(Cart cart : carts){
             if(cart.getQuantity() > 0){
