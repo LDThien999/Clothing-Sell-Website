@@ -35,4 +35,8 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "StaffId")
     Staff staff;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CustomerId")
+    Customer customer;
 }

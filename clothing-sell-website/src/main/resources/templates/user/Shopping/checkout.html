@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head th:replace="user/fragments :: meta_css"></head>
+
+<body>
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Offcanvas Menu Begin -->
+    <div class="offcanvas-menu-overlay"></div>
+    <div th:replace="user/fragments :: menu"></div>
+    <!-- Offcanvas Menu End -->
+
+    <!-- Header Section Begin -->
+    <header th:replace="user/fragments :: header"></header>
+    <!-- Header Section End -->
+
+    <!-- Breadcrumb Section Begin -->
+    <section class="breadcrumb-option">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb__text">
+                        <h4>Check Out</h4>
+                        <div class="breadcrumb__links">
+                            <a href="../index.html">Home</a>
+                            <a href="shop.html">Shop</a>
+                            <span>Check Out</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb Section End -->
+
+    <!-- Checkout Section Begin -->
+    <section class="checkout spad">
+        <div class="container">
+            <div class="checkout__form">
+                <form action="#">
+                    <div class="row">
+                        <div class="col-lg-8 col-md-6">
+                            <h6 class="checkout__title">Thông tin khách hàng</h6>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="checkout__input">
+                                        <p>Họ tên<span>*</span></p>
+                                        <input type="text" th:value="${order.customer.name}" disabled >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="checkout__input">
+                                <p>Country<span>*</span></p>
+                                <input type="text" value="Việt Nam" disabled>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="checkout__input">
+                                        <p>Phone<span>*</span></p>
+                                        <input type="text" th:value="${order.customer.phoneNum}" disabled>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="checkout__input">
+                                        <p>Email<span>*</span></p>
+                                        <input type="text" th:value="${order.customer.email}" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-6">
+                            <div class="checkout__order">
+                                <h4 class="order__title">Đơn hàng của bạn</h4>
+                                <div class="checkout__order__products">Sản phẩm <span>Giá</span></div>
+                                <ul class="checkout__total__products">
+                                    <li th:each="orderList : ${orderLists}" style="overflow: hidden;">
+                                        <span style="float: left;" th:text="${orderList.cart.product.productName} + ' (SL: ' + ${orderList.quantity} +' )'"></span>
+                                        <span class="span-total" style="float: right;color: rgba(230,40,70,0.86);font-weight: bold;" th:text="${orderList.cart.product.price*orderList.quantity}"></span>
+                                    </li>
+                                </ul>
+                                <ul class="checkout__total__all">
+                                    <li>Miễn giảm: <span>0 VND</span></li>
+                                    <li>Tổng tiền: <span id="result"></span></li>
+                                </ul>
+                                <button class="site-btn" onclick="getFastAPI()">Chấp thuận đơn hàng</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+    <script>
+        function getFastAPI(){
+            fetch('http://127.0.0.1:8000/')  // Địa chỉ của FastAPI server
+                .then(response => response.json())   // Chuyển dữ liệu từ JSON
+                .then(data => {
+                    alert(data)
+
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+    </script>
+    <script>
+        // Đảm bảo sự kiện onload được khai báo đúng
+        window.onload = function() {
+            calculateTotal();  // Gọi hàm calculateTotal khi trang đã tải xong
+        }
+
+        function calculateTotal() {
+            let total = 0;
+
+            // Lấy tất cả các thẻ span có class "span-total"
+            const spans = document.querySelectorAll(".span-total");
+
+            // Duyệt qua từng thẻ span và cộng giá trị vào tổng
+            spans.forEach(function(span) {
+                total += parseFloat(span.textContent) || 0; // Cộng giá trị vào tổng, nếu giá trị không phải số thì cộng 0
+            });
+
+            // Cập nhật tổng vào thẻ span có id "result"
+            document.getElementById("result").textContent = total;
+        }
+    </script>
+
+
+    <!-- Checkout Section End -->
+
+    <!-- Footer Section Begin -->
+    <footer th:replace="user/fragments :: footer"></footer>
+    <!-- Footer Section End -->
+
+    <!-- Search Begin -->
+    <div th:replace="user/fragments :: search"></div>
+    <!-- Search End -->
+
+    <!-- Js Plugins -->
+    <div th:replace="user/fragments :: scripts"></div>
+</body>
+
+</html>

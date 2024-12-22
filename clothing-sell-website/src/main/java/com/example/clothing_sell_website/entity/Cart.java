@@ -16,7 +16,7 @@ public class Cart {
     @Id
     @Column(name = "CartId")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer cartId;
+    long cartId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ProductId")
@@ -28,7 +28,7 @@ public class Cart {
     @Column(name = "Status")
     Boolean status;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CustomerId")
     Customer customer;
 }

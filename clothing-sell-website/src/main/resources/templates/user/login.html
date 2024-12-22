@@ -1,8 +1,11 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
-<head th:replace="user/fragments :: meta_css"></head>
 
+<head th:replace="user/fragments :: meta_css">
+
+</head>
 <body>
+
 <!-- Page Preloder -->
 <div id="preloder">
     <div class="loader"></div>
@@ -24,7 +27,7 @@
         <img th:src="@{user/img/login/bg.svg}">
     </div>
     <div class="login-content">
-        <form id="loginForm">
+        <form class="form-login" id="loginForm">
             <img th:src="@{user/img/login/avatar.svg}">
             <h2 class="title">ĐĂNG NHẬP</h2>
             <div class="input-div one">
@@ -45,8 +48,8 @@
                     <input name="password" type="password" class="input" placeholder="Mật khẩu" required>
                 </div>
             </div>
-            <a href="#">Quên mật khẩu?</a>
-            <input type="submit" class="btn" value="Đăng nhập">
+            <a class="a-login" href="#">Quên mật khẩu?</a>
+            <input type="submit" class="btn-login" value="Đăng nhập">
             <div class="inline-container">
                 <p>Bạn chưa có tài khoản?</p>
                 <a href="register.html">Đăng ký</a>

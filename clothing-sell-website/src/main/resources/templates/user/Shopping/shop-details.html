@@ -25,8 +25,8 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="product__details__breadcrumb">
-                            <a href="./index.html">Home</a>
-                            <a href="./shop.html">Shop</a>
+                            <a href="../index.html">Home</a>
+                            <a href="shop.html">Shop</a>
                             <span>Product Details</span>
                         </div>
                     </div>
@@ -36,25 +36,25 @@
                         <ul class="nav nav-tabs" role="tablist">
                             <li class="nav-item">
                                 <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab">
-                                    <div class="product__thumb__pic set-bg" data-setbg="user/img/shop-details/thumb-1.png">
+                                    <div class="product__thumb__pic set-bg" th:data-setbg="@{user/img/shop-details/thumb-1.png}">
                                     </div>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab">
-                                    <div class="product__thumb__pic set-bg" data-setbg="user/img/shop-details/thumb-2.png">
+                                    <div class="product__thumb__pic set-bg" th:data-setbg="@{user/img/shop-details/thumb-2.png}">
                                     </div>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab">
-                                    <div class="product__thumb__pic set-bg" data-setbg="user/img/shop-details/thumb-3.png">
+                                    <div class="product__thumb__pic set-bg" th:data-setbg="@{user/img/shop-details/thumb-3.png}">
                                     </div>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" data-toggle="tab" href="#tabs-4" role="tab">
-                                    <div class="product__thumb__pic set-bg" data-setbg="user/img/shop-details/thumb-4.png">
+                                    <div class="product__thumb__pic set-bg" th:data-setbg="@{user/img/shop-details/thumb-4.png}">
                                         <i class="fa fa-play"></i>
                                     </div>
                                 </a>
@@ -65,22 +65,22 @@
                         <div class="tab-content">
                             <div class="tab-pane active" id="tabs-1" role="tabpanel">
                                 <div class="product__details__pic__item">
-                                    <img src="user/img/shop-details/product-big-2.png" alt="">
+                                    <img th:src="@{/user/img/shop-details/product-big-2.png}" alt="">
                                 </div>
                             </div>
                             <div class="tab-pane" id="tabs-2" role="tabpanel">
                                 <div class="product__details__pic__item">
-                                    <img src="user/img/shop-details/product-big-3.png" alt="">
+                                    <img th:src="@{user/img/shop-details/product-big-3.png}" alt="">
                                 </div>
                             </div>
                             <div class="tab-pane" id="tabs-3" role="tabpanel">
                                 <div class="product__details__pic__item">
-                                    <img src="user/img/shop-details/product-big.png" alt="">
+                                    <img th:src="@{user/img/shop-details/product-big.png}" alt="">
                                 </div>
                             </div>
                             <div class="tab-pane" id="tabs-4" role="tabpanel">
                                 <div class="product__details__pic__item">
-                                    <img src="user/img/shop-details/product-big-4.png" alt="">
+                                    <img th:src="@{user/img/shop-details/product-big-4.png}" alt="">
                                     <a href="https://www.youtube.com/watch?v=8PJ3_p7VqHw&list=RD8PJ3_p7VqHw&start_radio=1" class="video-popup"><i class="fa fa-play"></i></a>
                                 </div>
                             </div>
@@ -94,19 +94,17 @@
                 <div class="row d-flex justify-content-center">
                     <div class="col-lg-8">
                         <div class="product__details__text">
-                            <h4>Hooded thermal anorak</h4>
+                            <h4 th:text="${product.productName}"></h4>
                             <div class="rating">
                                 <i class="fa fa-star"></i>
                                 <i class="fa fa-star"></i>
                                 <i class="fa fa-star"></i>
                                 <i class="fa fa-star"></i>
-                                <i class="fa fa-star-o"></i>
-                                <span> - 5 Reviews</span>
+                                <i class="fa fa-star"></i>
+                                <span> Sản phẩm cao cấp 5 sao </span>
                             </div>
-                            <h3>$270.00 <span>70.00</span></h3>
-                            <p>Coat with quilted lining and an adjustable hood. Featuring long sleeves with adjustable
-                                cuff tabs, adjustable asymmetric hem with elastic side tabs and a front zip fastening
-                            with placket.</p>
+                            <h3 th:text="${product.price}"> <span th:text="${product.price}"></span></h3>
+                            <p>Sản phẩm cao cấp với chất lượng cao luôn là tiêu chí hàng đầu để chúng tôi lựa chọn và mang đến cho các bạn.</p>
                             <div class="product__details__option">
                                 <div class="product__details__option__size">
                                     <span>Size:</span>
@@ -145,18 +143,57 @@
                             <div class="product__details__cart__option">
                                 <div class="quantity">
                                     <div class="pro-qty">
-                                        <input type="text" value="1">
+                                        <input id="quantity-input" type="text" value="1">
                                     </div>
                                 </div>
-                                <a href="#" class="primary-btn">add to cart</a>
+                                <button id="open-modal" class="modal__button" onclick="addCart(this)" th:value="${product.productId}" >
+                                    Thêm vào giỏ
+                                </button>
+
+                                <div class="modal__container" id="modal-container">
+                                    <div class="modal__content">
+                                        <div class="modal__close close-modal" title="Close">
+                                            <i class='bx bx-x'></i>
+                                        </div>
+
+                                        <img th:src="@{/modelPopup/img/checkingCart_rm.png}" alt="" class="modal__img">
+
+                                        <h1 class="modal__title">Thêm vào giỏ thành công!</h1>
+                                        <p class="modal__description">Chúc bạn mua sắm vui vẻ</p>
+
+                                        <button class="modal__button modal__button-width" onclick="window.location.href='/clothing-sell/cart.html';">
+                                            Xem giỏ hàng
+                                        </button>
+
+                                        <button class="modal__button-link close-modal" onclick="window.location.href='/clothing-sell/shop.html';">
+                                            Tiếp tục mua sắm
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
+                            <script>
+                                // Lấy các phần tử cần thao tác
+                                const quantityInput = document.getElementById("quantity-input");
+                                const addToCartBtn = document.getElementById("add-to-cart-btn");
+
+                                // Lắng nghe sự kiện thay đổi giá trị ô input
+                                quantityInput.addEventListener("input", function () {
+                                    const quantity = quantityInput.value; // Lấy giá trị từ ô input
+                                    if (!isNaN(quantity) && quantity > 0) { // Đảm bảo giá trị là số hợp lệ
+                                        // Cập nhật href của nút "Add to cart"
+                                        const baseUrl = addToCartBtn.getAttribute("th:href");
+                                        const updatedUrl = baseUrl.replace(/\/\d+\//, `/${quantity}/`);
+                                        addToCartBtn.setAttribute("href", updatedUrl);
+                                    }
+                                });
+                            </script>
                             <div class="product__details__btns__option">
                                 <a href="#"><i class="fa fa-heart"></i> add to wishlist</a>
                                 <a href="#"><i class="fa fa-exchange"></i> Add To Compare</a>
                             </div>
                             <div class="product__details__last__option">
                                 <h5><span>Guaranteed Safe Checkout</span></h5>
-                                <img src="user/img/shop-details/details-payment.png" alt="">
+                                <img src="img/shop-details/details-payment.png" alt="">
                                 <ul>
                                     <li><span>SKU:</span> 3812912</li>
                                     <li><span>Categories:</span> Clothes</li>
@@ -296,23 +333,43 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <h3 class="related-title">Related Product</h3>
+                    <h3 class="related-title">Đề xuất cho bạn</h3>
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-3 col-md-6 col-sm-6 col-sm-6">
+                <div class="col-lg-3 col-md-6 col-sm-6 col-sm-6" th:each="recommend : ${recommendProducts}">
                     <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="user/img/product/product-1.jpg">
+                        <div class="product__item__pic set-bg" th:data-setbg="@{'/user/img/product/' + ${recommend.image}}">
                             <span class="label">New</span>
                             <ul class="product__hover">
-                                <li><a href="#"><img src="user/img/icon/heart.png" alt=""></a></li>
-                                <li><a href="#"><img src="user/img/icon/compare.png" alt=""> <span>Compare</span></a></li>
-                                <li><a href="#"><img src="user/img/icon/search.png" alt=""></a></li>
+                                <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
+                                <li><a href="#"><img src="img/icon/compare.png" alt=""> <span>Compare</span></a></li>
+                                <li><a href="#"><img src="img/icon/search.png" alt=""></a></li>
                             </ul>
                         </div>
                         <div class="product__item__text">
-                            <h6>Piqué Biker Jacket</h6>
-                            <a href="#" class="add-cart">+ Add To Cart</a>
+                            <h6 th:text="${recommend.productName}"></h6>
+                            <a id="open-modal1" onclick="addCart(this)"  th:data-product-id="${recommend.productId}" class="add-cart" style=" cursor: pointer;">+ Thêm vào giỏ hàng</a>
+                            <div class="modal__container" id="modal-container1">
+                                <div class="modal__content">
+                                    <div class="modal__close close-modal" title="Close">
+                                        <i class='bx bx-x'></i>
+                                    </div>
+
+                                    <img th:src="@{/modelPopup/img/checkingCart_rm.png}" alt="" class="modal__img">
+
+                                    <h1 class="modal__title">Thêm vào giỏ thành công!</h1>
+                                    <p class="modal__description">Chúc bạn mua sắm vui vẻ</p>
+
+                                    <button class="modal__button modal__button-width" onclick="window.location.href='/clothing-sell/cart.html';">
+                                        Xem giỏ hàng
+                                    </button>
+
+                                    <button class="modal__button-link close-modal" onclick="window.location.href='/clothing-sell/shop.html';">
+                                        Tiếp tục mua sắm
+                                    </button>
+                                </div>
+                            </div>
                             <div class="rating">
                                 <i class="fa fa-star-o"></i>
                                 <i class="fa fa-star-o"></i>
@@ -320,41 +377,7 @@
                                 <i class="fa fa-star-o"></i>
                                 <i class="fa fa-star-o"></i>
                             </div>
-                            <h5>$67.24</h5>
-                            <div class="product__color__select">
-                                <label for="pc-1">
-                                    <input type="radio" id="pc-1">
-                                </label>
-                                <label class="active black" for="pc-2">
-                                    <input type="radio" id="pc-2">
-                                </label>
-                                <label class="grey" for="pc-3">
-                                    <input type="radio" id="pc-3">
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6 col-sm-6">
-                    <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="img/product/product-2.jpg">
-                            <ul class="product__hover">
-                                <li><a href="#"><img src="user/img/icon/heart.png" alt=""></a></li>
-                                <li><a href="#"><img src="user/img/icon/compare.png" alt=""> <span>Compare</span></a></li>
-                                <li><a href="#"><img src="user/img/icon/search.png" alt=""></a></li>
-                            </ul>
-                        </div>
-                        <div class="product__item__text">
-                            <h6>Piqué Biker Jacket</h6>
-                            <a href="#" class="add-cart">+ Add To Cart</a>
-                            <div class="rating">
-                                <i class="fa fa-star-o"></i>
-                                <i class="fa fa-star-o"></i>
-                                <i class="fa fa-star-o"></i>
-                                <i class="fa fa-star-o"></i>
-                                <i class="fa fa-star-o"></i>
-                            </div>
-                            <h5>$67.24</h5>
+                            <h5 th:text="${recommend.price} + 'VND'"></h5>
                             <div class="product__color__select">
                                 <label for="pc-4">
                                     <input type="radio" id="pc-4">
@@ -369,80 +392,45 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-6 col-sm-6 col-sm-6">
-                    <div class="product__item sale">
-                        <div class="product__item__pic set-bg" data-setbg="img/product/product-3.jpg">
-                            <span class="label">Sale</span>
-                            <ul class="product__hover">
-                                <li><a href="#"><img src="user/img/icon/heart.png" alt=""></a></li>
-                                <li><a href="#"><img src="user/img/icon/compare.png" alt=""> <span>Compare</span></a></li>
-                                <li><a href="#"><img src="user/img/icon/search.png" alt=""></a></li>
-                            </ul>
-                        </div>
-                        <div class="product__item__text">
-                            <h6>Multi-pocket Chest Bag</h6>
-                            <a href="#" class="add-cart">+ Add To Cart</a>
-                            <div class="rating">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star-o"></i>
-                            </div>
-                            <h5>$43.48</h5>
-                            <div class="product__color__select">
-                                <label for="pc-7">
-                                    <input type="radio" id="pc-7">
-                                </label>
-                                <label class="active black" for="pc-8">
-                                    <input type="radio" id="pc-8">
-                                </label>
-                                <label class="grey" for="pc-9">
-                                    <input type="radio" id="pc-9">
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6 col-sm-6">
-                    <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="img/product/product-4.jpg">
-                            <ul class="product__hover">
-                                <li><a href="#"><img src="user/img/icon/heart.png" alt=""></a></li>
-                                <li><a href="#"><img src="user/img/icon/compare.png" alt=""> <span>Compare</span></a></li>
-                                <li><a href="#"><img src="user/img/icon/search.png" alt=""></a></li>
-                            </ul>
-                        </div>
-                        <div class="product__item__text">
-                            <h6>Diagonal Textured Cap</h6>
-                            <a href="#" class="add-cart">+ Add To Cart</a>
-                            <div class="rating">
-                                <i class="fa fa-star-o"></i>
-                                <i class="fa fa-star-o"></i>
-                                <i class="fa fa-star-o"></i>
-                                <i class="fa fa-star-o"></i>
-                                <i class="fa fa-star-o"></i>
-                            </div>
-                            <h5>$60.9</h5>
-                            <div class="product__color__select">
-                                <label for="pc-10">
-                                    <input type="radio" id="pc-10">
-                                </label>
-                                <label class="active black" for="pc-11">
-                                    <input type="radio" id="pc-11">
-                                </label>
-                                <label class="grey" for="pc-12">
-                                    <input type="radio" id="pc-12">
-                                </label>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
     </section>
-    <!-- Related Section End -->
+    <script>
+        function addCart(button) {
+            const productId = button.value;
+            const inp = document.getElementById("quantity-input")
+            const quantity = parseInt(inp.value)
+            const data = {
+                productId: productId,
+                quantity: quantity
+            };
 
+            fetch('/clothing-sell/addCart', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json(); // Giải mã JSON từ server
+                    } else {
+                        throw new Error(response.url);
+                    }
+                })
+                .then(result => {
+                    showModal()
+                })
+                .catch(error => {
+                    console.error('Lỗi:', error);
+                    alert(error);
+                });
+        }
+    </script>
+    <!-- Related Section End -->
+    <script th:src="@{/modelPopup/js/main.js}"></script>
     <!-- Footer Section Begin -->
     <footer th:replace="user/fragments :: footer"></footer>
     <!-- Footer Section End -->

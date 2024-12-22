@@ -88,12 +88,12 @@ public class AuthController {
     }
     @GetMapping("/admin/info")
     private ResponseEntity<String> getStringResponseEntity() {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            System.out.println(authentication.getName());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println(authentication.getName());
 
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token không hợp lệ");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token không hợp lệ");
 
-       }
+    }
 
     @GetMapping("/api/user/profile")
     public ResponseEntity<Customer> profile(@RequestHeader("Authorization") String authorizationHeader) {
