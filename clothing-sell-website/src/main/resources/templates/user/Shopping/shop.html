@@ -349,7 +349,28 @@
                         fetch(urlStr)  // Địa chỉ của FastAPI server
                             .then(response => response.json())   // Chuyển dữ liệu từ JSON
                             .then(fastData => {
-                                location.href = `/clothing-sell/shop/detail/${productId}/` + fastData
+                                fetch('/clothing-sell/getDataAPI', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify(fastData),
+                                })
+                                    .then(response => {
+                                        if (response.ok) {
+                                            return response.json(); // Giải mã JSON từ server
+                                        } else {
+                                            throw new Error(response.url);
+                                        }
+                                    })
+                                    .then(result => {
+                                        location.href = `/clothing-sell/shop/detail/${productId}/` + fastData.label
+                                    })
+                                    .catch(error => {
+                                        console.error('Lỗi:', error);
+                                        alert(error);
+                                    });
+                                // location.href = `/clothing-sell/shop/detail/${productId}/` + fastData.label
                             })
                             .catch(error => {
                                 console.error('Error:', error);

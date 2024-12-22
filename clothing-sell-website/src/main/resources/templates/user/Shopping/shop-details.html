@@ -102,7 +102,7 @@
                                 <i class="fa fa-star"></i>
                                 <i class="fa fa-star"></i>
                                 <i class="fa fa-star"></i>
-                                <span> Sản phẩm cao cấp 5 sao </span>
+                                <span id="product-taker" th:data-value="${product.productId}"> Sản phẩm cao cấp 5 sao </span>
                             </div>
                             <h3 th:text="${product.price}"> <span th:text="${product.price}"></span></h3>
                             <p>Sản phẩm cao cấp với chất lượng cao luôn là tiêu chí hàng đầu để chúng tôi lựa chọn và mang đến cho các bạn.</p>
@@ -247,21 +247,21 @@
                     </div>
                 </div>
                     <div class="blog__details__comment">
-                        <h4>Leave A Comment</h4>
+                        <h4>Để lại đánh giá của bạn</h4>
                         <form action="#">
                             <div class="row">
                                 <div class="col-lg-4 col-md-4">
-                                    <input type="text" th:placeholder="${customer.name}" disabled>
+                                    <input type="text" th:placeholder="'Tên: '+${customer.name}" disabled>
                                 </div>
                                 <div class="col-lg-4 col-md-4">
-                                    <input type="text" th:placeholder="${customer.email}" disabled>
+                                    <input id="score-cmt" type="text" placeholder="Nhập điểm đánh giá của bạn">
                                 </div>
                                 <div class="col-lg-4 col-md-4">
-                                    <input type="text" th:placeholder="${customer.phoneNum}" disabled>
+                                    <input type="text" th:placeholder="'Số điện thoại: '+${customer.phoneNum}" disabled>
                                 </div>
                                 <div class="col-lg-12 text-center">
-                                    <textarea placeholder="Comment"></textarea>
-                                    <button type="submit" class="site-btn">Post Comment</button>
+                                    <textarea id="cmt-cmt" placeholder="Comment"></textarea>
+                                    <button onclick="pushCmt(this)" class="site-btn">Bình luận</button>
                                 </div>
                             </div>
                         </form>
@@ -270,7 +270,45 @@
         </div>
     </section>
 
+    <script>
+        function pushCmt(button) {
+            const textarea = document.getElementById("cmt-cmt");
+            const text = textarea.value;
 
+            const input = document.getElementById("score-cmt");
+            const score = input.value;
+
+            const spanElement = document.getElementById("product-taker");
+            const productId = spanElement.getAttribute("data-value");
+            const data = {
+                score: score,
+                comment: text,
+                productId: productId
+            };
+
+            fetch('/clothing-sell/pushCmt', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json(); // Giải mã JSON từ server
+                    } else {
+                        throw new Error(response.url);
+                    }
+                })
+                .then(result => {
+                    alert("Bạn đã đăng bình luận!")
+                })
+                .catch(error => {
+                    console.error('Lỗi:', error);
+                    alert(error);
+                });
+        }
+    </script>
     <!-- Shop Details Section End -->
 
     <!-- Related Section Begin -->

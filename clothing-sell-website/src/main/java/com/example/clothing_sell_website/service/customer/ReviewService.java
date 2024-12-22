@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface ReviewService {
    List<Review> getReviewByPro(String productId);
+   Review getReviewByProCus(String productId, String customerId);
+   Review saveReview(Review review);
 }

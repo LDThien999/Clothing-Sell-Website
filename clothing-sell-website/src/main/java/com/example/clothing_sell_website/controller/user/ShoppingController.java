@@ -1,6 +1,7 @@
 package com.example.clothing_sell_website.controller.user;
 
 import com.example.clothing_sell_website.entity.*;
+import com.example.clothing_sell_website.repository.ShopRepository;
 import com.example.clothing_sell_website.service.admin.AccountService;
 import com.example.clothing_sell_website.service.customer.*;
 
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -34,6 +36,8 @@ public class ShoppingController {
     private LevelService lvService;
     @Autowired
     private ReviewService reviewService;
+    @Autowired
+    private ShopRepository shopRepo;
 
     @GetMapping("/shop.html")
     public String shop(Model model, HttpServletRequest request) {
@@ -84,7 +88,17 @@ public class ShoppingController {
         model.addAttribute("customer",cus);
         model.addAttribute("product", product);
         List<Product> recommendProducts = shopService.getTop10Products(label);
-        model.addAttribute("recommendProducts", recommendProducts);
+        List<String> listRe = (List<String>) request.getSession().getAttribute("listRecomm");
+        List<Product> listFinal = new ArrayList<>();
+        if(!listRe.isEmpty()){
+            List<Product> recommendProducts2 = shopRepo.findAllById(listRe);
+            listFinal.addAll(recommendProducts2);
+        }
+        listFinal.addAll(recommendProducts);         // Thêm tất cả phần tử từ recommendProducts
+
+
+
+        model.addAttribute("recommendProducts", listFinal);
         LevelOfInterest lv = lvService.getLVByCusPro(cus.getCustomerId(), productId);
         lv.setLabel(label);
         lvService.saveLV(lv);

@@ -5,6 +5,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDateTime;
+import java.util.Date;
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -33,4 +36,8 @@ public class Review {
 
     @Column(name = "Comment")
     String comment;
+
+    @Column(name = "Date")
+    LocalDateTime date;
+
 }
