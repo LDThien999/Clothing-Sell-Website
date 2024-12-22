@@ -28,6 +28,15 @@
         .hidden {
             display: none !important;
         }
+
+        a {
+            color: black;
+        }
+
+        a:hover {
+            color: #4563ee !important;
+        }
+
     </style>
 </head>
 <body>
@@ -42,8 +51,8 @@
         <div class="offcanvas__top__hover logged-in">
             <span>Usd <i class="arrow_carrot-down"></i></span>
             <ul>
-                <li><a th:href="@{/user-information.html}" >Thông tin cá nhân</a></li>
-                <li>><a class="logout-btn" th:href="@{/logout.html}" >Đăng xuất</a></li>
+                <li><a th:href="@{/user-information.html}">Thông tin cá nhân</a></li>
+                <li>><a class="logout-btn" th:href="@{/logout.html}">Đăng xuất</a></li>
                 <li>USD</li>
             </ul>
         </div>
@@ -80,8 +89,10 @@
                         <div class="header__top__hover logged-in">
                             <span>Tài khoản của tôi <i class="arrow_carrot-down"></i></span>
                             <ul>
-                                <li><a th:href="@{/user-information.html}" style="font-size: 16px;" >Thông tin cá nhân</a></li>
-                                <li><a class="logout-btn" th:href="@{/logout.html}" style="font-size: 16px;" >Đăng xuất</a></li>
+                                <li><a th:href="@{/user-information.html}" style="font-size: 16px;">Thông tin cá
+                                    nhân</a></li>
+                                <li><a class="logout-btn" th:href="@{/logout.html}" style="font-size: 16px;">Đăng
+                                    xuất</a></li>
                             </ul>
                         </div>
 
@@ -100,9 +111,9 @@
             <div class="col-lg-6 col-md-6">
                 <nav class="header__menu mobile-menu">
                     <ul>
-                        <li class="active"><a href="./index.html">Trang chủ</a></li>
-                        <li><a href="./shop.html">Sản phẩm</a></li>
-                        <li><a href="#">Trang liên quan</a>
+                        <li class="director" ><a href="./index.html">Trang chủ</a></li>
+                        <li class="director" ><a href="./shop.html">Sản phẩm</a></li>
+                        <li class="director" ><a href="#">Trang liên quan</a>
                             <ul class="dropdown">
                                 <li><a href="./about.html">About Us</a></li>
                                 <li><a href="./shop-details.html">Shop Details</a></li>
@@ -111,7 +122,7 @@
                                 <li><a href="./blog-details.html">Blog Details</a></li>
                             </ul>
                         </li>
-                        <li><a href="./contact.html">Liên hệ</a></li>
+                        <li class="director" ><a href="./contact.html">Liên hệ</a></li>
                     </ul>
                 </nav>
             </div>
@@ -128,6 +139,21 @@
     </div>
 </header>
 <!-- Header Section End -->
+
+<!-- /templates/fragments/chatbot.html -->
+<div th:fragment="chatbot">
+    <div id="chatbot-container">
+        <button id="chatbot-toggle">Chat</button>
+        <div id="chatbot">
+            <iframe
+                    width="350"
+                    height="430"
+                    allow="microphone;"
+                    src="https://console.dialogflow.com/api-client/demo/embedded/d60e8930-e4ac-46d2-9501-0f722dc2d962">
+            </iframe>
+        </div>
+    </div>
+</div>
 
 <!-- Footer Section Begin -->
 <footer class="footer" th:fragment="footer">
@@ -184,9 +210,11 @@
                     <p>Copyright ©
                         <script>
                             document.write(new Date().getFullYear());
-                        </script>2020
+                        </script>
+                        2020
                         All rights reserved | This template is made with <i class="fa fa-heart-o"
-                                                                            aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                                                                            aria-hidden="true"></i> by <a
+                                href="https://colorlib.com" target="_blank">Colorlib</a>
                     </p>
                     <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
                 </div>
@@ -220,6 +248,73 @@
     <script th:src="@{/user/js/owl.carousel.min.js}"></script>
     <script th:src="@{/user/js/main.js}"></script>
     <script th:src="@{/user/js/fragments.js}"></script>
+
+    <script>
+        document.getElementById("chatbot-toggle").addEventListener("click", function () {
+            const chatbot = document.getElementById("chatbot");
+            if (chatbot.style.display === "none" || chatbot.style.display === "") {
+                chatbot.style.display = "block";
+            } else {
+                chatbot.style.display = "none";
+            }
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const resultElement = document.getElementById('result');
+
+            // Hàm lưu lịch sử chat vào LocalStorage
+            function saveChatHistory() {
+                const messages = [];
+                const userMessages = document.querySelectorAll('.user-request');
+                const serverMessages = document.querySelectorAll('.server-response');
+
+                userMessages.forEach((msg) => {
+                    messages.push({type: 'user', text: msg.textContent.trim()});
+                });
+
+                serverMessages.forEach((msg) => {
+                    messages.push({type: 'server', text: msg.textContent.trim()});
+                });
+
+                localStorage.setItem('chatHistory', JSON.stringify(messages));
+            }
+
+            // Hàm tải lịch sử chat từ LocalStorage
+            function loadChatHistory() {
+                const chatHistory = JSON.parse(localStorage.getItem('chatHistory')) || [];
+
+                chatHistory.forEach((msg) => {
+                    const messageDiv = document.createElement('div');
+                    messageDiv.className = msg.type === 'user' ? 'user-request' : 'server-response';
+                    messageDiv.textContent = msg.text;
+                    resultElement.appendChild(messageDiv);
+                });
+            }
+
+            // Hàm xóa lịch sử chat
+            function clearChatHistory() {
+                localStorage.removeItem('chatHistory');
+                resultElement.innerHTML = '';
+            }
+
+            // Tải lịch sử chat khi load trang
+            loadChatHistory();
+
+            // Theo dõi thay đổi và lưu lịch sử chat
+            const observer = new MutationObserver(() => saveChatHistory());
+            observer.observe(resultElement, {childList: true, subtree: true});
+
+            // Thêm nút xóa lịch sử chat (nếu cần)
+            const clearButton = document.createElement('button');
+            clearButton.textContent = 'Clear Chat History';
+            clearButton.addEventListener('click', clearChatHistory);
+            document.body.appendChild(clearButton);
+        });
+    </script>
+
+
 </th:block>
 
 </body>

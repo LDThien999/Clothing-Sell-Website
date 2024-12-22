@@ -2,6 +2,8 @@ package com.example.clothing_sell_website.controller.admin;
 
 import java.time.LocalDateTime;
 
+import com.example.clothing_sell_website.entity.Account;
+import com.example.clothing_sell_website.entity.Staff;
 import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -38,6 +40,10 @@ public class OrderController {
     public String getOrders(HttpServletRequest request, Model model) {
         model.addAttribute("currentUri", request.getRequestURI());
         model.addAttribute("orderList", orderService.getOrders());
+
+        String username = (String) request.getSession().getAttribute("currentStaff");
+        Account account = accountService.getAccountByUsername(username);
+        model.addAttribute("staffName", staffService.getStaffById(account.getStaff().getStaffId()).getName());
         return "admin/order";
     }
 
@@ -48,17 +54,17 @@ public class OrderController {
         //        model.addAttribute("staffList", staffService.getStaffs());
         Order order = orderService.findOrderById(id);
 
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        //        System.out.println("Tên account " + username);
-        //        Account account = accountService.getAccountByUsername(username);
-
+        String username = (String) request.getSession().getAttribute("currentStaff");
+        Account account = accountService.getAccountByUsername(username);
+        Staff staff = staffService.getStaffById(account.getStaff().getStaffId());
         order.setStatus(true);
-        //        order.setStaff(staffService.getStaffById());
+        order.setStaff(staff);
         orderService.save(order);
 
         billService.save(Bill.builder()
                 .totalAmount(billService.getTotalAmount(id))
                 .date(LocalDateTime.now())
+                .staff(staff)
                 .order(order)
                 .build());
         return "redirect:/admin/order";
