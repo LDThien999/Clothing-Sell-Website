@@ -42,7 +42,6 @@ public class OrderController {
         model.addAttribute("orderList", orderService.getOrders());
 
         String username = (String) request.getSession().getAttribute("currentStaff");
-        System.out.println("USERNAME NÈ: " + username);
         Account account = accountService.getAccountByUsername(username);
         model.addAttribute("staffName", staffService.getStaffById(account.getStaff().getStaffId()).getName());
         return "admin/order";
