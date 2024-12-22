@@ -13,9 +13,31 @@
 <head>
     <link rel="stylesheet" th:href="@{/admin/vendors/datatables.net-bs4/css/dataTables.bootstrap4.min.css}">
     <link rel="stylesheet" th:href="@{/admin/vendors/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css}">
+    <link rel="stylesheet" th:href="@{/user/css/notification.css}">
+    <style>
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .form-wrapper {
+            width: 40vw;
+            position: relative;
+            z-index: 10;
+        }
+    </style>
 </head>
 
 <body>
+<div id="notification-container" th:replace="user/notification :: notificationFragment"></div>
 
 
 <!-- Left Panel -->
@@ -82,48 +104,48 @@
                                     <td th:text="${account.role.roleName}"></td>
                                     <td th:text="${account.staff.name}"></td>
                                     <td>
-<!--                                        <button type="button" class="btn btn-danger"-->
-<!--                                                data-toggle="modal"-->
-<!--                                                th:data-target="|#deletemodal${account.accountId}|">-->
-<!--                                            <i class="fa fa-trash-o"></i>-->
-<!--                                        </button>-->
+                                        <!--                                        <button type="button" class="btn btn-danger"-->
+                                        <!--                                                data-toggle="modal"-->
+                                        <!--                                                th:data-target="|#deletemodal${account.accountId}|">-->
+                                        <!--                                            <i class="fa fa-trash-o"></i>-->
+                                        <!--                                        </button>-->
 
-<!--                                        <a th:href="@{/admin/account/update-account/{id}(id=${account.accountId})}">-->
-<!--                                            <button type="button" class="btn btn-primary">-->
-<!--                                                <i class="fa fa-pencil-square-o"></i>-->
-<!--                                            </button>-->
-<!--                                        </a>-->
+                                        <!--                                        <a th:href="@{/admin/account/update-account/{id}(id=${account.accountId})}">-->
+                                        <!--                                            <button type="button" class="btn btn-primary">-->
+                                        <!--                                                <i class="fa fa-pencil-square-o"></i>-->
+                                        <!--                                            </button>-->
+                                        <!--                                        </a>-->
 
 
-<!--                                        <div class="modal fade" th:id="'deletemodal' + ${account.accountId}" tabindex="-1" role="dialog" aria-labelledby="smallmodalLabel" aria-hidden="true">-->
-<!--                                            <div class="modal-dialog modal-sm" role="document">-->
-<!--                                                <div class="modal-content">-->
-<!--                                                    <div class="modal-header">-->
-<!--                                                        <h5 class="modal-title" id="smallmodalLabel">Thông báo</h5>-->
-<!--                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
-<!--                                                            <span aria-hidden="true">&times;</span>-->
-<!--                                                        </button>-->
-<!--                                                    </div>-->
-<!--                                                    <div class="modal-body">-->
-<!--                                                        <p>Bạn có chắc muốn xóa?</p>-->
-<!--                                                    </div>-->
-<!--                                                    <div class="modal-footer">-->
-<!--                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>-->
-<!--                                                        <a th:href="@{/admin/account/delete/{id}(id=${account.accountId})}">-->
-<!--                                                            <button type="button" class="btn btn-primary">Xác nhận</button>-->
-<!--                                                        </a>-->
-<!--                                                    </div>-->
-<!--                                                </div>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
+                                        <!--                                        <div class="modal fade" th:id="'deletemodal' + ${account.accountId}" tabindex="-1" role="dialog" aria-labelledby="smallmodalLabel" aria-hidden="true">-->
+                                        <!--                                            <div class="modal-dialog modal-sm" role="document">-->
+                                        <!--                                                <div class="modal-content">-->
+                                        <!--                                                    <div class="modal-header">-->
+                                        <!--                                                        <h5 class="modal-title" id="smallmodalLabel">Thông báo</h5>-->
+                                        <!--                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+                                        <!--                                                            <span aria-hidden="true">&times;</span>-->
+                                        <!--                                                        </button>-->
+                                        <!--                                                    </div>-->
+                                        <!--                                                    <div class="modal-body">-->
+                                        <!--                                                        <p>Bạn có chắc muốn xóa?</p>-->
+                                        <!--                                                    </div>-->
+                                        <!--                                                    <div class="modal-footer">-->
+                                        <!--                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>-->
+                                        <!--                                                        <a th:href="@{/admin/account/delete/{id}(id=${account.accountId})}">-->
+                                        <!--                                                            <button type="button" class="btn btn-primary">Xác nhận</button>-->
+                                        <!--                                                        </a>-->
+                                        <!--                                                    </div>-->
+                                        <!--                                                </div>-->
+                                        <!--                                            </div>-->
+                                        <!--                                        </div>-->
 
 
                                     </td>
                                 </tr>
                                 </tbody>
                             </table>
-                            <a th:href="@{/admin/account/create-account}">
-                                <input class="btn btn-info" type="button" value="Tạo tài khoản">
+                            <a>
+                                <input id="createAccountBtn" class="btn btn-info" type="button" value="Tạo tài khoản">
                             </a>
                         </div>
                     </div>
@@ -137,11 +159,68 @@
 
 <!-- Right Panel -->
 
+<!--REGISTER ACCOUNT FORM-->
+<div class="overlay" id="registerForm" style="display: none;">
+    <div class="form-wrapper">
+        <div class="container">
+            <div class="login-content">
+                <div class="login-logo">
+                    <a href="index.html">
+                        <img class="align-content" th:src="@{/admin/images/logo.png}" alt="">
+                    </a>
+                </div>
+                <div class="login-form">
+                    <form id="submitForm">
+                        <div class="form-group">
+                            <label>Người dùng</label>
+                            <input type="text" name="fullname" class="form-control" required placeholder="Họ và tên...">
+                        </div>
+                        <div class="form-group">
+                            <label>Địa chỉ email</label>
+                            <input type="email" name="email" class="form-control" required placeholder="Email...">
+                        </div>
+                        <div class="form-group">
+                            <label>Số điện thoại</label>
+                            <input type="text" name="phoneNum" class="form-control" required
+                                   placeholder="Số điện thoại...">
+                        </div>
+                        <div class="checkbox">
+                            <label>
+                                <input type="radio" name="gender" value="male" checked> Nam
+                            </label>
+                            <label>
+                                <input type="radio" name="gender" value="female"> Nữ
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label>Tài khoản</label>
+                            <input type="text" name="username" class="form-control" required placeholder="Tài khoản...">
+                        </div>
+                        <div class="form-group">
+                            <label>Mật khẩu</label>
+                            <input type="password" name="password" class="form-control" required
+                                   placeholder="Mật khẩu...">
+                        </div>
+                        <div class="form-group">
+                            <label>Mật khẩu</label>
+                            <input type="password" name="confirmPassword" class="form-control" required
+                                   placeholder="Nhập lại mật khẩu...">
+                        </div>
 
+                        <button type="submit" class="btn btn-primary btn-flat m-b-30 m-t-30" id="submitRegistration">Tạo
+                            tài khoản
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <script th:src="@{/admin/vendors/jquery/dist/jquery.min.js}"></script>
 <script th:src="@{/admin/vendors/popper.js/dist/umd/popper.min.js}"></script>
 <script th:src="@{/admin/vendors/bootstrap/dist/js/bootstrap.min.js}"></script>
 <script th:src="@{/admin/assets/js/main.js}"></script>
+<script th:src="@{/admin/assets/js/base.js}"></script>
 
 <script th:inline="javascript">
     var notificationType = '';
@@ -153,6 +232,100 @@
         sendNotification(notificationType, notificationMessage);
     }
 </script>
+
+<!--register account form-->
+<script>
+    document.getElementById('createAccountBtn').addEventListener('click', function () {
+        const form = document.getElementById('registerForm');
+        form.style.display = 'flex';
+    });
+
+    function closeForm() {
+        const form = document.getElementById('registerForm');
+        const inputs = document.querySelectorAll('#registrationForm input');
+        form.style.display = 'none';
+
+        // Reset giá trị của tất cả các input
+        inputs.forEach(input => {
+            if (input.type === 'radio') {
+                input.checked = false;
+            } else {
+                input.value = '';
+            }
+        });
+    }
+
+    document.getElementById('registerForm').addEventListener('click', function (e) {
+        const formWrapper = document.querySelector('.form-wrapper');
+        if (!formWrapper.contains(e.target)) {
+            closeForm();
+        }
+    });
+</script>
+
+<!--submit form-->
+<script>
+    document.getElementById("submitForm").addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const registrationForm = document.getElementById("registerForm");
+        const registerData = {
+            name: registrationForm.querySelector("input[name='fullname']").value,
+            email: registrationForm.querySelector("input[name='email']").value,
+            phoneNum: registrationForm.querySelector("input[name='phoneNum']").value,
+            gender: registrationForm.querySelector("input[name='gender']:checked")?.value || null,
+            username: registrationForm.querySelector("input[name='username']").value,
+            password: registrationForm.querySelector("input[name='password']").value,
+        };
+
+        if (!registerData.gender) {
+            showMessage(false, "Vui lòng chọn giới tính!");
+            return;
+        }
+
+        const confirmPassword = registrationForm.querySelector("input[name='confirmPassword']").value;
+        if (registerData.password !== confirmPassword) {
+            showMessage(false, "Mật khẩu không trùng khớp!");
+            return;
+        }
+
+        fetchData("/clothing-sell/register-staff", "POST", registerData)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showMessage(data.success, data.message || "Đăng ký thành công!", true);
+                    window.location.reload();
+                } else {
+                    showMessage(data.success, data.message || "Đăng ký thất bại!", false);
+                }
+            });
+    });
+
+    function showMessage(dataStatus, dataMessage, status) {
+        let noticeContainer;
+        let noticeMessage;
+
+        if (status) {
+            noticeContainer = document.getElementById("success-notice");
+            noticeMessage = document.getElementById("success-message");
+
+        } else {
+            noticeContainer = document.getElementById("error-notice");
+            noticeMessage = document.getElementById("error-message");
+
+        }
+
+        noticeContainer.style.display = "block";
+        noticeMessage.textContent = dataMessage;
+
+        setTimeout(function () {
+            noticeContainer.style.display = "none";
+        }, 3000);  // Ẩn sau 2 giây
+    }
+</script>
+
+<div th:replace="admin/fragments :: scripts"></div>
+
 
 <script th:src="@{/admin/vendors/datatables.net/js/jquery.dataTables.min.js}"></script>
 <script th:src="@{/admin/vendors/datatables.net-bs4/js/dataTables.bootstrap4.min.js}"></script>
