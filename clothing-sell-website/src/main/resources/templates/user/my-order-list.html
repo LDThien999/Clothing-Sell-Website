@@ -1,0 +1,166 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="user/fragments :: meta_css">
+    <title>Đơn hàng</title>
+</head>
+<head>
+    <style>
+        .table_order-list {
+            padding-right: 10%;
+            padding-left: 10%;
+            padding-bottom: 5%;
+            display: flex;
+            overflow: auto;
+        }
+
+        .table_order-list .table-orders {
+            border: 1px solid #dededf;
+            height: 100%;
+            width: 100%;
+            table-layout: fixed;
+            border-collapse: collapse;
+            border-spacing: 1px;
+            text-align: left;
+        }
+
+        .table_order-list caption {
+            caption-side: top;
+            text-align: left;
+        }
+
+        .table_order-list th {
+            border: 1px solid #dededf;
+            background-color: #fff6f6;
+            color: #000000;
+            padding: 5px;
+        }
+
+        .table_order-list td {
+            border: 1px solid #dededf;
+            background-color: #ffffff;
+            color: #000000;
+            padding: 5px;
+        }
+
+        .about {
+            padding-bottom: 0 !important;
+        }
+
+        .status-success {
+            background-color: #e0ffda !important;
+        }
+
+        .status-pending {
+            background-color: #e1dede !important;
+        }
+
+        .text-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3rem;
+            color: white;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+
+<body>
+<div th:replace="user/fragments :: chatbot"></div>
+<!-- Page Preloder -->
+<div id="preloder">
+    <div class="loader"></div>
+</div>
+
+<!-- Offcanvas Menu Begin -->
+<div class="offcanvas-menu-overlay"></div>
+<div th:replace="user/fragments :: menu"></div>
+<!-- Offcanvas Menu End -->
+
+<!-- Header Section Begin -->
+<header th:replace="user/fragments :: header"></header>
+<!-- Header Section End -->
+
+<section class="about spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="about__pic">
+                    <img th:src="@{/user/img/about/about-us.jpg}" alt="">
+                    <div class="text-overlay">Đơn hàng của bạn</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="table_order-list" role="region" tabindex="0">
+    <table class="table-orders">
+        <thead>
+        <tr>
+            <th>Mã đơn đặt hàng</th>
+            <th>Thời gian đặt hàng</th>
+            <th>Phương thức thanh toán</th>
+            <th>Trạng thái đơn đặt hàng</th>
+        </tr>
+        </thead>
+        <tbody id="order-list-body">
+        </tbody>
+    </table>
+</div>
+
+
+<!-- Footer Section Begin -->
+<footer th:replace="user/fragments :: footer"></footer>
+<!-- Footer Section End -->
+
+<!-- Search Begin -->
+<div th:replace="user/fragments :: search"></div>
+<!-- Search End -->
+
+<!-- Js Plugins -->
+<div th:replace="user/fragments :: scripts"></div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        fetch("/clothing-sell/api/user/order-list", {
+            method: "GET",
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("jwtToken")
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                const tbody = document.getElementById("order-list-body");
+
+                if (data.length > 0) {
+                    data.forEach(order => {
+                        const row = document.createElement("tr");
+                        const statusClass = order.status ? 'status-success' : 'status-pending';
+
+
+                        row.innerHTML = `
+                <td>${order.orderId}</td>
+                <td>${new Date(order.date).toLocaleString()}</td>
+                <td>${order.paymentMethod}</td>
+                <td class="${statusClass}">${order.status ? 'Đang giao hàng' : 'Chưa được xác nhận'}</td>
+            `;
+
+                        tbody.appendChild(row);
+                    });
+                } else {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `<td colspan="4">Không có đơn hàng nào</td>`;
+                    tbody.appendChild(row);
+                }
+            })
+            .catch(error => {
+                console.error('Lỗi khi lấy dữ liệu:', error);
+            });
+    });
+</script>
+
+</body>
+</html>

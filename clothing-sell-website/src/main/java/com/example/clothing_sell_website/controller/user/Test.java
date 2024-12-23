@@ -42,4 +42,7 @@ public class Test {
 
     @GetMapping("/user-information.html")
     public String profile() {return "user/profile";}
+
+    @GetMapping("/user/orders.html")
+    public String orders() {return "user/my-order-list";}
 }
