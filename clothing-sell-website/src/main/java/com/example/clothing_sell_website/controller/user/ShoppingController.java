@@ -97,6 +97,8 @@ public class ShoppingController {
             HttpSession session,
             HttpServletRequest request) {
         Product product = shopService.getProductById(productId);
+        product.setTraffic(product.getTraffic()+1);
+        shopService.saveProduct(product);
         String username = (String) request.getSession().getAttribute("currentCustomer");
         Customer cus = accountService.getAccountById(username).getCustomer();
         model.addAttribute("customer",cus);

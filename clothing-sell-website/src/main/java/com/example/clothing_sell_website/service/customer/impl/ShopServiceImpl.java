@@ -69,6 +69,12 @@ public class ShopServiceImpl implements ShopService {
         return pageRepo.findAll(pageable);
     }
 
+    @Override
+    public Product saveProduct(Product product){
+        return shopRepo.save(product);
+    }
+
+
 
 
 }
