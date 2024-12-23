@@ -10,6 +10,7 @@ public class Test {
     @GetMapping({"/", "/index.html"})
     public String index(HttpServletRequest request) {
         String username = (String) request.getSession().getAttribute("currentCustomer");
+
         return "user/index";
     }
 
