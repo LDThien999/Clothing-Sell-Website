@@ -312,7 +312,7 @@
     <!-- Shop Details Section End -->
 
     <!-- Related Section Begin -->
-    <section class="related spad">
+    <section id="cus-taker" th:data-customer-id="${customer.customerId}" class="related spad">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
@@ -325,14 +325,14 @@
                         <div class="product__item__pic set-bg" th:data-setbg="@{'/user/img/product/' + ${recommend.image}}">
                             <span class="label">New</span>
                             <ul class="product__hover">
-                                <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
-                                <li><a href="#"><img src="img/icon/compare.png" alt=""> <span>Compare</span></a></li>
-                                <li><a href="#"><img src="img/icon/search.png" alt=""></a></li>
+                                <li><a href="#"><img th:src="@{/user/img/icon/heart.png}" alt=""></a></li>
+                                <li><a href="#"><img th:src="@{/user/img/icon/compare.png}" alt=""> <span>Compare</span></a></li>
+                                <li><a onclick="getRecommend(this)" href="#" th:data-product-id="${recommend.productId}"><img th:src="@{/user/img/icon/search.png}" alt=""></a></li>
                             </ul>
                         </div>
                         <div class="product__item__text">
                             <h6 th:text="${recommend.productName}"></h6>
-                            <a id="open-modal1" onclick="addCart(this)"  th:data-product-id="${recommend.productId}" class="add-cart" style=" cursor: pointer;">+ Thêm vào giỏ hàng</a>
+                            <a id="open-modal1" onclick="addCartele(this)"  th:data-product-id="${recommend.productId}" class="add-cart" style=" cursor: pointer;">+ Thêm vào giỏ hàng</a>
                             <div class="modal__container" id="modal-container1">
                                 <div class="modal__content">
                                     <div class="modal__close close-modal" title="Close">
@@ -410,6 +410,105 @@
                     console.error('Lỗi:', error);
                     alert(error);
                 });
+        }
+    </script>
+    <script>
+        function addCartele(element) {
+            const productId = element.dataset.productId;
+            const quantity = 1
+            const data = {
+                productId: productId,
+                quantity: quantity
+            };
+
+            fetch('/clothing-sell/addCart', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json(); // Giải mã JSON từ server
+                    } else {
+                        throw new Error(response.url);
+                    }
+                })
+                .then(result => {
+                    openModalActive()
+                })
+                .catch(error => {
+                    console.error('Lỗi:', error);
+                    alert(error);
+                });
+        }
+    </script>
+    <script >
+        function getRecommend(anchor) {
+            event.preventDefault()
+            // Lấy giá trị của data-product-id
+            const productId = anchor.getAttribute("data-product-id");
+            const section = document.getElementById('cus-taker');
+            const customerId = section.getAttribute('data-customer-id');
+            const dataArg = {
+                ok: "ok"
+            }
+            const url0 = `/clothing-sell/increaseLevel/${customerId}/${productId}`
+            fetch(url0, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(dataArg),
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json(); // Giải mã JSON từ server
+                    } else {
+                        throw new Error(response.url);
+                    }
+                })
+                .then(result => {
+                    const urlStr = `http://127.0.0.1:8000/${customerId}/${productId}`;
+                    fetch(urlStr)  // Địa chỉ của FastAPI server
+                        .then(response => response.json())   // Chuyển dữ liệu từ JSON
+                        .then(fastData => {
+                            fetch('/clothing-sell/getDataAPI', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify(fastData),
+                            })
+                                .then(response => {
+                                    if (response.ok) {
+                                        return response.json(); // Giải mã JSON từ server
+                                    } else {
+                                        throw new Error(response.url);
+                                    }
+                                })
+                                .then(result => {
+                                    location.href = `/clothing-sell/shop/detail/${productId}/` + fastData.label
+                                })
+                                .catch(error => {
+                                    console.error('Lỗi:', error);
+                                    alert(error);
+                                });
+                            // location.href = `/clothing-sell/shop/detail/${productId}/` + fastData.label
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+
+                })
+                .catch(error => {
+                    console.error('Lỗi:', error);
+                    alert(error);
+                });
+
+
+
         }
     </script>
     <!-- Related Section End -->
