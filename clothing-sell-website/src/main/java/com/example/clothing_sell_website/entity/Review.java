@@ -1,12 +1,13 @@
 package com.example.clothing_sell_website.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.time.LocalDateTime;
+
 import jakarta.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 @Data
@@ -16,7 +17,6 @@ import java.util.Date;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Table(name = "Review")
-
 public class Review {
     @Id
     @Column(name = "ReviewId")
@@ -39,5 +39,4 @@ public class Review {
 
     @Column(name = "Date")
     LocalDateTime date;
-
 }

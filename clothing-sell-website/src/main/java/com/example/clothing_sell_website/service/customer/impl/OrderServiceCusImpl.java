@@ -1,9 +1,10 @@
 package com.example.clothing_sell_website.service.customer.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.example.clothing_sell_website.entity.Order;
 import com.example.clothing_sell_website.repository.OrderRepository;
 import com.example.clothing_sell_website.service.customer.OrderCusService;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @org.springframework.stereotype.Service
 public class OrderServiceCusImpl implements OrderCusService {
@@ -14,5 +15,4 @@ public class OrderServiceCusImpl implements OrderCusService {
     public void saveOrder(Order order) {
         OrderRepo.save(order);
     }
-
 }

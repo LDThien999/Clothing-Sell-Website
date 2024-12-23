@@ -1,7 +1,5 @@
 package com.example.clothing_sell_website.configuration;
 
-import com.example.clothing_sell_website.security.JwtAuthenticationFilter;
-import com.example.clothing_sell_website.service.auth.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,6 +18,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+
+import com.example.clothing_sell_website.security.JwtAuthenticationFilter;
+import com.example.clothing_sell_website.service.auth.CustomUserDetailsService;
 
 @Configuration
 @EnableWebSecurity

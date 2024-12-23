@@ -3,8 +3,6 @@ package com.example.clothing_sell_website.controller.admin;
 import java.time.LocalDate;
 import java.util.List;
 
-import com.example.clothing_sell_website.dto.respone.MonthlyRevenueResponse;
-import com.example.clothing_sell_website.dto.respone.WeeklyRevenueResponse;
 import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -15,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.clothing_sell_website.dto.respone.BillPrintResponse;
+import com.example.clothing_sell_website.dto.respone.MonthlyRevenueResponse;
+import com.example.clothing_sell_website.dto.respone.WeeklyRevenueResponse;
 import com.example.clothing_sell_website.entity.Bill;
 import com.example.clothing_sell_website.entity.OrderList;
 import com.example.clothing_sell_website.service.admin.BillService;
@@ -122,5 +122,4 @@ public class BillController {
             @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
         return billService.getWeeklyRevenue(startDate, endDate);
     }
-
 }

@@ -1,17 +1,18 @@
 package com.example.clothing_sell_website.service.admin.impl;
 
-import com.example.clothing_sell_website.entity.Account;
-import com.example.clothing_sell_website.repository.AccountRepository;
-import com.example.clothing_sell_website.service.admin.AccountService;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import com.example.clothing_sell_website.entity.Account;
+import com.example.clothing_sell_website.repository.AccountRepository;
+import com.example.clothing_sell_website.service.admin.AccountService;
 
-import java.util.List;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +24,8 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account getAccountById(String username) {
         Optional<Account> accountOpt = accountRepository.findByUsername(username);
-        return accountOpt.orElseThrow(() -> new RuntimeException("không tìm thấy tài khoản với username + " + username));
+        return accountOpt.orElseThrow(
+                () -> new RuntimeException("không tìm thấy tài khoản với username + " + username));
     }
 
     @Override

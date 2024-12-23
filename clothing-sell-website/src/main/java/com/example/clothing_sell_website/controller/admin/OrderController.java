@@ -2,18 +2,17 @@ package com.example.clothing_sell_website.controller.admin;
 
 import java.time.LocalDateTime;
 
-import com.example.clothing_sell_website.entity.Account;
-import com.example.clothing_sell_website.entity.Staff;
 import jakarta.servlet.http.HttpServletRequest;
 
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.clothing_sell_website.entity.Account;
 import com.example.clothing_sell_website.entity.Bill;
 import com.example.clothing_sell_website.entity.Order;
+import com.example.clothing_sell_website.entity.Staff;
 import com.example.clothing_sell_website.service.admin.AccountService;
 import com.example.clothing_sell_website.service.admin.BillService;
 import com.example.clothing_sell_website.service.admin.OrderService;
@@ -43,7 +42,9 @@ public class OrderController {
 
         String username = (String) request.getSession().getAttribute("currentStaff");
         Account account = accountService.getAccountByUsername(username);
-        model.addAttribute("staffName", staffService.getStaffById(account.getStaff().getStaffId()).getName());
+        model.addAttribute(
+                "staffName",
+                staffService.getStaffById(account.getStaff().getStaffId()).getName());
         return "admin/order";
     }
 
