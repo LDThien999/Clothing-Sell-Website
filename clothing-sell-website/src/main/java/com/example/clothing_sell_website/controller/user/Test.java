@@ -1,16 +1,33 @@
 package com.example.clothing_sell_website.controller.user;
 
+import com.example.clothing_sell_website.entity.Product;
+import com.example.clothing_sell_website.service.customer.ShopService;
 import jakarta.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class Test {
+    @Autowired
+    ShopService shopService;
     @GetMapping({"/", "/index.html"})
-    public String index(HttpServletRequest request) {
+    public String index(Model model, HttpServletRequest request) {
         String username = (String) request.getSession().getAttribute("currentCustomer");
+        List<Product> hotProductsViet = shopService.getHotProductsByVietNam().stream()
+                .limit(4)
+                .collect(Collectors.toList());
+        List<Product> hotProductsJP = shopService.getHotProductsByJP().stream()
+                .limit(4)
+                .collect(Collectors.toList());
 
+        model.addAttribute("hotProductsVi", hotProductsViet);
+        model.addAttribute("hotProductsJP", hotProductsJP);
         return "user/index";
     }
 
@@ -45,7 +62,9 @@ public class Test {
     }
 
     @GetMapping("/user-information.html")
-    public String profile() {
-        return "user/profile";
-    }
+    public String profile() {return "user/profile";}
+
+    @GetMapping("/user/orders.html")
+    public String orders() {return "user/my-order-list";}
+
 }

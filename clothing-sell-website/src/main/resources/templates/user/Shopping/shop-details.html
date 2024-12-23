@@ -225,11 +225,11 @@
                                         <p class="note">Một số bình luận nổi bật</p>
                                         <div class="container">
                                             <div class="row">
-                                                <div class="col-lg-4 col-md-6 col-sm-6" th:each="review : ${reviews}">
+                                                <div class="col-lg-4 col-md-6 col-sm-6" th:each="review, index : ${reviews}">
                                                     <div class="blog__item">
-                                                        <div class="blog__item__pic set-bg" th:data-setbg="@{/user/img/blog/blog-4.jpg}"></div>
+                                                        <div class="blog__item__pic set-bg" th:data-setbg="@{'/user/img/blog/blog-' + (${index.index + 2}) + '.jpg'}"></div>
                                                         <div class="blog__item__text">
-                                                            <span><img th:src="@{/user/img/icon/calendar.png}" alt=""> 16 February 2020</span>
+                                                            <span th:text="${review.date}"><img th:src="@{/user/img/icon/calendar.png}" alt=""></span>
                                                             <h5 th:text="${review.customer.name}"></h5>
                                                             <img style="height:100px; width:100px" th:src="@{/user/img/customer.jpg}" alt="">
                                                             <h5 th:text="'Điểm đánh giá: '+${review.score}"></h5>

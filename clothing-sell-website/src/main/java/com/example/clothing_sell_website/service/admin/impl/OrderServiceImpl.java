@@ -2,6 +2,7 @@ package com.example.clothing_sell_website.service.admin.impl;
 
 import java.util.List;
 
+import com.example.clothing_sell_website.entity.Customer;
 import org.springframework.stereotype.Service;
 
 import com.example.clothing_sell_website.entity.Order;
@@ -22,6 +23,11 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<Order> getOrders() {
         return orderRepository.findAll();
+    }
+
+    @Override
+    public List<Order> getOrdersByCustomer(Customer customer) {
+        return orderRepository.findOrdersByCustomer(customer);
     }
 
     @Override

@@ -104,7 +104,7 @@ public class CartWork {
                 cart.setQuantity(0);
                 cartService.saveCart(cart);
             } else {
-                cart.setQuantity(cart.getQuantity() - quantity);
+                cart.setQuantity(0);
                 cartService.saveCart(cart);
             }
             OrderList orderList = new OrderList();

@@ -2,11 +2,14 @@ package com.example.clothing_sell_website.service.admin;
 
 import java.util.List;
 
+import com.example.clothing_sell_website.entity.Customer;
 import com.example.clothing_sell_website.entity.Order;
 import com.example.clothing_sell_website.entity.OrderList;
 
 public interface OrderService {
     List<Order> getOrders();
+
+    List<Order> getOrdersByCustomer(Customer customer);
 
     Order findOrderById(Integer id);
 

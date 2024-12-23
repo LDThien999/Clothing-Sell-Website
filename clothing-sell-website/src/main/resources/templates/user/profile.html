@@ -1,6 +1,9 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head th:replace="user/fragments :: meta_css">
+    <title>Thông tin khách hàng</title>
+</head>
+<head>
     <style>
         body {
             color: #1a202c;
@@ -14,6 +17,7 @@
 
         .card-profile {
             box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .1), 0 1px 2px 0 rgba(0, 0, 0, .06);
+            height: 100%;
         }
 
         .card-profile {
@@ -29,6 +33,7 @@
         }
 
         .card-profile-body {
+            padding-top: 15%;
             flex: 1 1 auto;
             min-height: 1px;
             padding: 1rem;
@@ -60,7 +65,6 @@
             box-shadow: none !important;
         }
     </style>
-    <title>Thông tin khách hàng</title>
 </head>
 
 <body>
@@ -162,6 +166,31 @@
     </div>
 </div>
 
+<div class="row" id="change-password-section" style="display: none;">
+    <div class="col-sm-3">
+        <h6 class="mb-0">Mật khẩu mới</h6>
+    </div>
+    <div class="col-sm-9 text-secondary">
+        <input type="password" id="newPassword" required placeholder="Nhập mật khẩu mới" style="width: 20%;">
+    </div>
+</div>
+<hr>
+<div class="row" id="confirm-password-section" style="display: none;">
+    <div class="col-sm-3">
+        <h6 class="mb-0">Nhập lại mật khẩu</h6>
+    </div>
+    <div class="col-sm-9 text-secondary">
+        <input type="password" id="confirmPassword" required placeholder="Nhập lại mật khẩu mới" style="width: 20%;">
+    </div>
+</div>
+<hr>
+<div class="row" id="confirm-button-section" style="display: none;">
+    <div class="col-sm-12">
+        <button class="btn btn-success" id="confirm-change-btn">Xác nhận</button>
+        <button class="btn btn-secondary" id="cancel-change-btn">Hủy</button>
+    </div>
+</div>
+
 <!-- Footer Section Begin -->
 <footer th:replace="user/fragments :: footer"></footer>
 <!-- Footer Section End -->
@@ -240,6 +269,60 @@
                 throw error;
             });
 
+
+        document.querySelector('.primary-btn-profile').addEventListener('click', function () {
+            // Hiển thị các ô nhập mật khẩu
+            document.getElementById('change-password-section').style.display = 'flex';
+            document.getElementById('confirm-password-section').style.display = 'flex';
+            document.getElementById('confirm-button-section').style.display = 'block';
+        });
+
+        document.getElementById('confirm-change-btn').addEventListener('click', function () {
+            const newPasswordInput = document.getElementById('newPassword');
+            const confirmPasswordInput = document.getElementById('confirmPassword');
+
+            if (!newPasswordInput.checkValidity()) {
+                newPasswordInput.reportValidity(); // Hiển thị thông báo lỗi
+                return;
+            }
+
+            if (!confirmPasswordInput.checkValidity()) {
+                confirmPasswordInput.reportValidity(); // Hiển thị thông báo lỗi
+                return;
+            }
+
+            const newPassword = newPasswordInput.value.trim();
+            const confirmPassword = confirmPasswordInput.value.trim();
+
+            if (newPassword === confirmPassword) {
+                const updatedData = {password:newPassword};
+
+                fetchDataApi("/clothing-sell/api/user/change-password", "POST", updatedData)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        alert("Thay đổi mật khẩu thành công");
+                        return response.json();
+                    })
+
+                document.getElementById('change-password-section').style.display = 'none';
+                document.getElementById('confirm-password-section').style.display = 'none';
+                document.getElementById('confirm-button-section').style.display = 'none';
+            } else {
+                alert('Mật khẩu mới và xác nhận mật khẩu không khớp!');
+            }
+        });
+
+
+        document.getElementById('cancel-change-btn').addEventListener('click', function () {
+            document.getElementById('change-password-section').style.display = 'none';
+            document.getElementById('confirm-password-section').style.display = 'none';
+            document.getElementById('confirm-button-section').style.display = 'none';
+
+            document.getElementById('newPassword').value = '';
+            document.getElementById('confirmPassword').value = '';
+        });
 
     });
 </script>
