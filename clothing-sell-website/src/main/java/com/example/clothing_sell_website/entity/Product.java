@@ -43,4 +43,7 @@ public class Product {
 
     @Column(name = "Image")
     String image;
+
+    @Column(name = "Traffic")
+    Integer traffic;
 }

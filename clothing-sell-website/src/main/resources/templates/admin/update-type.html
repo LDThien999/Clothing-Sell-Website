@@ -52,10 +52,10 @@
         <div class="card">
             <div class="card-header"><strong>Cập nhật loại</strong><small> Form</small></div>
             <div class="card-body card-block">
-                <form action="#" th:action="@{/admin/type/save-type}" th:object="${type}" method="post">
+                <form action="#" th:action="@{/admin/brand-type/save-type}" th:object="${type}" method="post">
                     <div class="form-group"><label for="typeId" class=" form-control-label">Mã loại</label>
                         <input type="text" th:field="*{typeId}" id="typeId" placeholder="Nhập mã loại"
-                               class="form-control">
+                               class="form-control" readonly>
                     </div>
 
                     <div class="form-group"><label for="typeName" class=" form-control-label">Tên loại</label>

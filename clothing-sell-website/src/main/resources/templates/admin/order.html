@@ -108,7 +108,6 @@
                                         <div th:if="${!order.status}">
                                             <button th:id="'approveBtn-' + ${order.orderId}"
                                                     th:data-id="${order.orderId}"
-                                                    th:staff-name="${staffName}"
                                                     class="btn btn-success approveBtn"
                                                     type="button">
                                                 Chấp thuận
@@ -134,6 +133,7 @@
                     </div>
                 </div>
 
+                <div id="staffInfo" th:data-staff-name="${staffName}"></div>
 
             </div>
         </div><!-- .animated -->

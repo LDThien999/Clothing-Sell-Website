@@ -62,14 +62,14 @@ public class BrandAndTypeController {
     public String updateBrand(@PathVariable String id, HttpServletRequest request, Model model) {
         model.addAttribute("currentUri", request.getRequestURI());
         model.addAttribute("brand", brandService.findBrandById(id));
-        return "admin/add-brand";
+        return "admin/update-brand";
     }
 
     @GetMapping("/update-type/{id}")
     public String updateType(@PathVariable String id, HttpServletRequest request, Model model) {
         model.addAttribute("currentUri", request.getRequestURI());
         model.addAttribute("type", typeService.findTypeById(id));
-        return "admin/add-type";
+        return "admin/update-type";
     }
 
     @PostMapping("/save-brand")
