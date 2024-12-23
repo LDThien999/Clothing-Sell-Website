@@ -97,6 +97,11 @@ function sendNotification(type, message) {
 
 (function($) {
     'use strict';
+    $(document).on('shown.bs.modal', function() {
+                // Đảm bảo không có backdrop nào còn lại khi mở modal mới
+                $('.modal-backdrop').remove();
+    //            $('body').addClass('modal-open');
+            });
 
     // Biến global cho DataTable
     var dataTable;
