@@ -19,4 +19,16 @@ public interface ShopRepository extends JpaRepository<Product, String> {
     @Modifying
     @Query("FROM Product p WHERE p.type.typeId = :typeId ")
     List<Product> getProductByType(@Param("typeId") String typeId);
+
+    @Modifying
+    @Query("FROM Product p ORDER BY p.traffic DESC")
+    List<Product> getProductHot();
+
+    @Modifying
+    @Query("FROM Product p WHERE p.origin='Vietnam' ORDER BY p.traffic DESC")
+    List<Product> getProductHotByVietNam();
+
+    @Modifying
+    @Query("FROM Product p WHERE p.origin='Japan' ORDER BY p.traffic DESC")
+    List<Product> getProductHotByJP();
 }

@@ -74,7 +74,20 @@ public class ShopServiceImpl implements ShopService {
         return shopRepo.save(product);
     }
 
+    @Override
+    public List<Product> getProductsHot(){
+        return shopRepo.getProductHot();
+    }
 
+    @Override
+    public List<Product> getHotProductsByVietNam(){
+        return shopRepo.getProductHotByVietNam();
+    }
+
+    @Override
+    public List<Product> getHotProductsByJP(){
+        return shopRepo.getProductHotByJP();
+    }
 
 
 }
