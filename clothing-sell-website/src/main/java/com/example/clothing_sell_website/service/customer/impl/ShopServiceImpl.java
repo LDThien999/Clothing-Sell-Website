@@ -69,6 +69,25 @@ public class ShopServiceImpl implements ShopService {
         return pageRepo.findAll(pageable);
     }
 
+    @Override
+    public Product saveProduct(Product product){
+        return shopRepo.save(product);
+    }
+
+    @Override
+    public List<Product> getProductsHot(){
+        return shopRepo.getProductHot();
+    }
+
+    @Override
+    public List<Product> getHotProductsByVietNam(){
+        return shopRepo.getProductHotByVietNam();
+    }
+
+    @Override
+    public List<Product> getHotProductsByJP(){
+        return shopRepo.getProductHotByJP();
+    }
 
 
 }

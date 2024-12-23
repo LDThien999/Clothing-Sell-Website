@@ -14,4 +14,8 @@ public interface ShopService {
     List<String> getTop20ProductIds(int n);
     List<Product> getTop20Products(int n);
     Page<Product> getProductsByPage(int page, int size);
+    Product saveProduct(Product product);
+    List<Product> getProductsHot();
+    List<Product> getHotProductsByVietNam();
+    List<Product> getHotProductsByJP();
 }
