@@ -4,10 +4,10 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
-import com.example.clothing_sell_website.dto.respone.MonthlyRevenueResponse;
-import com.example.clothing_sell_website.dto.respone.WeeklyRevenueResponse;
 import org.springframework.stereotype.Service;
 
+import com.example.clothing_sell_website.dto.respone.MonthlyRevenueResponse;
+import com.example.clothing_sell_website.dto.respone.WeeklyRevenueResponse;
 import com.example.clothing_sell_website.entity.Bill;
 import com.example.clothing_sell_website.repository.BillRepository;
 import com.example.clothing_sell_website.service.admin.BillService;
@@ -53,20 +53,16 @@ public class BillServiceImpl implements BillService {
     public List<MonthlyRevenueResponse> getMonthlyRevenueByYear(int year) {
         List<Object[]> monthlyRevenueList = billRepository.getMonthlyRevenueByYear(year);
         return monthlyRevenueList.stream()
-                .map(record -> new MonthlyRevenueResponse(
-                        (int) record[0],
-                        (double) record[1]/1000000,
-                        (long) record[2]
-                )).toList();
+                .map(record ->
+                        new MonthlyRevenueResponse((int) record[0], (double) record[1] / 1000000, (long) record[2]))
+                .toList();
     }
 
     @Override
     public List<WeeklyRevenueResponse> getWeeklyRevenue(LocalDate startDate, LocalDate endDate) {
         List<Object[]> weeklyRevenueList = billRepository.getWeeklyRevenue(startDate, endDate);
         return weeklyRevenueList.stream()
-                .map(record -> new WeeklyRevenueResponse(
-                        (int) record[0],
-                        (double) record[1]
-                )).toList();
+                .map(record -> new WeeklyRevenueResponse((int) record[0], (double) record[1]))
+                .toList();
     }
 }

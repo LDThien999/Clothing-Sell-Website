@@ -1,15 +1,18 @@
 package com.example.clothing_sell_website.service.customer.impl;
 
-import com.example.clothing_sell_website.entity.Cart;
-import com.example.clothing_sell_website.service.customer.CartService;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.example.clothing_sell_website.repository.CartRepository;
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.example.clothing_sell_website.entity.Cart;
+import com.example.clothing_sell_website.repository.CartRepository;
+import com.example.clothing_sell_website.service.customer.CartService;
 
 @org.springframework.stereotype.Service
 public class CartServiceImpl implements CartService {
     @Autowired
     private CartRepository cartRepo;
+
     @Override
     public Cart saveCart(Cart cart) {
         return cartRepo.save(cart);
@@ -17,8 +20,7 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public void deleteCart(long cartId) {
-        cartRepo
-                .findById(cartId);
+        cartRepo.findById(cartId);
         cartRepo.deleteById(cartId);
     }
 
@@ -28,16 +30,12 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public Cart getCartById(long cartId){
+    public Cart getCartById(long cartId) {
         return cartRepo.findById(cartId).orElseThrow(() -> new RuntimeException("Id không tồn tại!"));
     }
 
-
     @Override
-    public List<Cart> getCartByCus(String customerId){
+    public List<Cart> getCartByCus(String customerId) {
         return cartRepo.getCartByCus(customerId);
     }
-
-
-
 }
