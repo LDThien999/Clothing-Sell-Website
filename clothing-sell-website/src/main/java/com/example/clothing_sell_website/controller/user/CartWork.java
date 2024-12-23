@@ -60,8 +60,17 @@ public class CartWork{
             cartService.saveCart(cart);
         }
         LevelOfInterest lv = lvService.getLVByCusPro(cus.getCustomerId(), productId);
-        lv.setLevelInt(lv.getLevelInt() + 5);
-        lvService.saveLV(lv);
+        if(lv == null){
+            lv = new LevelOfInterest();
+            lv.setCustomer(cus);
+            lv.setProduct(productService.getProductById(productId));
+            lv.setLevelInt(5);
+            lvService.saveLV(lv);
+        }else{
+            lv.setLevelInt(lv.getLevelInt() + 5);
+            lvService.saveLV(lv);
+        }
+
         return ResponseEntity.ok(Map.of("message", "Đã thêm vào giỏ hàng"));
     }
 

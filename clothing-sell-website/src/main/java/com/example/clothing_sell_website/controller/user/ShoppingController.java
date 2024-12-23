@@ -54,25 +54,33 @@ public class ShoppingController {
     }
 
     @GetMapping("/shop/brand/{brandId}")
-    public String shopBrand(@PathVariable String brandId, Model model) {
+    public String shopBrand(@PathVariable String brandId, Model model,HttpServletRequest request) {
         List<Product> products = shopService.getProductByBrand(brandId);
         model.addAttribute("products", products);
         List<Type> types = typeService.getAllType();
         List<Brand> brands = brandService.getAllBrand();
         model.addAttribute("types", types);
         model.addAttribute("brands", brands);
+        String username = (String) request.getSession().getAttribute("currentCustomer");
+        System.out.println(username);
+        Customer cus = accountService.getAccountById(username).getCustomer();
+        model.addAttribute("customer",cus);
         return "user/shopping/shop";
 
     }
 
     @GetMapping("/shop/type/{typeId}")
-    public String shopType(@PathVariable String typeId, Model model) {
+    public String shopType(@PathVariable String typeId, Model model,HttpServletRequest request) {
         List<Product> products = shopService.getProductByType(typeId);
         model.addAttribute("products", products);
         List<Type> types = typeService.getAllType();
         List<Brand> brands = brandService.getAllBrand();
         model.addAttribute("types", types);
         model.addAttribute("brands", brands);
+        String username = (String) request.getSession().getAttribute("currentCustomer");
+        System.out.println(username);
+        Customer cus = accountService.getAccountById(username).getCustomer();
+        model.addAttribute("customer",cus);
         return "user/shopping/shop";
 
     }
