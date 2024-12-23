@@ -11,7 +11,7 @@ public interface ShopService {
     List<Product> getProductByBrand(String brandId);
     List<Product> getProductByType(String typeId);
     Product getProductById(String productId);
-    List<String> getTop10ProductIds(int n);
-    List<Product> getTop10Products(int n);
+    List<String> getTop20ProductIds(int n);
+    List<Product> getTop20Products(int n);
     Page<Product> getProductsByPage(int page, int size);
 }

@@ -14,9 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Controller
 public class ShoppingController {
@@ -87,17 +85,28 @@ public class ShoppingController {
         Customer cus = accountService.getAccountById(username).getCustomer();
         model.addAttribute("customer",cus);
         model.addAttribute("product", product);
-        List<Product> recommendProducts = shopService.getTop10Products(label);
+        List<Product> recommendProducts = shopService.getTop20Products(label);
         List<String> listRe = (List<String>) request.getSession().getAttribute("listRecomm");
-        List<Product> listFinal = new ArrayList<>();
+        List<Product> listTemp = new ArrayList<>();
         if(!listRe.isEmpty()){
             List<Product> recommendProducts2 = shopRepo.findAllById(listRe);
-            listFinal.addAll(recommendProducts2);
+            listTemp.addAll(recommendProducts2);
+
         }
-        listFinal.addAll(recommendProducts);         // Thêm tất cả phần tử từ recommendProducts
+        listTemp.addAll(recommendProducts);         // Thêm tất cả phần tử từ recommendProducts
 
 
+        HashSet<Product> uniqueSet = new HashSet<>(listTemp);
+        ArrayList<Product> uniqueList = new ArrayList<>(uniqueSet);
 
+        List<Product> listFinal = new ArrayList<>();
+        // Kiểm tra nếu danh sách có ít hơn 12 phần tử
+        if (uniqueList.size() <= 12) {
+            listFinal = uniqueList;
+        }else{
+            Collections.shuffle(uniqueList);
+            listFinal = uniqueList.subList(0, 12);
+        }
         model.addAttribute("recommendProducts", listFinal);
         LevelOfInterest lv = lvService.getLVByCusPro(cus.getCustomerId(), productId);
         lv.setLabel(label);
