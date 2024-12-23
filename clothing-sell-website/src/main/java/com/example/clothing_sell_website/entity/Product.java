@@ -23,7 +23,6 @@ public class Product {
     @Column(name = "Price")
     Float price;
 
-
     @Column(name = "Size", length = 5)
     String size;
 

@@ -14,6 +14,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import com.example.clothing_sell_website.entity.*;
+import com.example.clothing_sell_website.repository.ShopRepository;
+import com.example.clothing_sell_website.service.admin.AccountService;
+import com.example.clothing_sell_website.service.customer.*;
 import java.util.*;
 
 @Controller
@@ -86,8 +90,12 @@ public class ShoppingController {
     }
 
     @GetMapping("/shop/detail/{productId}/{label}")
-    public String shopDetail(@PathVariable("productId") String productId,@PathVariable("label") int label, Model model,HttpSession session
-    ,HttpServletRequest request) {
+    public String shopDetail(
+            @PathVariable("productId") String productId,
+            @PathVariable("label") int label,
+            Model model,
+            HttpSession session,
+            HttpServletRequest request) {
         Product product = shopService.getProductById(productId);
         String username = (String) request.getSession().getAttribute("currentCustomer");
         Customer cus = accountService.getAccountById(username).getCustomer();
