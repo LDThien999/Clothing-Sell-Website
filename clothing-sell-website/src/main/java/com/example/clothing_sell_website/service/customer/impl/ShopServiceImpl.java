@@ -46,8 +46,8 @@ public class ShopServiceImpl implements ShopService {
 
     // Truy vấn 10 Product_Id từ Level_Of_Interest
     @Override
-    public List<String> getTop10ProductIds(int n) {
-        String sql = "SELECT TOP 10 Product_Id " +
+    public List<String> getTop20ProductIds(int n) {
+        String sql = "SELECT TOP 20 Product_Id " +
                 "FROM Level_Of_Interest " +
                 "WHERE Label_Main = " +n+
                 " GROUP BY Product_Id " +
@@ -58,8 +58,8 @@ public class ShopServiceImpl implements ShopService {
     }
 
     @Override
-    public List<Product> getTop10Products(int n) {
-        List<String> productIds = getTop10ProductIds(n);
+    public List<Product> getTop20Products(int n) {
+        List<String> productIds = getTop20ProductIds(n);
         return shopRepo.findAllById(productIds);
     }
 

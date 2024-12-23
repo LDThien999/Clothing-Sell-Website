@@ -18,6 +18,7 @@ public interface AccountRepository extends JpaRepository<Account, String> {
 
     @Query("FROM Account a WHERE a.customer IS NULL")
     List<Account> getStaffAccounts();
+
     @Query("FROM Account a WHERE a.staff IS NULL")
     List<Account> getCustomerAccounts();
 }

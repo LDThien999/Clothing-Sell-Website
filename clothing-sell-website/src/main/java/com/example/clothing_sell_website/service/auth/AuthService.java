@@ -3,8 +3,6 @@ package com.example.clothing_sell_website.service.auth;
 import java.util.Optional;
 import java.util.Random;
 
-import com.example.clothing_sell_website.entity.Staff;
-import com.example.clothing_sell_website.repository.StaffRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -22,9 +20,12 @@ import com.example.clothing_sell_website.dto.respone.RegisterResponse;
 import com.example.clothing_sell_website.entity.Account;
 import com.example.clothing_sell_website.entity.Customer;
 import com.example.clothing_sell_website.entity.Role;
+import com.example.clothing_sell_website.entity.Staff;
 import com.example.clothing_sell_website.repository.AccountRepository;
 import com.example.clothing_sell_website.repository.CustomerRepository;
 import com.example.clothing_sell_website.repository.RoleRepository;
+import com.example.clothing_sell_website.repository.StaffRepository;
+
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -50,6 +51,7 @@ public class AuthService {
 
     @Autowired
     private final RoleRepository roleRepository;
+
     @Autowired
     private final StaffRepository staffRepository;
 
@@ -61,7 +63,6 @@ public class AuthService {
             if (accountOtp.isPresent()) {
                 Account account = accountOtp.get();
                 String token = jwtService.generateToken(authentication);
-
 
                 return AuthenticationResponse.builder()
                         .token(token)
@@ -83,9 +84,9 @@ public class AuthService {
                 .build();
     }
 
-    public RegisterResponse registerNewCustomerAccount(RegisterRequest request){
+    public RegisterResponse registerNewCustomerAccount(RegisterRequest request) {
         Optional<Account> accountOptional = accountRepository.findByUsername(request.getUsername());
-        if (accountOptional.isPresent()){
+        if (accountOptional.isPresent()) {
             return RegisterResponse.builder()
                     .message("Username đã tồn tại")
                     .success(false)
@@ -93,7 +94,7 @@ public class AuthService {
         }
 
         Customer customer = new Customer();
-        try{
+        try {
             customer.setCustomerId(generateCustomerId());
             customer.setName(request.getName());
             customer.setEmail(request.getEmail());
@@ -108,7 +109,7 @@ public class AuthService {
         }
 
         Role role = roleRepository.findByRoleId("1");
-        try{
+        try {
             Account account = new Account();
             account.setUsername(request.getUsername());
             account.setPassword(passwordEncoder.encode(request.getPassword()));
@@ -127,17 +128,16 @@ public class AuthService {
                     .success(true)
                     .build();
         } catch (Exception e) {
-            return
-                    RegisterResponse.builder()
-                            .message("Đã xảy ra sự cố")
-                            .success(false)
-                            .build();
+            return RegisterResponse.builder()
+                    .message("Đã xảy ra sự cố")
+                    .success(false)
+                    .build();
         }
     }
 
-    public RegisterResponse registerNewStaffAccount(RegisterRequest request){
+    public RegisterResponse registerNewStaffAccount(RegisterRequest request) {
         Optional<Account> accountOptional = accountRepository.findByUsername(request.getUsername());
-        if (accountOptional.isPresent()){
+        if (accountOptional.isPresent()) {
             return RegisterResponse.builder()
                     .message("Username đã tồn tại")
                     .success(false)
@@ -145,7 +145,7 @@ public class AuthService {
         }
 
         Staff staff = new Staff();
-        try{
+        try {
             staff.setStaffId(generateStaffId());
             staff.setName(request.getName());
             staff.setEmail(request.getEmail());
@@ -161,7 +161,7 @@ public class AuthService {
         }
 
         Role role = roleRepository.findByRoleId("0");
-        try{
+        try {
             Account account = new Account();
             account.setUsername(request.getUsername());
             account.setPassword(passwordEncoder.encode(request.getPassword()));
@@ -180,11 +180,10 @@ public class AuthService {
                     .success(true)
                     .build();
         } catch (Exception e) {
-            return
-                    RegisterResponse.builder()
-                            .message("Đã xảy ra sự cố")
-                            .success(false)
-                            .build();
+            return RegisterResponse.builder()
+                    .message("Đã xảy ra sự cố")
+                    .success(false)
+                    .build();
         }
     }
 
@@ -196,7 +195,7 @@ public class AuthService {
         javaMailSender.send(simpleMailMessage);
     }
 
-    private String generateRandomString(){
+    private String generateRandomString() {
         int length = 7;
         String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         Random random = new Random();
@@ -232,7 +231,7 @@ public class AuthService {
     public String generateCustomerId() {
         Random random = new Random();
         String customerId = "";
-        while (customerId.isEmpty() || customerRepository.findById(customerId).isPresent()){
+        while (customerId.isEmpty() || customerRepository.findById(customerId).isPresent()) {
             customerId = "KH" + generateRandomString();
         }
         return customerId;
@@ -241,10 +240,9 @@ public class AuthService {
     public String generateStaffId() {
         Random random = new Random();
         String staffId = "";
-        while (staffId.isEmpty() || staffRepository.findById(staffId).isPresent()){
+        while (staffId.isEmpty() || staffRepository.findById(staffId).isPresent()) {
             staffId = "NV" + generateRandomString();
         }
         return staffId;
     }
 }
-

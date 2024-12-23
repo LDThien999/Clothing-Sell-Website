@@ -1,6 +1,7 @@
 package com.example.clothing_sell_website.controller.user;
 
 import jakarta.servlet.http.HttpServletRequest;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -9,8 +10,10 @@ public class Test {
     @GetMapping({"/", "/index.html"})
     public String index(HttpServletRequest request) {
         String username = (String) request.getSession().getAttribute("currentCustomer");
+
         return "user/index";
     }
+
     @GetMapping("/about.html")
     public String about() {
         return "user/about";
@@ -31,18 +34,20 @@ public class Test {
         return "user/contact";
     }
 
-
     @GetMapping("/login.html")
     public String loginPage() {
         return "user/login";
     }
 
     @GetMapping("/register.html")
-    public String registerPage() {return "user/register";}
+    public String registerPage() {
+        return "user/register";
+    }
 
     @GetMapping("/user-information.html")
     public String profile() {return "user/profile";}
 
     @GetMapping("/user/orders.html")
     public String orders() {return "user/my-order-list";}
+
 }
