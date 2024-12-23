@@ -68,13 +68,13 @@ public class CartWork {
             cartService.saveCart(cart);
         }
         LevelOfInterest lv = lvService.getLVByCusPro(cus.getCustomerId(), productId);
-        if(lv == null){
+        if (lv == null) {
             lv = new LevelOfInterest();
             lv.setCustomer(cus);
             lv.setProduct(productService.getProductById(productId));
             lv.setLevelInt(5);
             lvService.saveLV(lv);
-        }else{
+        } else {
             lv.setLevelInt(lv.getLevelInt() + 5);
             lvService.saveLV(lv);
         }
