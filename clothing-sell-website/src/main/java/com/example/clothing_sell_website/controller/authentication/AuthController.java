@@ -9,6 +9,7 @@ import com.example.clothing_sell_website.dto.respone.RegisterResponse;
 import com.example.clothing_sell_website.entity.Account;
 import com.example.clothing_sell_website.entity.Customer;
 import com.example.clothing_sell_website.entity.Order;
+import com.example.clothing_sell_website.entity.OrderList;
 import com.example.clothing_sell_website.service.admin.AccountService;
 import com.example.clothing_sell_website.service.admin.CustomerService;
 import com.example.clothing_sell_website.service.admin.OrderService;
@@ -16,6 +17,7 @@ import com.example.clothing_sell_website.service.auth.AuthService;
 import com.example.clothing_sell_website.service.auth.JwtService;
 import java.util.Objects;
 
+import com.example.clothing_sell_website.service.customer.OrderListService;
 import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +27,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 
 import java.util.List;
@@ -50,6 +50,8 @@ public class AuthController {
     private BCryptPasswordEncoder passwordEncoder;
     @Autowired
     private OrderService orderService;
+    @Autowired
+    private OrderListService orderListService;
 
 
     @PostMapping("/login")
@@ -163,5 +165,16 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
+    @GetMapping("/api/user/order-details/{orderId}")
+    public String orderDetails(Model model, @PathVariable("orderId") int orderId) {
+//
+         List<OrderList> orderLists = orderListService.getOrderListByOrder(orderId);
+         model.addAttribute("orderLists",orderLists);
+          return "user/order-detail";
+//
+
+    }
+
 }
 
